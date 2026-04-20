@@ -1,0 +1,146 @@
+{
+  "app": {
+    "title": "Loup-Garou",
+    "subtitle": "Jeu de déduction sociale"
+  },
+  "home": {
+    "createRoom": "Créer une salle",
+    "joinRoom": "Rejoindre",
+    "or": "— ou —",
+    "enterCode": "Entrez le code de la salle",
+    "enterName": "Entrez votre nom",
+    "join": "Rejoindre",
+    "settings": "Paramètres",
+    "language": "Langue"
+  },
+  "lobby": {
+    "roomCode": "Code de salle",
+    "players": "joueurs",
+    "startGame": "Lancer la partie",
+    "waiting": "En attente...",
+    "ready": "Prêt",
+    "minPlayers": "Il faut au moins 6 joueurs",
+    "host": "Hôte",
+    "leave": "Quitter",
+    "copied": "Code copié !",
+    "share": "Partager le code"
+  },
+  "roles": {
+    "wolf": "Loup-Garou",
+    "villager": "Villageois",
+    "seer": "Voyante",
+    "witch": "Sorcière",
+    "doctor": "Médecin",
+    "hunter": "Chasseur",
+    "yourRole": "Votre rôle secret",
+    "understood": "Compris",
+    "teamEvil": "Équipe du mal",
+    "teamGood": "Équipe du bien"
+  },
+  "roleDesc": {
+    "wolf": "Faites semblant d'être un villageois innocent le jour, mais la nuit vous devenez une bête qui chasse ses victimes avec votre meute.",
+    "villager": "Un simple citoyen sans pouvoir spécial, mais votre voix est votre arme la plus puissante.",
+    "seer": "Vous avez une vision surnaturelle qui révèle la vraie identité de n'importe quel joueur.",
+    "witch": "Vous avez deux potions magiques à usage unique. Réfléchissez bien avant de les utiliser.",
+    "doctor": "Le médecin fidèle du village. Chaque nuit, vous choisissez un joueur à protéger.",
+    "hunter": "Un brave guerrier qui n'a pas peur de la mort. Si vous êtes tué, vous tirez votre dernière balle."
+  },
+  "abilities": {
+    "wolfHunt": "Chasse nocturne",
+    "wolfHuntDesc": "Votez avec les loups pour choisir une victime",
+    "wolfDisguise": "Déguisement diurne",
+    "wolfDisguiseDesc": "Participez aux discussions comme si vous étiez innocent",
+    "seerVision": "Vision nocturne",
+    "seerVisionDesc": "Révélez l'identité d'un joueur chaque nuit",
+    "seerLog": "Journal des révélations",
+    "seerLogDesc": "Accumulez vos découvertes nuit après nuit",
+    "witchSave": "Potion de guérison",
+    "witchSaveDesc": "Sauvez la victime des loups · Une fois par partie",
+    "witchKill": "Potion de mort",
+    "witchKillDesc": "Tuez un joueur suspect · Une fois par partie",
+    "docProtect": "Protection nocturne",
+    "docProtectDesc": "Protégez un joueur chaque nuit · Pas le même deux fois de suite",
+    "hunterShot": "Tir mortel",
+    "hunterShotDesc": "Déclenché à votre mort · Choisissez votre cible rapidement"
+  },
+  "night": {
+    "title": "La nuit tombe...",
+    "voiceOnly": "Voix uniquement · Caméras éteintes",
+    "wolfChannel": "Canal secret des loups",
+    "chooseVictim": "Choisir la victime",
+    "confirmKill": "Confirmer le meurtre",
+    "seerTurn": "Tour de la Voyante",
+    "whoToReveal": "Qui révéler ce soir ?",
+    "revealIdentity": "Révéler l'identité",
+    "witchTurn": "Tour de la Sorcière",
+    "victimChosen": "Victime choisie",
+    "willDie": "Mourra si vous n'intervenez pas",
+    "savePotion": "Sauver",
+    "killPotion": "Tuer",
+    "savePlayer": "Sauver",
+    "useDeathPotion": "Potion de mort",
+    "skip": "Passer sans utiliser",
+    "docTurn": "Tour du Médecin",
+    "whoToProtect": "Choisissez qui protéger ce soir",
+    "confirmProtect": "Confirmer la protection",
+    "protectedLastNight": "Protégé la nuit dernière",
+    "youWillProtect": "Vous protégerez",
+    "tonight": "ce soir"
+  },
+  "day": {
+    "title": "Le jour",
+    "dayNum": "Jour",
+    "discussion": "Discussion libre avec voix et caméra",
+    "vote": "Voter",
+    "timeLeft": "Temps restant"
+  },
+  "vote": {
+    "title": "Vote public",
+    "voteToEliminate": "Votez pour éliminer le suspect",
+    "confirmVote": "Confirmer le vote",
+    "votes": "votes",
+    "eliminated": "Éliminé !",
+    "noElimination": "Personne éliminé"
+  },
+  "hunter": {
+    "youDied": "Vous êtes mort, Chasseur !",
+    "lastShot": "Vous avez une dernière balle. Choisissez qui part avec vous !",
+    "whoToTake": "Qui emmenez-vous ?",
+    "fireShot": "Tirer la dernière balle !",
+    "yourTarget": "Votre cible",
+    "willHit": "Votre balle touchera"
+  },
+  "result": {
+    "wolfWin": "Les loups gagnent !",
+    "villageWin": "Le village gagne !",
+    "rolesRevealed": "Rôles révélés",
+    "playAgain": "Rejouer",
+    "backToHome": "Retour à l'accueil"
+  },
+  "seerResult": {
+    "visionTitle": "Résultat de la vision",
+    "isWolf": "Loup dangereux !",
+    "isVillager": "Villageois innocent",
+    "revealed": "Votre vision a révélé que",
+    "log": "Journal"
+  },
+  "witchResult": {
+    "title": "Résultat magique",
+    "saved": "Votre potion l'a sauvé !",
+    "killed": "La potion de mort l'a tué",
+    "potionsLeft": "Potions restantes",
+    "depleted": "Épuisée"
+  },
+  "common": {
+    "back": "Retour",
+    "confirm": "Confirmer",
+    "cancel": "Annuler",
+    "ok": "OK",
+    "loading": "Chargement...",
+    "error": "Erreur",
+    "dead": "Mort",
+    "alive": "Vivant",
+    "speaking": "Parle",
+    "muted": "Muet"
+  }
+}

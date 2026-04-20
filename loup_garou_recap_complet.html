@@ -1,0 +1,1255 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🐺 ذئب المدينة — الدليل الكامل</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Cinzel:wght@700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #05050e;
+  --surface: #0d0d1c;
+  --surface2: #12122a;
+  --border: #1e1e3a;
+  --text: #e8e8f0;
+  --muted: #6060a0;
+  --wolf: #ef4444;
+  --seer: #d97706;
+  --mag: #7c3aed;
+  --doc: #059669;
+  --hunter: #ea580c;
+  --village: #22c55e;
+  --moon: #c8a84b;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Cairo', sans-serif;
+  direction: rtl;
+  overflow-x: hidden;
+}
+
+/* ── NOISE OVERLAY ── */
+body::before {
+  content:''; position:fixed; inset:0; pointer-events:none; z-index:0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  opacity: 0.4;
+}
+
+/* ── HERO ── */
+.hero {
+  position: relative; min-height: 100vh;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  overflow: hidden;
+  background: radial-gradient(ellipse at 50% 40%, #1a0a2e 0%, #0a0510 50%, var(--bg) 100%);
+}
+.hero-moon {
+  position: absolute; top: 80px; left: 50%; transform: translateX(-50%);
+  width: 160px; height: 160px; border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #fff9e0, var(--moon) 40%, #8a6a20);
+  box-shadow: 0 0 80px 30px rgba(200,168,75,0.2), 0 0 160px 60px rgba(200,168,75,0.08);
+  animation: moonFloat 8s ease-in-out infinite;
+}
+@keyframes moonFloat { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(-12px)} }
+
+.hero-trees {
+  position: absolute; bottom: 0; left: 0; right: 0; height: 280px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 280'%3E%3Cpolygon points='0,280 60,140 120,280' fill='%230a0a18'/%3E%3Cpolygon points='50,280 120,100 190,280' fill='%23080814'/%3E%3Cpolygon points='130,280 200,120 270,280' fill='%230a0a18'/%3E%3Cpolygon points='220,280 300,80 380,280' fill='%23080814'/%3E%3Cpolygon points='320,280 400,110 480,280' fill='%230a0a18'/%3E%3Cpolygon points='430,280 510,90 590,280' fill='%23080814'/%3E%3Cpolygon points='540,280 630,70 720,280' fill='%230a0a18'/%3E%3Cpolygon points='660,280 740,100 820,280' fill='%23080814'/%3E%3Cpolygon points='760,280 850,120 940,280' fill='%230a0a18'/%3E%3Cpolygon points='880,280 960,85 1040,280' fill='%23080814'/%3E%3Cpolygon points='980,280 1060,110 1140,280' fill='%230a0a18'/%3E%3Cpolygon points='1080,280 1150,130 1220,280' fill='%23080814'/%3E%3C/svg%3E") no-repeat bottom;
+  background-size: cover;
+}
+
+.hero-stars {
+  position: absolute; inset: 0; pointer-events: none;
+}
+.star {
+  position: absolute; border-radius: 50%; background: #fff;
+  animation: twinkle var(--d,3s) ease-in-out infinite;
+  animation-delay: var(--dl,0s);
+}
+@keyframes twinkle { 0%,100%{opacity:0.2} 50%{opacity:0.9} }
+
+.hero-content { position: relative; z-index: 2; text-align: center; padding: 0 20px; margin-top: 200px; }
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(200,168,75,0.1); border: 1px solid rgba(200,168,75,0.3);
+  border-radius: 30px; padding: 6px 18px; font-size: 12px; color: var(--moon);
+  letter-spacing: 3px; text-transform: uppercase; margin-bottom: 20px;
+  animation: fadeUp 1s ease both;
+}
+.hero-title {
+  font-family: 'Cinzel', serif; font-size: clamp(42px, 8vw, 80px); font-weight: 900;
+  line-height: 1.1; letter-spacing: 4px; text-transform: uppercase;
+  background: linear-gradient(135deg, #fff5d0 0%, var(--moon) 40%, #8a6a20 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  animation: fadeUp 1s 0.2s ease both;
+}
+.hero-sub {
+  font-size: 18px; color: var(--muted); margin-top: 12px; letter-spacing: 1px;
+  animation: fadeUp 1s 0.4s ease both;
+}
+.hero-tags {
+  display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
+  margin-top: 24px; animation: fadeUp 1s 0.6s ease both;
+}
+.hero-tag {
+  padding: 6px 16px; border-radius: 20px; font-size: 13px; font-weight: 600;
+  border: 1px solid; cursor: default;
+}
+.tag-vid { background: rgba(34,197,94,0.08); border-color: rgba(34,197,94,0.3); color: #4ade80; }
+.tag-mic { background: rgba(124,58,237,0.08); border-color: rgba(124,58,237,0.3); color: #c4b5fd; }
+.tag-live { background: rgba(239,68,68,0.08); border-color: rgba(239,68,68,0.3); color: #f87171; }
+.tag-ar { background: rgba(200,168,75,0.08); border-color: rgba(200,168,75,0.3); color: var(--moon); }
+.hero-scroll { position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%); color: var(--muted); font-size: 12px; letter-spacing: 3px; text-transform: uppercase; animation: bounce 2s infinite; }
+@keyframes bounce { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(8px)} }
+@keyframes fadeUp { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
+
+/* ── SECTIONS ── */
+section { position: relative; z-index: 1; padding: 80px 40px; max-width: 1400px; margin: 0 auto; }
+
+.section-header { text-align: center; margin-bottom: 60px; }
+.section-eyebrow {
+  font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: var(--muted);
+  margin-bottom: 12px; font-family: monospace;
+}
+.section-title {
+  font-size: clamp(28px,5vw,48px); font-weight: 900; line-height: 1.2;
+}
+.section-desc { font-size: 15px; color: var(--muted); margin-top: 10px; line-height: 1.8; max-width: 600px; margin-left: auto; margin-right: auto; }
+
+/* ── DIVIDER ── */
+.divider { height: 1px; background: linear-gradient(90deg, transparent, var(--border), transparent); margin: 0 40px; }
+
+/* ══════════════════════════════
+   ROLES GRID
+══════════════════════════════ */
+.roles-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; }
+
+.role-card {
+  border-radius: 24px; padding: 28px; position: relative; overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: default;
+}
+.role-card:hover { transform: translateY(-6px); }
+.role-card::before {
+  content: ''; position: absolute; inset: 0; border-radius: 24px; opacity: 0.06;
+  background: radial-gradient(ellipse at 30% 30%, white, transparent);
+  pointer-events: none;
+}
+.rc-wolf   { background: #0e0506; border: 1.5px solid rgba(239,68,68,0.3); box-shadow: 0 8px 40px rgba(239,68,68,0.08); }
+.rc-village{ background: #04100a; border: 1.5px solid rgba(34,197,94,0.3); box-shadow: 0 8px 40px rgba(34,197,94,0.08); }
+.rc-seer   { background: #0e0c02; border: 1.5px solid rgba(217,119,6,0.3); box-shadow: 0 8px 40px rgba(217,119,6,0.08); }
+.rc-mag    { background: #080415; border: 1.5px solid rgba(124,58,237,0.3); box-shadow: 0 8px 40px rgba(124,58,237,0.08); }
+.rc-doc    { background: #020e08; border: 1.5px solid rgba(5,150,105,0.3); box-shadow: 0 8px 40px rgba(5,150,105,0.08); }
+.rc-hunter { background: #0e0602; border: 1.5px solid rgba(234,88,12,0.3); box-shadow: 0 8px 40px rgba(234,88,12,0.08); }
+
+.rc-wolf:hover   { box-shadow: 0 16px 60px rgba(239,68,68,0.18); }
+.rc-village:hover{ box-shadow: 0 16px 60px rgba(34,197,94,0.18); }
+.rc-seer:hover   { box-shadow: 0 16px 60px rgba(217,119,6,0.18); }
+.rc-mag:hover    { box-shadow: 0 16px 60px rgba(124,58,237,0.18); }
+.rc-doc:hover    { box-shadow: 0 16px 60px rgba(5,150,105,0.18); }
+.rc-hunter:hover { box-shadow: 0 16px 60px rgba(234,88,12,0.18); }
+
+.rc-header { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; flex-direction: row-reverse; }
+.rc-icon { font-size: 52px; filter: drop-shadow(0 0 12px currentColor); }
+.rc-info { flex: 1; text-align: right; }
+.rc-name { font-size: 22px; font-weight: 900; }
+.rc-name-wolf   { color: #f87171; }
+.rc-name-village{ color: #4ade80; }
+.rc-name-seer   { color: #fbbf24; }
+.rc-name-mag    { color: #c4b5fd; }
+.rc-name-doc    { color: #6ee7b7; }
+.rc-name-hunter { color: #fb923c; }
+
+.rc-team-badge { display: inline-block; font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 10px; margin-top: 4px; }
+.tb-evil    { background: rgba(239,68,68,0.15); color: #f87171; border: 1px solid rgba(239,68,68,0.3); }
+.tb-good    { background: rgba(34,197,94,0.15); color: #4ade80; border: 1px solid rgba(34,197,94,0.3); }
+
+.rc-desc { font-size: 13px; color: #aaa; line-height: 1.8; text-align: right; margin-bottom: 20px; }
+
+.rc-abilities { display: flex; flex-direction: column; gap: 8px; }
+.ability {
+  display: flex; align-items: flex-start; gap: 10px; padding: 10px 12px;
+  border-radius: 12px; flex-direction: row-reverse;
+}
+.ab-wolf    { background: rgba(239,68,68,0.06); border: 1px solid rgba(239,68,68,0.15); }
+.ab-village { background: rgba(34,197,94,0.06); border: 1px solid rgba(34,197,94,0.15); }
+.ab-seer    { background: rgba(217,119,6,0.06); border: 1px solid rgba(217,119,6,0.15); }
+.ab-mag     { background: rgba(124,58,237,0.06); border: 1px solid rgba(124,58,237,0.15); }
+.ab-doc     { background: rgba(5,150,105,0.06); border: 1px solid rgba(5,150,105,0.15); }
+.ab-hunter  { background: rgba(234,88,12,0.06); border: 1px solid rgba(234,88,12,0.15); }
+
+.ab-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+.ab-text { text-align: right; }
+.ab-title { font-size: 13px; font-weight: 700; }
+.ab-desc  { font-size: 11px; color: #777; margin-top: 2px; line-height: 1.5; }
+
+.rc-phase-badge {
+  display: flex; gap: 6px; margin-top: 16px; justify-content: flex-end; flex-wrap: wrap;
+}
+.phase-pill {
+  font-size: 10px; padding: 3px 10px; border-radius: 10px; font-weight: 700;
+}
+.pp-night { background: rgba(99,102,241,0.15); color: #a5b4fc; border: 1px solid rgba(99,102,241,0.3); }
+.pp-day   { background: rgba(251,191,36,0.15); color: #fde68a; border: 1px solid rgba(251,191,36,0.3); }
+.pp-death { background: rgba(239,68,68,0.15); color: #fca5a5; border: 1px solid rgba(239,68,68,0.3); }
+
+/* ══════════════════════════════
+   SCREENS SHOWCASE
+══════════════════════════════ */
+.screens-flow { display: flex; flex-direction: column; gap: 80px; }
+
+.flow-block { display: flex; flex-direction: column; gap: 24px; }
+.flow-block-header {
+  display: flex; align-items: center; gap: 16px; padding: 20px 24px;
+  border-radius: 16px; flex-direction: row-reverse;
+}
+.fbh-wolf   { background: rgba(239,68,68,0.06); border: 1px solid rgba(239,68,68,0.2); }
+.fbh-seer   { background: rgba(217,119,6,0.06); border: 1px solid rgba(217,119,6,0.2); }
+.fbh-mag    { background: rgba(124,58,237,0.06); border: 1px solid rgba(124,58,237,0.2); }
+.fbh-doc    { background: rgba(5,150,105,0.06); border: 1px solid rgba(5,150,105,0.2); }
+.fbh-hunter { background: rgba(234,88,12,0.06); border: 1px solid rgba(234,88,12,0.2); }
+.fbh-global { background: rgba(200,168,75,0.06); border: 1px solid rgba(200,168,75,0.2); }
+
+.fbh-icon { font-size: 36px; }
+.fbh-info { flex: 1; text-align: right; }
+.fbh-title { font-size: 20px; font-weight: 900; }
+.fbh-sub { font-size: 12px; color: var(--muted); margin-top: 3px; }
+.fbh-count { font-size: 11px; padding: 4px 12px; border-radius: 20px; font-weight: 700; }
+.cnt-wolf   { background: rgba(239,68,68,0.15); color: #f87171; }
+.cnt-seer   { background: rgba(217,119,6,0.15); color: #fbbf24; }
+.cnt-mag    { background: rgba(124,58,237,0.15); color: #c4b5fd; }
+.cnt-doc    { background: rgba(5,150,105,0.15); color: #6ee7b7; }
+.cnt-hunter { background: rgba(234,88,12,0.15); color: #fb923c; }
+.cnt-global { background: rgba(200,168,75,0.15); color: var(--moon); }
+
+.screens-row { display: flex; gap: 20px; overflow-x: auto; padding-bottom: 12px; }
+.screens-row::-webkit-scrollbar { height: 4px; }
+.screens-row::-webkit-scrollbar-track { background: var(--surface); border-radius: 2px; }
+.screens-row::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+/* ── MINI PHONE MOCKUPS ── */
+.phone {
+  width: 200px; flex-shrink: 0; border-radius: 28px;
+  border: 1.5px solid var(--border); overflow: hidden;
+  background: #0a0a16; box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+  transition: transform 0.3s; cursor: pointer;
+}
+.phone:hover { transform: scale(1.04) translateY(-4px); }
+.phone-bar { height: 20px; display: flex; align-items: center; justify-content: space-between; padding: 0 12px; font-size: 8px; color: #666; direction: ltr; }
+.phone-screen { padding: 10px; min-height: 360px; position: relative; overflow: hidden; display: flex; flex-direction: column; }
+.phone-label { position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); font-size: 9px; color: #444; white-space: nowrap; font-family: monospace; letter-spacing: 1px; }
+
+/* phone screen variants */
+.ps-home { background: radial-gradient(ellipse at 50% 30%, #1a0a2e, #060310); }
+.ps-lobby { background: linear-gradient(180deg, #1a0a2e, #0a0a16); }
+.ps-role-wolf { background: radial-gradient(ellipse at 50%, #1a0505, #060202); }
+.ps-role-seer { background: radial-gradient(ellipse at 50%, #1a1400, #060500); }
+.ps-role-mag  { background: radial-gradient(ellipse at 50%, #120835, #050310); }
+.ps-role-doc  { background: radial-gradient(ellipse at 50%, #031a10, #010805); }
+.ps-role-hunter { background: radial-gradient(ellipse at 50%, #1a0800, #060200); }
+.ps-night { background: radial-gradient(ellipse at 50% 20%, #0a0a1f, #030308); }
+.ps-day   { background: radial-gradient(ellipse at 50% 10%, #1a1400, #060500); }
+.ps-video { background: #050510; }
+.ps-result { background: radial-gradient(ellipse at 50% 30%, #1a0a2e, #050308); }
+
+/* phone UI elements */
+.p-moon { width: 44px; height: 44px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #ffe9a0, #c8a84b); margin: 10px auto 6px; box-shadow: 0 0 20px rgba(200,168,75,0.4); }
+.p-trees { height: 50px; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 50'%3E%3Cpolygon points='0,50 20,20 40,50' fill='%230a0a18'/%3E%3Cpolygon points='30,50 55,10 80,50' fill='%23080814'/%3E%3Cpolygon points='70,50 95,18 120,50' fill='%230a0a18'/%3E%3Cpolygon points='110,50 140,8 170,50' fill='%23080814'/%3E%3Cpolygon points='155,50 180,15 205,50' fill='%230a0a18'/%3E%3C/svg%3E") no-repeat bottom; background-size: cover; margin-top: auto; }
+.p-title { font-size: 14px; font-weight: 900; text-align: center; background: linear-gradient(135deg, #ffe9a0, #c8a84b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.p-sub { font-size: 8px; color: #777; text-align: center; margin-top: 2px; }
+.p-btn { margin: 8px auto; display: block; width: 120px; height: 28px; border-radius: 14px; border: none; font-size: 10px; font-weight: 700; cursor: pointer; font-family: 'Cairo', sans-serif; }
+.pb-purple { background: linear-gradient(135deg, #7c3aed, #4f46e5); color: #fff; }
+.pb-outline { background: transparent; border: 1px solid #7c3aed; color: #a78bfa; }
+.p-code-box { background: #1e1e30; border-radius: 10px; padding: 8px 10px; margin: 8px 0; border: 1px solid #2a2a45; }
+.p-code { font-size: 16px; font-weight: 900; letter-spacing: 4px; color: #c8a84b; text-align: center; direction: ltr; }
+.p-player-row { display: flex; align-items: center; gap: 6px; padding: 6px 8px; background: #161625; border-radius: 8px; margin-bottom: 4px; flex-direction: row-reverse; }
+.p-av { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; }
+.p-av1{background:#2d1b69;}.p-av2{background:#1a2e1a;}.p-av3{background:#2e1a1a;}.p-av4{background:#1a2a2e;}.p-av5{background:#2e2a1a;}
+.p-pname { font-size: 9px; font-weight: 600; flex: 1; text-align: right; }
+.p-dot-g { width: 5px; height: 5px; border-radius: 50%; background: #22c55e; }
+.p-dot-w { width: 5px; height: 5px; border-radius: 50%; background: #444; }
+
+.p-role-card { width: 120px; margin: 8px auto 0; border-radius: 16px; padding: 16px 10px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.prc-wolf   { background: #1a0505; border: 1.5px solid #5a1a1a; }
+.prc-seer   { background: #1a1400; border: 1.5px solid #5a4a00; }
+.prc-mag    { background: #0d0520; border: 1.5px solid #3d1a7a; }
+.prc-doc    { background: #031a10; border: 1.5px solid #1a5a3a; }
+.prc-hunter { background: #1a0800; border: 1.5px solid #5a2a00; }
+.p-role-icon { font-size: 32px; }
+.p-role-name { font-size: 12px; font-weight: 900; }
+.p-rn-wolf   { color: #f87171; }
+.p-rn-seer   { color: #fbbf24; }
+.p-rn-mag    { color: #c4b5fd; }
+.p-rn-doc    { color: #6ee7b7; }
+.p-rn-hunter { color: #fb923c; }
+.p-role-desc { font-size: 8px; color: #888; line-height: 1.5; }
+
+/* night voice grid */
+.p-voice-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 6px; padding: 0 6px; }
+.p-voice-cell { display: flex; flex-direction: column; align-items: center; gap: 3px; }
+.p-v-av { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; border: 1.5px solid #1e1e35; }
+.p-v-av.talking { border-color: #22c55e; box-shadow: 0 0 8px rgba(34,197,94,0.4); }
+.p-v-av.wolf-t  { border-color: #ef4444; box-shadow: 0 0 8px rgba(239,68,68,0.4); }
+.pva1{background:#2d1b69;}.pva2{background:#1a2e1a;}.pva3{background:#2e1a1a;}.pva4{background:#1a2a2e;}.pva5{background:#2e2a1a;}.pva6{background:#1a1a2a;}
+.p-v-name { font-size: 7px; color: #888; font-weight: 600; }
+
+/* video grid mini */
+.p-video-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3px; padding: 6px; flex: 1; }
+.p-vid-cell { border-radius: 8px; background: #111120; border: 1px solid #1e1e35; display: flex; align-items: center; justify-content: center; font-size: 20px; aspect-ratio: 4/3; position: relative; overflow: hidden; }
+.p-vid-cell.speaking { border-color: #22c55e; }
+.p-vid-name { position: absolute; bottom: 3px; right: 4px; font-size: 7px; color: #fff; font-weight: 700; }
+
+/* phase banner small */
+.p-phase-banner { margin: 6px; padding: 6px 10px; border-radius: 10px; display: flex; align-items: center; gap: 6px; flex-direction: row-reverse; }
+.ppb-night { background: #0d0d2e; border: 1px solid #2a2a6a; }
+.ppb-day   { background: #1a1200; border: 1px solid #3a2800; }
+.p-phase-txt { font-size: 10px; font-weight: 700; }
+.ptxt-night { color: #a78bfa; }
+.ptxt-day   { color: #fbbf24; }
+.p-timer { text-align: center; font-size: 24px; font-weight: 900; color: #c8a84b; margin: 4px 0; }
+
+/* seer result */
+.p-vision { margin: 6px; border-radius: 12px; padding: 12px; text-align: center; }
+.pv-wolf { background: #1a0505; border: 1.5px solid #ef444444; }
+.pv-village { background: #051a0d; border: 1.5px solid #22c55e44; }
+.p-vision-icon { font-size: 36px; }
+.p-vision-name { font-size: 13px; font-weight: 900; margin-top: 4px; }
+.pvn-wolf { color: #f87171; }
+.pvn-v    { color: #4ade80; }
+.p-vision-badge { font-size: 9px; padding: 3px 8px; border-radius: 8px; margin-top: 6px; display: inline-block; }
+.pvb-wolf { background: #ef444422; color: #f87171; border: 1px solid #ef444444; }
+.pvb-v    { background: #22c55e22; color: #4ade80; border: 1px solid #22c55e44; }
+
+/* potions */
+.p-potions { display: flex; gap: 6px; padding: 0 8px; }
+.p-potion { flex: 1; border-radius: 10px; padding: 8px 6px; text-align: center; font-size: 20px; }
+.pp-life { background: #062a1a; border: 1px solid #05966944; }
+.pp-death { background: #1a0808; border: 1px solid #ef444444; }
+.p-potion-name { font-size: 9px; font-weight: 700; margin-top: 3px; }
+.ppn-life { color: #34d399; }
+.ppn-death { color: #f87171; }
+
+/* hunter death */
+.p-death-banner { margin: 6px; padding: 10px; border-radius: 10px; text-align: center; background: #1a0800; border: 1px solid #ea580c44; }
+.pdb-title { font-size: 11px; font-weight: 900; color: #fb923c; }
+.pdb-sub { font-size: 8px; color: #888; margin-top: 3px; line-height: 1.4; }
+.p-hunter-list { padding: 0 8px; }
+.phl-item { display: flex; align-items: center; gap: 6px; padding: 6px 8px; border-radius: 8px; margin-bottom: 4px; background: #1a0a00; border: 1px solid #2a1400; flex-direction: row-reverse; }
+.phl-item.sel { border-color: #ea580c; background: #2a1000; }
+.phl-av { font-size: 14px; }
+.phl-name { font-size: 9px; font-weight: 700; flex: 1; text-align: right; }
+.phl-icon { font-size: 12px; }
+
+/* action btn small */
+.p-action-btn { margin: 6px 8px 0; height: 32px; border-radius: 16px; border: none; width: calc(100% - 16px); font-size: 11px; font-weight: 700; cursor: pointer; font-family: 'Cairo', sans-serif; }
+.pab-wolf    { background: linear-gradient(135deg, #ef4444, #b91c1c); color: #fff; }
+.pab-seer    { background: linear-gradient(135deg, #d97706, #b45309); color: #fff; }
+.pab-mag-s   { background: linear-gradient(135deg, #059669, #047857); color: #fff; }
+.pab-mag-k   { background: linear-gradient(135deg, #ef4444, #b91c1c); color: #fff; }
+.pab-doc     { background: linear-gradient(135deg, #059669, #047857); color: #fff; }
+.pab-hunter  { background: linear-gradient(135deg, #ea580c, #c2410c); color: #fff; }
+.pab-vote    { background: linear-gradient(135deg, #d97706, #b45309); color: #fff; }
+
+/* ══════════════════════════════
+   GAME FLOW TIMELINE
+══════════════════════════════ */
+.timeline { position: relative; padding: 0 20px; }
+.timeline::before { content:''; position:absolute; top:0; bottom:0; right: 50%; width: 2px; background: linear-gradient(180deg, transparent, var(--border) 20%, var(--border) 80%, transparent); }
+
+.tl-item { display: flex; align-items: center; gap: 32px; margin-bottom: 40px; flex-direction: row-reverse; }
+.tl-item:nth-child(even) { flex-direction: row; }
+.tl-item:nth-child(even) .tl-content { text-align: right; }
+.tl-dot { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; z-index: 1; position: relative; }
+.tl-content { flex: 1; max-width: 380px; }
+.tl-title { font-size: 18px; font-weight: 900; }
+.tl-desc { font-size: 13px; color: var(--muted); margin-top: 6px; line-height: 1.7; }
+.tl-roles { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
+.tl-item:nth-child(even) .tl-roles { justify-content: flex-end; }
+.tl-role-tag { font-size: 10px; padding: 3px 10px; border-radius: 10px; font-weight: 700; }
+
+.td-night  { background: #1a1a3a; border: 1px solid #3a3a6a; }
+.td-night .tl-dot  { background: #1a1a3a; border: 2px solid #6366f1; color: #a5b4fc; }
+.td-night .tl-title { color: #a5b4fc; }
+
+.td-wolf   { background: rgba(239,68,68,0.15); color: #f87171; border: 1px solid rgba(239,68,68,0.3); }
+.td-seer-t { background: rgba(217,119,6,0.15); color: #fbbf24; border: 1px solid rgba(217,119,6,0.3); }
+.td-mag-t  { background: rgba(124,58,237,0.15); color: #c4b5fd; border: 1px solid rgba(124,58,237,0.3); }
+.td-doc-t  { background: rgba(5,150,105,0.15); color: #6ee7b7; border: 1px solid rgba(5,150,105,0.3); }
+
+.td-day    { background: #2a1e00; border: 1px solid #4a3800; }
+.td-day .tl-dot    { background: #2a1e00; border: 2px solid #d97706; color: #fbbf24; }
+.td-day .tl-title  { color: #fbbf24; }
+
+.td-result { background: rgba(200,168,75,0.15); color: var(--moon); border: 1px solid rgba(200,168,75,0.3); }
+.td-hunter-t { background: rgba(234,88,12,0.15); color: #fb923c; border: 1px solid rgba(234,88,12,0.3); }
+
+/* ══════════════════════════════
+   SCREENS LEGEND TABLE
+══════════════════════════════ */
+.legend-table { width: 100%; border-collapse: separate; border-spacing: 0 8px; }
+.legend-table th { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); padding: 0 16px 8px; text-align: right; border-bottom: 1px solid var(--border); }
+.legend-table td { padding: 12px 16px; font-size: 13px; }
+.legend-table tr td:first-child { border-radius: 0 12px 12px 0; }
+.legend-table tr td:last-child  { border-radius: 12px 0 0 12px; }
+.lt-row { background: var(--surface); }
+.lt-row:hover { background: var(--surface2); }
+.lt-num { font-size: 11px; color: var(--muted); font-family: monospace; font-weight: 700; white-space: nowrap; }
+.lt-icon { font-size: 22px; text-align: center !important; }
+.lt-name { font-weight: 700; }
+.lt-desc { color: var(--muted); }
+.lt-roles-cell { text-align: left !important; }
+.lt-tag { display: inline-block; font-size: 10px; padding: 2px 8px; border-radius: 8px; font-weight: 700; margin: 2px; }
+
+/* ══════════════════════════════
+   TECH STACK
+══════════════════════════════ */
+.tech-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+.tech-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 20px; text-align: center; transition: transform 0.2s, border-color 0.2s; }
+.tech-card:hover { transform: translateY(-4px); border-color: #3a3a6a; }
+.tech-icon { font-size: 32px; margin-bottom: 10px; }
+.tech-name { font-size: 14px; font-weight: 700; }
+.tech-desc { font-size: 11px; color: var(--muted); margin-top: 4px; line-height: 1.5; }
+
+/* ══════════════════════════════
+   FOOTER
+══════════════════════════════ */
+.footer {
+  text-align: center; padding: 60px 40px;
+  background: linear-gradient(180deg, transparent, rgba(200,168,75,0.03));
+  border-top: 1px solid var(--border);
+}
+.footer-title { font-size: 28px; font-weight: 900; background: linear-gradient(135deg, #ffe9a0, var(--moon)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.footer-sub { font-size: 14px; color: var(--muted); margin-top: 8px; }
+
+/* ── UTILS ── */
+.gold { color: var(--moon); }
+.text-center { text-align: center; }
+.mb4 { margin-bottom: 4px; }
+.mt8 { margin-top: 8px; }
+
+/* scroll animations */
+.reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════
+     HERO
+══════════════════════════════ -->
+<div class="hero">
+  <!-- stars -->
+  <div class="hero-stars" id="stars"></div>
+  <div class="hero-moon"></div>
+  <div class="hero-trees"></div>
+  <div class="hero-content">
+    <div class="hero-badge">🐺 الدليل الكامل للعبة</div>
+    <div class="hero-title">ذئب المدينة</div>
+    <div class="hero-sub">لعبة الاستنتاج الاجتماعي · صوت وكاميرا · متعدد اللاعبين</div>
+    <div class="hero-tags">
+      <div class="hero-tag tag-vid">📹 كاميرا مباشرة</div>
+      <div class="hero-tag tag-mic">🎙️ صوت حي</div>
+      <div class="hero-tag tag-live">🔴 متعدد اللاعبين</div>
+      <div class="hero-tag tag-ar">🇸🇦 عربي كامل</div>
+    </div>
+  </div>
+  <div class="hero-scroll">▼ &nbsp; اسحب للأسفل</div>
+</div>
+
+<!-- ══════════════════════════════
+     ROLES
+══════════════════════════════ -->
+<div class="divider"></div>
+<section class="reveal">
+  <div class="section-header">
+    <div class="section-eyebrow">الشخصيات</div>
+    <div class="section-title">٦ أدوار · فريقان · سر واحد 🔒</div>
+    <div class="section-desc">كل لاعب يحمل هوية سرية. الذئاب يصطادون ليلاً، والقرويون يكشفون الحقيقة نهاراً.</div>
+  </div>
+
+  <div class="roles-grid">
+
+    <!-- WOLF -->
+    <div class="role-card rc-wolf reveal">
+      <div class="rc-header">
+        <div class="rc-icon">🐺</div>
+        <div class="rc-info">
+          <div class="rc-name rc-name-wolf">المستذئب</div>
+          <div class="rc-team-badge tb-evil">فريق الشر</div>
+        </div>
+      </div>
+      <div class="rc-desc">تتظاهر بأنك قروي بريء خلال النهار، لكن ليلاً تتحول إلى وحش يصطاد الضحايا مع رفاقك من الذئاب.</div>
+      <div class="rc-abilities">
+        <div class="ability ab-wolf">
+          <div class="ab-icon">🌙</div>
+          <div class="ab-text">
+            <div class="ab-title">الصيد الليلي</div>
+            <div class="ab-desc">صوّت مع الذئاب لاختيار ضحية · القناة السرية الصوتية مفتوحة فقط لكم</div>
+          </div>
+        </div>
+        <div class="ability ab-wolf">
+          <div class="ab-icon">🎭</div>
+          <div class="ab-text">
+            <div class="ab-title">التمويه النهاري</div>
+            <div class="ab-desc">شارك في النقاش والتصويت كأنك بريء · لا تكشف نفسك!</div>
+          </div>
+        </div>
+      </div>
+      <div class="rc-phase-badge">
+        <div class="phase-pill pp-night">🌙 ليل</div>
+        <div class="phase-pill pp-day">☀️ نهار</div>
+      </div>
+    </div>
+
+    <!-- VILLAGE -->
+    <div class="role-card rc-village reveal">
+      <div class="rc-header">
+        <div class="rc-icon">🧑‍🌾</div>
+        <div class="rc-info">
+          <div class="rc-name rc-name-village">القروي</div>
+          <div class="rc-team-badge tb-good">فريق الخير</div>
+        </div>
+      </div>
+      <div class="rc-desc">مواطن بسيط بلا قدرات خاصة، لكن صوتك أقوى سلاح. راقب، فكّر، وصوّت لكشف الذئاب قبل أن ينتهوا من القرية.</div>
+      <div class="rc-abilities">
+        <div class="ability ab-village">
+          <div class="ab-icon">💬</div>
+          <div class="ab-text">
+            <div class="ab-title">النقاش النهاري</div>
+            <div class="ab-desc">شارك عبر الكاميرا والصوت · حلل تصرفات الآخرين واكشف الكاذب</div>
+          </div>
+        </div>
+        <div class="ability ab-village">
+          <div class="ab-icon">🗳️</div>
+          <div class="ab-text">
+            <div class="ab-title">التصويت الجماعي</div>
+            <div class="ab-desc">صوّت لطرد المشبوه · الأغلبية تقرر مصيره</div>
+          </div>
+        </div>
+      </div>
+      <div class="rc-phase-badge"><div class="phase-pill pp-day">☀️ نهار فقط</div></div>
+    </div>
+
+    <!-- SEER -->
+    <div class="role-card rc-seer reveal">
+      <div class="rc-header">
+        <div class="rc-icon">🔮</div>
+        <div class="rc-info">
+          <div class="rc-name rc-name-seer">العرّاف</div>
+          <div class="rc-team-badge tb-good">فريق الخير</div>
+        </div>
+      </div>
+      <div class="rc-desc">تملك بصيرة خارقة تكشف حقيقة أي لاعب. معلوماتك ثمينة جداً — شاركها بذكاء دون أن تكشف هويتك.</div>
+      <div class="rc-abilities">
+        <div class="ability ab-seer">
+          <div class="ab-icon">👁️</div>
+          <div class="ab-text">
+            <div class="ab-title">الرؤية الليلية</div>
+            <div class="ab-desc">اكشف هوية لاعب كل ليلة · تعرف إن كان ذئباً أم قروياً</div>
+          </div>
+        </div>
+        <div class="ability ab-seer">
+          <div class="ab-icon">📜</div>
+          <div class="ab-text">
+            <div class="ab-title">سجل الكشوفات</div>
+            <div class="ab-desc">تراكم معلوماتك ليلة بعد ليلة · لا تنسَ من فحصتهم</div>
+          </div>
+        </div>
+      </div>
+      <div class="rc-phase-badge">
+        <div class="phase-pill pp-night">🌙 ليل</div>
+        <div class="phase-pill pp-day">☀️ نهار</div>
+      </div>
+    </div>
+
+    <!-- MAGICIAN -->
+    <div class="role-card rc-mag reveal">
+      <div class="rc-header">
+        <div class="rc-icon">🧙‍♂️</div>
+        <div class="rc-info">
+          <div class="rc-name rc-name-mag">الساحر</div>
+          <div class="rc-team-badge tb-good">فريق الخير</div>
+        </div>
+      </div>
+      <div class="rc-desc">تملك جرعتين سحريتين لا تتكرران. فكّر ألف مرة قبل استخدامهما — قرارك قد يغير مجرى اللعبة كلها.</div>
+      <div class="rc-abilities">
+        <div class="ability ab-mag">
+          <div class="ab-icon">💚</div>
+          <div class="ab-text">
+            <div class="ab-title">جرعة الإنقاذ</div>
+            <div class="ab-desc">أنقذ ضحية الذئاب من الموت · مرة واحدة طوال اللعبة</div>
+          </div>
+        </div>
+        <div class="ability ab-mag">
+          <div class="ab-icon">🖤</div>
+          <div class="ab-text">
+            <div class="ab-title">جرعة الموت</div>
+            <div class="ab-desc">اقتل لاعباً تشك فيه · مرة واحدة طوال اللعبة</div>
+          </div>
+        </div>
+      </div>
+      <div class="rc-phase-badge"><div class="phase-pill pp-night">🌙 ليل فقط</div></div>
+    </div>
+
+    <!-- DOCTOR -->
+    <div class="role-card rc-doc reveal">
+      <div class="rc-header">
+        <div class="rc-icon">🧑‍⚕️</div>
+        <div class="rc-info">
+          <div class="rc-name rc-name-doc">الطبيب</div>
+          <div class="rc-team-badge tb-good">فريق الخير</div>
+        </div>
+      </div>
+      <div class="rc-desc">طبيب القرية الوفي. كل ليلة تختار لاعباً تحميه من هجوم الذئاب — لكن لا يمكنك حماية نفس الشخص ليلتين متتاليتين.</div>
+      <div class="rc-abilities">
+        <div class="ability ab-doc">
+          <div class="ab-icon">🛡️</div>
+          <div class="ab-text">
+            <div class="ab-title">الحماية الليلية</div>
+            <div class="ab-desc">احمِ لاعباً كل ليلة بدون حد · لا تكرار لنفس الشخص</div>
+          </div>
+        </div>
+        <div class="ability ab-doc">
+          <div class="ab-icon">🔒</div>
+          <div class="ab-text">
+            <div class="ab-title">السرية التامة</div>
+            <div class="ab-desc">لا أحد يعلم من حميته · حتى المحمي لا يعرف</div>
+          </div>
+        </div>
+      </div>
+      <div class="rc-phase-badge"><div class="phase-pill pp-night">🌙 ليل فقط</div></div>
+    </div>
+
+    <!-- HUNTER -->
+    <div class="role-card rc-hunter reveal">
+      <div class="rc-header">
+        <div class="rc-icon">🏹</div>
+        <div class="rc-info">
+          <div class="rc-name rc-name-hunter">الصيّاد</div>
+          <div class="rc-team-badge tb-good">فريق الخير</div>
+        </div>
+      </div>
+      <div class="rc-desc">محارب شجاع لا يخاف الموت. إن قُتلت بأي طريقة، تُطلق رصاصتك الأخيرة على لاعب تختاره ليرحل معك.</div>
+      <div class="rc-abilities">
+        <div class="ability ab-hunter">
+          <div class="ab-icon">💀</div>
+          <div class="ab-text">
+            <div class="ab-title">رصاصة الموت</div>
+            <div class="ab-desc">تُفعَّل لحظة موتك تلقائياً · اختر هدفك بسرعة</div>
+          </div>
+        </div>
+        <div class="ability ab-hunter">
+          <div class="ab-icon">⚡</div>
+          <div class="ab-text">
+            <div class="ab-title">الانتقام الأخير</div>
+            <div class="ab-desc">لا أحد يعلم بقدرتك مسبقاً · المفاجأة سلاحك</div>
+          </div>
+        </div>
+      </div>
+      <div class="rc-phase-badge"><div class="phase-pill pp-death">💀 عند الموت</div></div>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ══════════════════════════════
+     GAME FLOW TIMELINE
+══════════════════════════════ -->
+<section class="reveal">
+  <div class="section-header">
+    <div class="section-eyebrow">سير اللعبة</div>
+    <div class="section-title">كيف تتسلسل الأحداث؟ ⚡</div>
+    <div class="section-desc">كل جولة تتبادل بين مرحلة الليل السرية ومرحلة النهار الصاخبة.</div>
+  </div>
+
+  <div class="timeline">
+
+    <div class="tl-item td-night reveal">
+      <div class="tl-dot td-night">🌙</div>
+      <div class="tl-content">
+        <div class="tl-title">يحل الظلام</div>
+        <div class="tl-desc">الكاميرات تُغلق والأصوات تخفت. كل شخصية تؤدي دورها الليلي بالترتيب في صمت تام. القرويون ينامون.</div>
+        <div class="tl-roles">
+          <div class="tl-role-tag td-wolf">🐺 الذئاب يصطادون</div>
+          <div class="tl-role-tag td-seer-t">🔮 العراف يكشف</div>
+          <div class="tl-role-tag td-doc-t">🧑‍⚕️ الطبيب يحمي</div>
+          <div class="tl-role-tag td-mag-t">🧙‍♂️ الساحر يقرر</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tl-item td-day reveal">
+      <div class="tl-dot td-day">☀️</div>
+      <div class="tl-content">
+        <div class="tl-title">يشرق الصباح</div>
+        <div class="tl-desc">الكاميرات تفتح والأصوات تعلو. يُكشف عن ضحية الليل. الجميع يناقش بحرية عبر الفيديو لتحديد هوية الذئب.</div>
+        <div class="tl-roles">
+          <div class="tl-role-tag" style="background:rgba(251,191,36,0.15);color:#fde68a;border:1px solid rgba(251,191,36,0.3)">💬 نقاش حر بالصوت والكاميرا</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tl-item td-night reveal">
+      <div class="tl-dot td-night">🗳️</div>
+      <div class="tl-content">
+        <div class="tl-title">التصويت العام</div>
+        <div class="tl-desc">كل لاعب يصوت لطرد المشبوه. الشخص الأكثر أصواتاً يُطرد ويُكشف دوره. إن كان ذئباً — انتصار جزئي!</div>
+        <div class="tl-roles">
+          <div class="tl-role-tag td-hunter-t">🏹 الصياد قد يُطلق رصاصته هنا</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tl-item td-day reveal">
+      <div class="tl-dot td-day">🏆</div>
+      <div class="tl-content">
+        <div class="tl-title">نهاية اللعبة</div>
+        <div class="tl-desc">الذئاب يفوزون إن تساووا بعدد القرويين. القرويون يفوزون بإقصاء جميع الذئاب. أي فريق سيتفوق؟</div>
+        <div class="tl-roles">
+          <div class="tl-role-tag td-wolf">🐺 فوز الذئاب</div>
+          <div class="tl-role-tag" style="background:rgba(34,197,94,0.15);color:#4ade80;border:1px solid rgba(34,197,94,0.3)">🧑‍🌾 فوز القرية</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ══════════════════════════════
+     SCREENS SHOWCASE
+══════════════════════════════ -->
+<section class="reveal">
+  <div class="section-header">
+    <div class="section-eyebrow">الواجهات</div>
+    <div class="section-title">جولة كاملة بالشاشات 📱</div>
+    <div class="section-desc">كل شخصية لها شاشاتها الخاصة. اسحب يميناً لترى المزيد.</div>
+  </div>
+
+  <div class="screens-flow">
+
+    <!-- GLOBAL SCREENS -->
+    <div class="flow-block reveal">
+      <div class="flow-block-header fbh-global">
+        <div class="fbh-icon">🌍</div>
+        <div class="fbh-info">
+          <div class="fbh-title" style="color:var(--moon)">الشاشات العامة</div>
+          <div class="fbh-sub">يراها جميع اللاعبين بغض النظر عن الدور</div>
+        </div>
+        <div class="fbh-count cnt-global">٤ شاشات</div>
+      </div>
+      <div class="screens-row">
+
+        <!-- Home -->
+        <div class="phone">
+          <div class="phone-bar"><span>9:41</span><span>🔋</span></div>
+          <div class="phone-screen ps-home">
+            <div class="p-moon"></div>
+            <div style="text-align:center;margin-top:6px">
+              <div class="p-title">🐺 ذئب المدينة</div>
+              <div class="p-sub">لعبة الاستنتاج الاجتماعي</div>
+            </div>
+            <button class="p-btn pb-purple" style="margin-top:14px">🎮 إنشاء غرفة</button>
+            <div style="text-align:center;font-size:8px;color:#555;margin:4px 0">— أو —</div>
+            <button class="p-btn pb-outline">🔑 الانضمام</button>
+            <div class="p-trees"></div>
+            <div class="phone-label">الرئيسية</div>
+          </div>
+        </div>
+
+        <!-- Lobby -->
+        <div class="phone">
+          <div class="phone-bar" style="background:#1a0a2e"><span>9:41</span><span>🔋</span></div>
+          <div class="phone-screen ps-lobby" style="padding:0">
+            <div style="padding:10px 12px;background:#1a0a2e">
+              <div class="p-code-box"><div style="font-size:8px;color:#888;text-align:right">كود الغرفة</div><div class="p-code">WLF-47</div></div>
+              <div style="font-size:11px;font-weight:700;text-align:right">الغابة المظلمة 🌲</div>
+              <div style="font-size:8px;color:#666;text-align:right;margin-top:2px">٥/٨ لاعبين</div>
+            </div>
+            <div style="padding:8px 10px;flex:1">
+              <div class="p-player-row"><div class="p-av p-av1">👑</div><div class="p-pname">أحمد</div><div class="p-dot-g"></div></div>
+              <div class="p-player-row"><div class="p-av p-av2">🧑</div><div class="p-pname">سارة</div><div class="p-dot-g"></div></div>
+              <div class="p-player-row"><div class="p-av p-av3">🧔</div><div class="p-pname">كريم</div><div class="p-dot-g"></div></div>
+              <div class="p-player-row"><div class="p-av p-av4">👩</div><div class="p-pname">لينا</div><div class="p-dot-w"></div></div>
+              <div class="p-player-row"><div class="p-av p-av5">🧑‍🦱</div><div class="p-pname">يوسف</div><div class="p-dot-w"></div></div>
+            </div>
+            <div style="padding:8px 10px"><button class="p-btn pb-purple" style="width:100%;margin:0">🚀 بدء اللعبة</button></div>
+            <div class="phone-label">غرفة الانتظار</div>
+          </div>
+        </div>
+
+        <!-- Day Video -->
+        <div class="phone">
+          <div class="phone-bar" style="background:#0a0a18"><span>9:41</span><span>🔋</span></div>
+          <div class="phone-screen ps-video" style="padding:0">
+            <div class="p-phase-banner ppb-day" style="margin:6px">
+              <div style="font-size:14px">☀️</div>
+              <div class="p-phase-txt ptxt-day" style="font-size:10px">النهار — يوم ٢</div>
+            </div>
+            <div class="p-video-grid">
+              <div class="p-vid-cell speaking"><div>🧑</div><div class="p-vid-name">أحمد</div></div>
+              <div class="p-vid-cell" style="border-color:#7c3aed"><div>😐</div><div class="p-vid-name" style="color:#a78bfa">أنت</div></div>
+              <div class="p-vid-cell"><div>👩</div><div class="p-vid-name">سارة</div></div>
+              <div class="p-vid-cell" style="opacity:0.3"><div>💀</div><div class="p-vid-name">لينا</div></div>
+              <div class="p-vid-cell"><div>🧑‍🦱</div><div class="p-vid-name">يوسف</div></div>
+              <div class="p-vid-cell"><div>🧔</div><div class="p-vid-name">كريم</div></div>
+            </div>
+            <div style="padding:6px 8px;display:flex;gap:6px;align-items:center">
+              <div style="width:28px;height:28px;border-radius:50%;background:#1e1e35;display:flex;align-items:center;justify-content:center;font-size:13px">🎙️</div>
+              <div style="width:28px;height:28px;border-radius:50%;background:#1e1e35;display:flex;align-items:center;justify-content:center;font-size:13px">📹</div>
+              <button class="p-action-btn pab-vote" style="flex:1;margin:0;height:28px;font-size:10px">🗳️ صوّت</button>
+            </div>
+            <div class="phone-label">النهار · كاميرات</div>
+          </div>
+        </div>
+
+        <!-- Night voice -->
+        <div class="phone">
+          <div class="phone-bar"><span>9:41</span><span>🔋</span></div>
+          <div class="phone-screen ps-night">
+            <div class="p-phase-banner ppb-night">
+              <div style="font-size:14px">🌙</div>
+              <div class="p-phase-txt ptxt-night" style="font-size:10px">حل الظلام...</div>
+            </div>
+            <div class="p-timer">0:47</div>
+            <div style="font-size:8px;color:#666;text-align:center;margin-bottom:8px">صوت فقط · كاميرات مغلقة</div>
+            <div class="p-voice-grid">
+              <div class="p-voice-cell"><div class="p-v-av pva1 talking">🧑</div><div class="p-v-name">أحمد</div></div>
+              <div class="p-voice-cell"><div class="p-v-av pva2">👩</div><div class="p-v-name">سارة</div></div>
+              <div class="p-voice-cell"><div class="p-v-av pva3 wolf-t">🧔</div><div class="p-v-name" style="color:#ef4444">كريم</div></div>
+              <div class="p-voice-cell"><div class="p-v-av pva4" style="opacity:0.3">💀</div><div class="p-v-name" style="color:#444">لينا</div></div>
+              <div class="p-voice-cell"><div class="p-v-av pva5">🧑‍🦱</div><div class="p-v-name">يوسف</div></div>
+              <div class="p-voice-cell"><div class="p-v-av pva6" style="border-color:#7c3aed">😶</div><div class="p-v-name" style="color:#a78bfa">أنت</div></div>
+            </div>
+            <div class="phone-label">الليل · صوت</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- WOLF SCREENS -->
+    <div class="flow-block reveal">
+      <div class="flow-block-header fbh-wolf">
+        <div class="fbh-icon">🐺</div>
+        <div class="fbh-info">
+          <div class="fbh-title" style="color:#f87171">شاشات المستذئب</div>
+          <div class="fbh-sub">يراها الذئاب فقط — قناة سرية ليلية</div>
+        </div>
+        <div class="fbh-count cnt-wolf">٢ شاشات</div>
+      </div>
+      <div class="screens-row">
+        <div class="phone">
+          <div class="phone-bar"><span>9:41</span><span>🔋</span></div>
+          <div class="phone-screen ps-role-wolf" style="align-items:center;justify-content:center;gap:8px">
+            <div style="font-size:8px;color:#555;letter-spacing:2px;font-family:monospace">دورك السري</div>
+            <div class="p-role-card prc-wolf">
+              <div class="p-role-icon">🐺</div>
+              <div class="p-role-name p-rn-wolf">المستذئب</div>
+              <div class="p-role-desc">اصطد مع رفاقك ليلاً وتظاهر نهاراً</div>
+            </div>
+            <div style="background:#1a0808;border:1px solid #5a1a1a;border-radius:10px;padding:8px 10px;width:100%;margin-top:4px">
+              <div style="font-size:8px;color:#c0392b;text-transform:uppercase;letter-spacing:1px;text-align:right">قدرتك</div>
+              <div style="font-size:9px;color:#aa7777;text-align:right;margin-top:4px;line-height:1.5">قناة سرية صوتية مع الذئاب فقط ليلاً</div>
+            </div>
+            <button class="p-btn" style="background:#c0392b;color:#fff;border:none;width:140px;margin-top:4px">فهمتُ 🤫</button>
+            <div class="phone-label">كشف الدور</div>
+          </div>
+        </div>
+        <div class="phone">
+          <div class="phone-bar"><span>9:41</span><span>🔋</span></div>
+          <div class="phone-screen ps-night">
+            <div class="p-phase-banner ppb-night"><div style="font-size:14px">🐺</div><div class="p-phase-txt ptxt-night" style="font-size:10px">قناة الذئاب السرية</div></div>
+            <div style="margin:6px;background:#0d0508;border:1px solid #3a1a1a;border-radius:10px;padding:8px 10px">
+              <div style="font-size:8px;color:#ef4444;text-align:right;margin-bottom:4px">كريم يتكلم...</div>
+              <div style="font-size:9px;color:#aa5555;text-align:right;font-style:italic;line-height:1.5">"نقتل أحمد الليلة — يشك فينا!"</div>
+            </div>
+            <div style="padding:0 8px;flex:1">
+              <div style="font-size:9px;color:#ef4444;text-align:right;margin-bottom:6px;letter-spacing:1px">اختر الضحية</div>
+              <div style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center">
+                <div style="width:52px;background:#111120;border:1px solid #1e1e35;border-radius:10px;padding:6px;text-align:center">
+                  <div style="font-size:18px">🧑</div><div style="font-size:8px;color:#aaa">أحمد</div>
+                </div>
+                <div style="width:52px;background:#1a0808;border:1.5px solid #ef4444;border-radius:10px;padding:6px;text-align:center;box-shadow:0 0 8px rgba(239,68,68,0.2)">
+                  <div style="font-size:18px">🧔</div><div style="font-size:8px;color:#ef4444">كريم</div>
+                </div>
+                <div style="width:52px;background:#111120;border:1px solid #333;border-radius:10px;padding:6px;text-align:center;opacity:0.3">
+                  <div style="font-size:18px">💀</div><div style="font-size:8px;color:#555">لينا</div>
+                </div>
+                <div style="width:52px;background:#111120;border:1px solid #1e1e35;border-radius:10px;padding:6px;text-align:center">
+                  <div style="font-size:18px">👩</div><div style="font-size:8px;color:#aaa">سارة</div>
+                </div>
+              </div>
+            </div>
+            <button class="p-action-btn pab-wolf">🩸 تأكيد القتل</button>
+            <div class="phone-label" style="bottom:14px">اختيار الضحية</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SEER SCREENS -->
+    <div class="flow-block reveal">
+      <div class="flow-block-header fbh-seer">
+        <div class="fbh-icon">🔮</div>
+        <div class="fbh-info">
+          <div class="fbh-title" style="color:#fbbf24">شاشات العرّاف</div>
+          <div class="fbh-sub">يكشف الهويات ليلاً · يراقب نهاراً</div>
+        </div>
+        <div class="fbh-count cnt-seer">٣ شاشات</div>
+      </div>
+      <div class="screens-row">
+        <!-- role card -->
+        <div class="phone">
+          <div class="phone-bar" style="background:#1a1000"><span>9:41</span><span>🔋</span></div>
+          <div class="phone-screen ps-role-seer" style="align-items:center;justify-content:center;gap:8px">
+            <div style="font-size:8px;color:#555;letter-spacing:2px;font-family:monospace">دورك السري</div>
+            <div class="p-role-card prc-seer">
+              <div class="p-role-icon">🔮</div>
+              <div class="p-role-name p-rn-seer">العرّاف</div>
+              <div class="p-role-desc">اكشف هوية لاعب كل ليلة</div>
+            </div>
+            <div style="background:#1a1400;border:1px solid #5a4a00;border-radius:10px;padding:8px 10px;width:100%">
+              <div style="font-size:9px;color:#fbbf24;text-align:right;line-height:1.5">👁️ الرؤية الليلية · 🤫 السر المطلق</div>
+            </div>
+            <button class="p-btn btn-seer" style="background:linear-gradient(135deg,#d97706,#b45309);color:#fff;border:none;width:140px">فهمتُ! 🔮</button>
+            <div class="phone-label">كشف الدور</div>
+          </div>
+        </div>
+        <!-- choose player -->
+        <div class="phone">
+          <div class="phone-bar"><span>9:41</span><span>🔋</span></div>
+          <div class="phone-screen ps-role-seer">
+            <div class="p-phase-banner ppb-night"><div style="font-size:14px">🔮</div><div class="p-phase-txt ptxt-night" style="color:#fbbf24;font-size:10px">دور العرّاف</div></div>
+            <div style="text-align:center;font-size:40px;margin:6px 0;filter:drop-shadow(0 0 12px rgba(217,119,6,0.5))">🔮</div>
+            <div style="padding:0 8px;flex:1">
+              <div style="font-size:9px;color:#d97706;text-align:right;margin-bottom:6px">من تكشف الليلة؟</div>
+              <div style="display:flex;flex-direction:column;gap:4px">
+                <div style="display:flex;align-items:center;gap:6px;padding:6px 8px;background:#2a1e00;border:1.5px solid #d97706;border-radius:8px;flex-direction:row-reverse">
+                  <div style="font-size:16px">🧑</div><div style="font-size:9px;flex:1;text-align:right;color:#fbbf24">أحمد</div><div style="font-size:12px">🔮</div>
+                </div>
+                <div style="display:flex;align-items:center;gap:6px;padding:6px 8px;background:#1a1400;border:1px solid #2a2200;border-radius:8px;flex-direction:row-reverse">
+                  <div style="font-size:16px">👩</div><div style="font-size:9px;flex:1;text-align:right">سارة</div><div style="font-size:12px">👁️</div>
+                </div>
+                <div style="display:flex;align-items:center;gap:6px;padding:6px 8px;background:#001a00;border:1px solid #22c55e44;border-radius:8px;flex-direction:row-reverse">
+                  <div style="font-size:16px">🧑‍🦱</div><div style="font-size:9px;flex:1;text-align:right;color:#4ade80">يوسف</div><div style="font-size:9px;color:#22c55e;background:#22c55e22;border-radius:4px;padding:1px 4px">✓ قروي</div>
+                </div>
+              </div>
+            </div>
+            <button class="p-action-btn pab-seer">👁️ اكشف الهوية</button>
+            <div class="phone-label" style="bottom:14px">اختيار اللاعب</div>
+          </div>
+        </div>
+        <!-- result wolf -->
+        <div class="phone">
+          <div class="phone-bar"><span>9:41</span><span>🔋</span></div>
+          <div class="phone-screen ps-role-seer" style="align-items:center;gap:10px;padding:16px 12px">
+            <div style="font-size:10px;color:#d97706;letter-spacing:2px;font-family:monospace">👁️ رؤية البصيرة</div>
+            <div class="p-vision pv-wolf" style="width:100%">
+              <div class="p-vision-icon">🐺</div>
+              <div class="p-vision-name pvn-wolf">أحمد</div>
+              <div class="p-vision-badge pvb-wolf">ذئب خطير! 🐺</div>
+              <div style="font-size:9px;color:#aaa;margin-top:6px;line-height:1.5">بصيرتك كشفت أن أحمد ذئب متخفٍّ</div>
+            </div>
+            <div style="width:100%;background:#1a1100;border:1px solid #d9770644;border-radius:10px;padding:8px 10px">
+              <div style="font-size:8px;color:#d97706;text-align:right;margin-bottom:4px">السجل</div>
+              <div style="display:flex;align-items:center;gap:6px;flex-direction:row-reverse">
+                <div style="font-size:14px">🧑</div><div style="font-size:9px;flex:1;text-align:right">أحمد</div><div style="font-size:9px;color:#f87171">🐺 ذئب</div>
+              </div>
+              <div style="display:flex;align-items:center;gap:6px;flex-direction:row-reverse;margin-top:4px">
+                <div style="font-size:14px">🧑‍🦱</div><div style="font-size:9px;flex:1;text-align:right">يوسف</div><div style="font-size:9px;color:#4ade80">✅ قروي</div>
+              </div>
+            </div>
+            <div class="phone-label">نتيجة البصيرة</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAGICIAN SCREENS -->
+    <div class="flow-block reveal">
+      <div class="flow-block-header fbh-mag">
+        <div class="fbh-icon">🧙‍♂️</div>
+        <div class="fbh-info">
+          <div class="fbh-title" style="color:#c4b5fd">شاشات الساحر</div>
+          <div class="fbh-sub">جرعتان سحريتان · قرار واحد غير قابل للتراجع</div>
+        </div>
+        <div class="fbh-count cnt-mag">٣ شاشات</div>
+      </div>
+      <div class="screens-row">
+        <!-- role -->
+        <div class="phone">
+          <div class="phone-bar" style="background:#0d0520"><span>9:41</span><span>🔋</span></div>
+          <div class="phone-screen ps-role-mag" style="align-items:center;justify-content:center;gap:8px">
+            <div class="p-role-card prc-mag">
+              <div class="p-role-icon">🧙‍♂️</div>
+              <div class="p-role-name p-rn-mag">الساحر</div>
+              <div class="p-role-desc">جرعة إنقاذ + جرعة موت</div>
+            </div>
+            <div class="p-potions">
+              <div class="p-potion pp-life"><div>💚</div><div class="p-potion-name ppn-life">إنقاذ ×١</div></div>
+              <div class="p-potion pp-death"><div>🖤</div><div class="p-potion-name ppn-death">موت ×١</div></div>
+            </div>
+            <button class="p-btn" style="background:linear-gradient(135deg,#7c3aed,#4f46e5);color:#fff;border:none;width:150px">فهمتُ! 🧙‍♂️</button>
+            <div class="phone-label">كشف الدور</div>
+          </div>
+        </div>
+        <!-- night action -->
+        <div class="phone">
+          <div class="phone-bar"><span>9:41</span><span>🔋</span></div>
+          <div class="phone-screen ps-role-mag">
+            <div class="p-phase-banner ppb-night"><div style="font-size:14px">🧙‍♂️</div><div class="p-phase-txt" style="color:#c4b5fd;font-size:10px">دور الساحر</div></div>
+            <div style="margin:6px 8px;background:#1a0808;border:1px solid #ef444444;border-radius:10px;padding:8px 10px;display:flex;align-items:center;gap:8px;flex-direction:row-reverse">
+              <div style="font-size:20px;flex-shrink:0">🧑</div>
+              <div style="text-align:right">
+                <div style="font-size:8px;color:#ef4444">⚠️ الضحية المختارة</div>
+                <div style="font-size:12px;font-weight:700">أحمد</div>
+                <div style="font-size:8px;color:#888;margin-top:2px">سيموت إن لم تتدخل</div>
+              </div>
+            </div>
+            <div class="p-potions" style="padding:0 8px">
+              <div class="p-potion pp-life" style="cursor:pointer"><div>💚</div><div class="p-potion-name ppn-life">إنقاذ</div><div style="font-size:8px;color:#888;margin-top:2px">أنقذ أحمد</div></div>
+              <div class="p-potion pp-death" style="cursor:pointer"><div>🖤</div><div class="p-potion-name ppn-death">موت</div><div style="font-size:8px;color:#888;margin-top:2px">اقتل آخر</div></div>
+            </div>
+            <button class="p-action-btn pab-mag-s" style="margin-top:8px">💚 أنقذ أحمد</button>
+            <button class="p-action-btn pab-mag-k" style="margin-top:4px">🖤 جرعة الموت</button>
+            <div style="margin:4px 8px;height:28px;border-radius:14px;border:1px solid #2a2a3a;display:flex;align-items:center;justify-content:center;font-size:9px;color:#555">تجاوز بدون استخدام</div>
+            <div class="phone-label" style="bottom:8px">اختيار الجرعة</div>
+          </div>
+        </div>
+        <!-- morning result -->
+        <div class="phone">
+          <div class="phone-bar"><span>9:41</span><span>🔋</span></div>
+          <div class="phone-screen ps-result" style="padding:12px;gap:8px">
+            <div style="font-size:10px;color:#a78bfa;letter-spacing:2px;text-align:center;font-family:monospace">☀️ نتيجة السحر</div>
+            <div style="background:#062a1a;border:1.5px solid #059669;border-radius:12px;padding:10px;display:flex;align-items:center;gap:8px;flex-direction:row-reverse">
+              <div style="font-size:22px;background:#0d3a22;border:1.5px solid #059669;border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center">🧑</div>
+              <div style="flex:1;text-align:right"><div style="font-size:12px;font-weight:700">أحمد 🛡️</div><div style="font-size:9px;color:#34d399;margin-top:3px">أنقذته جرعتك!</div></div>
+              <div style="font-size:18px">✅</div>
+            </div>
+            <div style="background:#1a0808;border:1.5px solid #ef4444;border-radius:12px;padding:10px;display:flex;align-items:center;gap:8px;flex-direction:row-reverse">
+              <div style="font-size:22px;background:#2e1a1a;border:1.5px solid #ef4444;border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center">🧔</div>
+              <div style="flex:1;text-align:right"><div style="font-size:12px;font-weight:700">كريم ☠️</div><div style="font-size:9px;color:#f87171;margin-top:3px">قتلته جرعة الموت</div></div>
+              <div style="font-size:18px">⚰️</div>
+            </div>
+            <div class="p-potions">
+              <div class="p-potion pp-life" style="opacity:0.35"><div>💚</div><div class="p-potion-name ppn-life">×٠ نفدت</div></div>
+              <div class="p-potion pp-death" style="opacity:0.35"><div>🖤</div><div class="p-potion-name ppn-death">×٠ نفدت</div></div>
+            </div>
+            <div class="phone-label">نتيجة الليلة</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DOCTOR SCREENS -->
+    <div class="flow-block reveal">
+      <div class="flow-block-header fbh-doc">
+        <div class="fbh-icon">🧑‍⚕️</div>
+        <div class="fbh-info">
+          <div class="fbh-title" style="color:#6ee7b7">شاشات الطبيب</div>
+          <div class="fbh-sub">يحمي كل ليلة · لا قيود على العدد</div>
+        </div>
+        <div class="fbh-count cnt-doc">٢ شاشات</div>
+      </div>
+      <div class="screens-row">
+        <div class="phone">
+          <div class="phone-bar" style="background:#031a10"><span>9:41</span><span>🔋</span></div>
+          <div class="phone-screen ps-role-doc" style="align-items:center;justify-content:center;gap:8px">
+            <div class="p-role-card prc-doc">
+              <div class="p-role-icon">🧑‍⚕️</div>
+              <div class="p-role-name p-rn-doc">الطبيب</div>
+              <div class="p-role-desc">احمِ لاعباً كل ليلة من الذئاب</div>
+            </div>
+            <div style="background:#031a10;border:1px solid #05966944;border-radius:10px;padding:8px 10px;width:100%">
+              <div style="font-size:9px;color:#6ee7b7;text-align:right;line-height:1.5">🛡️ حماية ليلية كل ليلة<br>🔒 لا تكرار لنفس الشخص متتالياً</div>
+            </div>
+            <button class="p-btn" style="background:linear-gradient(135deg,#059669,#047857);color:#fff;border:none;width:150px">فهمتُ! 🧑‍⚕️</button>
+            <div class="phone-label">كشف الدور</div>
+          </div>
+        </div>
+        <div class="phone">
+          <div class="phone-bar"><span>9:41</span><span>🔋</span></div>
+          <div class="phone-screen ps-role-doc">
+            <div class="p-phase-banner ppb-night"><div style="font-size:14px">🧑‍⚕️</div><div class="p-phase-txt" style="color:#34d399;font-size:10px">دور الطبيب</div></div>
+            <div style="padding:0 8px;font-size:9px;color:#888;text-align:center;margin-bottom:6px">اختر من تحمي الليلة 🛡️</div>
+            <div style="padding:0 8px;flex:1">
+              <div style="display:flex;align-items:center;gap:6px;padding:8px;background:#062a1a;border:1.5px solid #059669;border-radius:10px;margin-bottom:4px;flex-direction:row-reverse;box-shadow:0 0 10px rgba(5,150,105,0.15)">
+                <div style="font-size:18px;background:#1a4a2a;border:1.5px solid #059669;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center">🧑</div>
+                <div style="flex:1;text-align:right"><div style="font-size:10px;font-weight:700;color:#34d399">أحمد</div><div style="font-size:8px;color:#059669">✔ اخترته</div></div>
+                <div style="width:18px;height:18px;border-radius:50%;background:#059669;display:flex;align-items:center;justify-content:center;font-size:10px">✓</div>
+              </div>
+              <div style="display:flex;align-items:center;gap:6px;padding:8px;background:#0a1a0e;border:1px solid #1a3a22;border-radius:10px;margin-bottom:4px;flex-direction:row-reverse">
+                <div style="font-size:18px;background:#1a3a22;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center">👩</div>
+                <div style="flex:1;text-align:right"><div style="font-size:10px;font-weight:700">سارة</div></div><div style="font-size:14px">🛡️</div>
+              </div>
+              <div style="display:flex;align-items:center;gap:6px;padding:8px;background:#0a1a0e;border:1px solid #333;border-radius:10px;opacity:0.5;flex-direction:row-reverse">
+                <div style="font-size:18px;background:#1a3a22;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center">🧑‍🦱</div>
+                <div style="flex:1;text-align:right"><div style="font-size:10px;font-weight:700;color:#555">يوسف</div><div style="font-size:8px;color:#059669">حُمي البارحة ⛔</div></div>
+              </div>
+            </div>
+            <div style="margin:6px 8px;padding:8px;background:#062a1a;border-radius:10px;border:1px solid #05966944;display:flex;align-items:center;gap:6px;flex-direction:row-reverse">
+              <div style="font-size:16px">🛡️</div><div style="font-size:10px;color:#34d399">ستحمي أحمد الليلة</div>
+            </div>
+            <button class="p-action-btn pab-doc">💉 تأكيد الحماية</button>
+            <div class="phone-label" style="bottom:14px">اختيار المحمي</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HUNTER SCREENS -->
+    <div class="flow-block reveal">
+      <div class="flow-block-header fbh-hunter">
+        <div class="fbh-icon">🏹</div>
+        <div class="fbh-info">
+          <div class="fbh-title" style="color:#fb923c">شاشات الصيّاد</div>
+          <div class="fbh-sub">ساكت طوال اللعبة · مميت عند الموت</div>
+        </div>
+        <div class="fbh-count cnt-hunter">٢ شاشات</div>
+      </div>
+      <div class="screens-row">
+        <div class="phone">
+          <div class="phone-bar" style="background:#1a0800"><span>9:41</span><span>🔋</span></div>
+          <div class="phone-screen ps-role-hunter" style="align-items:center;justify-content:center;gap:8px">
+            <div class="p-role-card prc-hunter">
+              <div class="p-role-icon">🏹</div>
+              <div class="p-role-name p-rn-hunter">الصيّاد</div>
+              <div class="p-role-desc">رصاصة أخيرة عند موتك</div>
+            </div>
+            <div style="background:#1a0800;border:1px solid #ea580c44;border-radius:10px;padding:8px 10px;width:100%">
+              <div style="font-size:9px;color:#fb923c;text-align:right;line-height:1.5">💀 عند موتك تُطلق رصاصة واحدة على هدفك ⚡ مفاجأة للجميع</div>
+            </div>
+            <button class="p-btn" style="background:linear-gradient(135deg,#ea580c,#c2410c);color:#fff;border:none;width:150px">فهمتُ! 🏹</button>
+            <div class="phone-label">كشف الدور</div>
+          </div>
+        </div>
+        <div class="phone">
+          <div class="phone-bar"><span>9:41</span><span>🔋</span></div>
+          <div class="phone-screen ps-role-hunter">
+            <div class="p-death-banner" style="margin:8px">
+              <div class="pdb-title">💀 لقيت حتفك يا صياد!</div>
+              <div class="pdb-sub">لك رصاصة أخيرة واحدة. اختر من يرحل معك!</div>
+            </div>
+            <div style="padding:0 8px;font-size:10px;color:#fb923c;text-align:center;font-weight:700;margin-bottom:6px">🏹 من تأخذه معك؟</div>
+            <div class="p-hunter-list">
+              <div class="phl-item sel"><div class="phl-av">🧔</div><div class="phl-name" style="color:#fb923c">كريم — هدفك 🎯</div><div class="phl-icon">🎯</div></div>
+              <div class="phl-item"><div class="phl-av">👩</div><div class="phl-name">سارة</div><div class="phl-icon">🏹</div></div>
+              <div class="phl-item"><div class="phl-av">🧑</div><div class="phl-name">أحمد</div><div class="phl-icon">🏹</div></div>
+              <div class="phl-item"><div class="phl-av">👩‍🦰</div><div class="phl-name">نور</div><div class="phl-icon">🏹</div></div>
+            </div>
+            <div style="margin:6px 8px;background:#2a1000;border-radius:10px;border:1px solid #ea580c44;padding:8px;display:flex;align-items:center;gap:6px;flex-direction:row-reverse">
+              <div style="font-size:16px">🏹</div><div style="font-size:9px;color:#fb923c">رصاصتك ستصيب كريم!</div>
+            </div>
+            <button class="p-action-btn pab-hunter">🏹 أطلق الرصاصة الأخيرة!</button>
+            <div class="phone-label" style="bottom:14px">اختيار الهدف</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ══════════════════════════════
+     ALL SCREENS TABLE
+══════════════════════════════ -->
+<section class="reveal">
+  <div class="section-header">
+    <div class="section-eyebrow">الجدول الكامل</div>
+    <div class="section-title">كل الشاشات دفعة واحدة 📋</div>
+  </div>
+  <table class="legend-table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th></th>
+        <th>الشاشة</th>
+        <th>الوصف</th>
+        <th style="text-align:left">يراها</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="lt-row"><td class="lt-num">01</td><td class="lt-icon">🏠</td><td class="lt-name">الرئيسية</td><td class="lt-desc">القمر والغابة · إنشاء أو انضمام لغرفة</td><td class="lt-roles-cell"><span class="lt-tag" style="background:rgba(200,168,75,0.15);color:var(--moon);border:1px solid rgba(200,168,75,0.3)">الجميع</span></td></tr>
+      <tr class="lt-row"><td class="lt-num">02</td><td class="lt-icon">🚪</td><td class="lt-name">غرفة الانتظار</td><td class="lt-desc">كود الغرفة · قائمة اللاعبين · بدء اللعبة</td><td class="lt-roles-cell"><span class="lt-tag" style="background:rgba(200,168,75,0.15);color:var(--moon);border:1px solid rgba(200,168,75,0.3)">الجميع</span></td></tr>
+      <tr class="lt-row"><td class="lt-num">03</td><td class="lt-icon">🃏</td><td class="lt-name">كشف الدور</td><td class="lt-desc">بطاقة سرية · وصف الدور والقدرات</td><td class="lt-roles-cell"><span class="lt-tag" style="background:rgba(200,168,75,0.15);color:var(--moon);border:1px solid rgba(200,168,75,0.3)">الجميع</span></td></tr>
+      <tr class="lt-row"><td class="lt-num">04</td><td class="lt-icon">🌙</td><td class="lt-name">الليل · صوت</td><td class="lt-desc">كاميرات مغلقة · شبكة أصوات اللاعبين</td><td class="lt-roles-cell"><span class="lt-tag" style="background:rgba(200,168,75,0.15);color:var(--moon);border:1px solid rgba(200,168,75,0.3)">الجميع</span></td></tr>
+      <tr class="lt-row"><td class="lt-num">05</td><td class="lt-icon">☀️</td><td class="lt-name">النهار · كاميرات</td><td class="lt-desc">شبكة فيديو · نقاش · مؤشر "يتكلم"</td><td class="lt-roles-cell"><span class="lt-tag" style="background:rgba(200,168,75,0.15);color:var(--moon);border:1px solid rgba(200,168,75,0.3)">الجميع</span></td></tr>
+      <tr class="lt-row"><td class="lt-num">06</td><td class="lt-icon">🐺</td><td class="lt-name">قناة الذئاب</td><td class="lt-desc">صوت سري · اختيار الضحية · تأكيد القتل</td><td class="lt-roles-cell"><span class="lt-tag" style="background:rgba(239,68,68,0.15);color:#f87171;border:1px solid rgba(239,68,68,0.3)">الذئاب فقط</span></td></tr>
+      <tr class="lt-row"><td class="lt-num">07</td><td class="lt-icon">🔮</td><td class="lt-name">اختيار الكشف</td><td class="lt-desc">قائمة اللاعبين · اختيار من تفحص ليلاً</td><td class="lt-roles-cell"><span class="lt-tag" style="background:rgba(217,119,6,0.15);color:#fbbf24;border:1px solid rgba(217,119,6,0.3)">العراف فقط</span></td></tr>
+      <tr class="lt-row"><td class="lt-num">08</td><td class="lt-icon">👁️</td><td class="lt-name">نتيجة البصيرة</td><td class="lt-desc">ذئب أم قروي؟ · سجل الكشوفات السابقة</td><td class="lt-roles-cell"><span class="lt-tag" style="background:rgba(217,119,6,0.15);color:#fbbf24;border:1px solid rgba(217,119,6,0.3)">العراف فقط</span></td></tr>
+      <tr class="lt-row"><td class="lt-num">09</td><td class="lt-icon">🧪</td><td class="lt-name">اختيار الجرعة</td><td class="lt-desc">يرى الضحية · يختار إنقاذ أو قتل أو تجاوز</td><td class="lt-roles-cell"><span class="lt-tag" style="background:rgba(124,58,237,0.15);color:#c4b5fd;border:1px solid rgba(124,58,237,0.3)">الساحر فقط</span></td></tr>
+      <tr class="lt-row"><td class="lt-num">10</td><td class="lt-icon">⚗️</td><td class="lt-name">نتيجة السحر</td><td class="lt-desc">من أُنقذ · من قُتل · الجرعات المتبقية</td><td class="lt-roles-cell"><span class="lt-tag" style="background:rgba(124,58,237,0.15);color:#c4b5fd;border:1px solid rgba(124,58,237,0.3)">الساحر فقط</span></td></tr>
+      <tr class="lt-row"><td class="lt-num">11</td><td class="lt-icon">🛡️</td><td class="lt-name">اختيار المحمي</td><td class="lt-desc">قائمة اللاعبين · مقفل من حُمي البارحة</td><td class="lt-roles-cell"><span class="lt-tag" style="background:rgba(5,150,105,0.15);color:#6ee7b7;border:1px solid rgba(5,150,105,0.3)">الطبيب فقط</span></td></tr>
+      <tr class="lt-row"><td class="lt-num">12</td><td class="lt-icon">💀</td><td class="lt-name">رصاصة الصياد</td><td class="lt-desc">يُفعَّل عند الموت · مقياس الشك · اختيار الهدف</td><td class="lt-roles-cell"><span class="lt-tag" style="background:rgba(234,88,12,0.15);color:#fb923c;border:1px solid rgba(234,88,12,0.3)">الصياد فقط</span></td></tr>
+      <tr class="lt-row"><td class="lt-num">13</td><td class="lt-icon">🗳️</td><td class="lt-name">التصويت النهاري</td><td class="lt-desc">شريط الأصوات · تصويت بالكاميرا والصوت</td><td class="lt-roles-cell"><span class="lt-tag" style="background:rgba(200,168,75,0.15);color:var(--moon);border:1px solid rgba(200,168,75,0.3)">الجميع</span></td></tr>
+      <tr class="lt-row"><td class="lt-num">14</td><td class="lt-icon">🏆</td><td class="lt-name">نهاية اللعبة</td><td class="lt-desc">من فاز؟ كشف أدوار الجميع · إعادة اللعب</td><td class="lt-roles-cell"><span class="lt-tag" style="background:rgba(200,168,75,0.15);color:var(--moon);border:1px solid rgba(200,168,75,0.3)">الجميع</span></td></tr>
+    </tbody>
+  </table>
+</section>
+
+<div class="divider"></div>
+
+<!-- ══════════════════════════════
+     TECH STACK
+══════════════════════════════ -->
+<section class="reveal">
+  <div class="section-header">
+    <div class="section-eyebrow">التقنيات</div>
+    <div class="section-title">المكونات التقنية للمشروع 🛠️</div>
+  </div>
+  <div class="tech-grid">
+    <div class="tech-card reveal"><div class="tech-icon">⚛️</div><div class="tech-name">React Native</div><div class="tech-desc">واجهة المستخدم · iOS و Android من كود واحد</div></div>
+    <div class="tech-card reveal"><div class="tech-icon">🔥</div><div class="tech-name">Firebase / Supabase</div><div class="tech-desc">قاعدة بيانات لحظية · غرف · حالة اللاعبين</div></div>
+    <div class="tech-card reveal"><div class="tech-icon">📹</div><div class="tech-name">WebRTC / Agora</div><div class="tech-desc">مكالمات فيديو وصوت بين اللاعبين في الوقت الفعلي</div></div>
+    <div class="tech-card reveal"><div class="tech-icon">⚡</div><div class="tech-name">Socket.io</div><div class="tech-desc">أحداث اللعبة اللحظية · المزامنة بين اللاعبين</div></div>
+    <div class="tech-card reveal"><div class="tech-icon">🔐</div><div class="tech-name">Node.js Backend</div><div class="tech-desc">منطق اللعبة السري · منع الغش · التحقق من الأدوار</div></div>
+    <div class="tech-card reveal"><div class="tech-icon">🤖</div><div class="tech-name">Anthropic API</div><div class="tech-desc">مراقب اللعبة الذكي · تحليل النقاش · اقتراحات</div></div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<div class="footer reveal">
+  <div class="footer-title">🐺 ذئب المدينة</div>
+  <div class="footer-sub">٦ شخصيات · ١٤ شاشة · لعبة واحدة لا تُنسى</div>
+  <div style="margin-top:20px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+    <div class="hero-tag tag-vid">📹 كاميرا مباشرة</div>
+    <div class="hero-tag tag-mic">🎙️ صوت حي</div>
+    <div class="hero-tag tag-live">🔴 أونلاين</div>
+    <div class="hero-tag tag-ar">🇸🇦 عربي</div>
+  </div>
+</div>
+
+<script>
+// Generate stars
+const starsEl = document.getElementById('stars');
+for (let i = 0; i < 80; i++) {
+  const s = document.createElement('div');
+  s.className = 'star';
+  const size = Math.random() * 2.5 + 0.5;
+  s.style.cssText = `
+    width:${size}px; height:${size}px;
+    top:${Math.random()*60}%;
+    left:${Math.random()*100}%;
+    --d:${2+Math.random()*4}s;
+    --dl:${Math.random()*3}s;
+  `;
+  starsEl.appendChild(s);
+}
+
+// Reveal on scroll
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

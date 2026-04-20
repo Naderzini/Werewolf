@@ -1,0 +1,146 @@
+{
+  "app": {
+    "title": "Werewolf",
+    "subtitle": "Social Deduction Game"
+  },
+  "home": {
+    "createRoom": "Create Room",
+    "joinRoom": "Join Room",
+    "or": "— or —",
+    "enterCode": "Enter room code",
+    "enterName": "Enter your name",
+    "join": "Join",
+    "settings": "Settings",
+    "language": "Language"
+  },
+  "lobby": {
+    "roomCode": "Room Code",
+    "players": "players",
+    "startGame": "Start Game",
+    "waiting": "Waiting...",
+    "ready": "Ready",
+    "minPlayers": "At least 6 players required",
+    "host": "Host",
+    "leave": "Leave",
+    "copied": "Code copied!",
+    "share": "Share code"
+  },
+  "roles": {
+    "wolf": "Werewolf",
+    "villager": "Villager",
+    "seer": "Seer",
+    "witch": "Witch",
+    "doctor": "Doctor",
+    "hunter": "Hunter",
+    "yourRole": "Your Secret Role",
+    "understood": "Understood",
+    "teamEvil": "Evil Team",
+    "teamGood": "Good Team"
+  },
+  "roleDesc": {
+    "wolf": "Pretend to be an innocent villager during the day, but at night you become a beast hunting victims with your wolf pack.",
+    "villager": "A simple citizen with no special powers, but your voice is your strongest weapon. Observe, think, and vote to expose the wolves.",
+    "seer": "You have supernatural vision that reveals any player's true identity. Your information is precious — share it wisely.",
+    "witch": "You have two one-time magical potions. Think carefully before using them.",
+    "doctor": "The village's loyal doctor. Each night you choose a player to protect from wolf attacks.",
+    "hunter": "A brave warrior who doesn't fear death. If killed, you fire your last bullet at a player of your choice."
+  },
+  "abilities": {
+    "wolfHunt": "Night Hunt",
+    "wolfHuntDesc": "Vote with wolves to choose a victim · Secret voice channel open only for you",
+    "wolfDisguise": "Day Disguise",
+    "wolfDisguiseDesc": "Participate in discussion and vote as if innocent",
+    "seerVision": "Night Vision",
+    "seerVisionDesc": "Reveal a player's identity each night · Wolf or Villager",
+    "seerLog": "Revelation Log",
+    "seerLogDesc": "Accumulate your findings night after night",
+    "witchSave": "Healing Potion",
+    "witchSaveDesc": "Save the wolf's victim from death · Once per game",
+    "witchKill": "Death Potion",
+    "witchKillDesc": "Kill a suspected player · Once per game",
+    "docProtect": "Night Protection",
+    "docProtectDesc": "Protect a player each night · No same player twice in a row",
+    "hunterShot": "Death Shot",
+    "hunterShotDesc": "Triggered upon your death · Choose your target quickly"
+  },
+  "night": {
+    "title": "Darkness falls...",
+    "voiceOnly": "Voice only · Cameras off",
+    "wolfChannel": "Secret Wolf Channel",
+    "chooseVictim": "Choose victim",
+    "confirmKill": "Confirm Kill",
+    "seerTurn": "Seer's Turn",
+    "whoToReveal": "Who to reveal tonight?",
+    "revealIdentity": "Reveal Identity",
+    "witchTurn": "Witch's Turn",
+    "victimChosen": "Chosen Victim",
+    "willDie": "Will die if you don't intervene",
+    "savePotion": "Save",
+    "killPotion": "Kill",
+    "savePlayer": "Save",
+    "useDeathPotion": "Death Potion",
+    "skip": "Skip without using",
+    "docTurn": "Doctor's Turn",
+    "whoToProtect": "Choose who to protect tonight",
+    "confirmProtect": "Confirm Protection",
+    "protectedLastNight": "Protected last night",
+    "youWillProtect": "You will protect",
+    "tonight": "tonight"
+  },
+  "day": {
+    "title": "Daytime",
+    "dayNum": "Day",
+    "discussion": "Free discussion with voice and camera",
+    "vote": "Vote",
+    "timeLeft": "Time left"
+  },
+  "vote": {
+    "title": "Public Vote",
+    "voteToEliminate": "Vote to eliminate the suspect",
+    "confirmVote": "Confirm Vote",
+    "votes": "votes",
+    "eliminated": "Eliminated!",
+    "noElimination": "No one eliminated"
+  },
+  "hunter": {
+    "youDied": "You've been killed, Hunter!",
+    "lastShot": "You have one last bullet. Choose who leaves with you!",
+    "whoToTake": "Who do you take with you?",
+    "fireShot": "Fire the last shot!",
+    "yourTarget": "Your target",
+    "willHit": "Your bullet will hit"
+  },
+  "result": {
+    "wolfWin": "Wolves Win!",
+    "villageWin": "Village Wins!",
+    "rolesRevealed": "Roles Revealed",
+    "playAgain": "Play Again",
+    "backToHome": "Back to Home"
+  },
+  "seerResult": {
+    "visionTitle": "Vision Result",
+    "isWolf": "Dangerous Wolf!",
+    "isVillager": "Innocent Villager",
+    "revealed": "Your vision revealed that",
+    "log": "Log"
+  },
+  "witchResult": {
+    "title": "Magic Result",
+    "saved": "Your potion saved them!",
+    "killed": "Death potion killed them",
+    "potionsLeft": "Potions remaining",
+    "depleted": "Depleted"
+  },
+  "common": {
+    "back": "Back",
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "ok": "OK",
+    "loading": "Loading...",
+    "error": "Error",
+    "dead": "Dead",
+    "alive": "Alive",
+    "speaking": "Speaking",
+    "muted": "Muted"
+  }
+}
