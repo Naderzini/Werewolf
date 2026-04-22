@@ -1,15 +1,12 @@
 import { io } from 'socket.io-client';
-
-// Change this to your server URL
-// For local dev: use your machine's IP (not localhost) for mobile testing
-const SERVER_URL = 'http://192.168.1.100:3001';
+import { SOCKET_URL } from '../config/api';
 
 let socket = null;
 
 export const connectSocket = () => {
   if (socket?.connected) return socket;
   
-  socket = io(SERVER_URL, {
+  socket = io(SOCKET_URL, {
     transports: ['websocket'],
     reconnection: true,
     reconnectionAttempts: 5,

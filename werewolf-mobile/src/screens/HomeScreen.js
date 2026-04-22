@@ -141,6 +141,33 @@ export default function HomeScreen({ navigation }) {
         <Text style={styles.settingsIcon}>⚙️</Text>
       </TouchableOpacity>
 
+      {/* Test Menu Button */}
+      <TouchableOpacity
+        style={styles.testBtn}
+        onPress={() => {
+          const screens = [
+            'Home', 'JoinRoom', 'Lobby', 'Settings', 'RoleReveal', 
+            'Night', 'WolfAction', 'SeerAction', 'SeerResult', 
+            'WitchAction', 'DoctorAction', 'Day', 'Vote', 
+            'HunterAction', 'GameResult'
+          ];
+          const currentIndex = screens.indexOf('Home');
+          let index = 0;
+          const showMenu = () => {
+            const screenButtons = screens.map((screen, i) => ({
+              text: screen,
+              onPress: () => navigation.navigate(screen)
+            }));
+            alert('Test Menu - Navigate to any screen by tapping it in the list above');
+          };
+          
+          // Create a simple list view
+          navigation.navigate('TestMenu');
+        }}
+      >
+        <Text style={styles.testIcon}>🧪</Text>
+      </TouchableOpacity>
+
       {/* Trees silhouette */}
       <View style={styles.treesContainer}>
         <View style={styles.trees}>
@@ -264,6 +291,22 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   settingsIcon: {
+    fontSize: 18,
+  },
+  testBtn: {
+    position: 'absolute',
+    top: 50,
+    left: 20,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: '#7c3aed',
+    borderWidth: 1,
+    borderColor: '#a78bfa',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  testIcon: {
     fontSize: 18,
   },
   treesContainer: {

@@ -18,6 +18,7 @@ import VoteScreen from '../screens/VoteScreen';
 import HunterActionScreen from '../screens/HunterActionScreen';
 import GameResultScreen from '../screens/GameResultScreen';
 import SettingsScreen from '../screens/SettingsScreen';
+import TestMenuScreen from '../screens/TestMenuScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -32,6 +33,7 @@ export default function AppNavigator() {
     <NavigationContainer>
       <Stack.Navigator screenOptions={screenOptions} initialRouteName="Home">
         <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="TestMenu" component={TestMenuScreen} />
         <Stack.Screen name="JoinRoom" component={JoinRoomScreen} />
         <Stack.Screen name="Lobby" component={LobbyScreen} />
         <Stack.Screen name="Settings" component={SettingsScreen} />
