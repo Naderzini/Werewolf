@@ -1,0 +1,155 @@
+{
+  "app": {
+    "title": "Lobisomem",
+    "subtitle": "Jogo de Dedução Social"
+  },
+  "home": {
+    "createRoom": "Criar Sala",
+    "joinRoom": "Entrar",
+    "or": "— ou —",
+    "enterCode": "Digite o código da sala",
+    "enterName": "Digite seu nome",
+    "join": "Entrar",
+    "settings": "Configurações",
+    "language": "Idioma",
+    "createRoomInfo": "Um código único de sala será gerado para você. Compartilhe com amigos para convidá-los.",
+    "chooseAvatar": "Escolha seu avatar"
+  },
+  "lobby": {
+    "roomCode": "Código da Sala",
+    "players": "jogadores",
+    "startGame": "Iniciar Jogo",
+    "waiting": "Esperando...",
+    "ready": "Pronto",
+    "minPlayers": "Pelo menos 6 jogadores necessários",
+    "host": "Anfitrião",
+    "leave": "Sair",
+    "copied": "Código copiado!",
+    "share": "Compartilhar código",
+    "avatarChanged": "Avatar atualizado!"
+  },
+  "roles": {
+    "wolf": "Lobisomem",
+    "villager": "Aldeão",
+    "seer": "Vidente",
+    "witch": "Bruxa",
+    "doctor": "Médico",
+    "hunter": "Caçador",
+    "yourRole": "Seu Papel Secreto",
+    "understood": "Entendido",
+    "teamEvil": "Equipe do Mal",
+    "teamGood": "Equipe do Bem"
+  },
+  "roleDesc": {
+    "wolf": "Finja ser um aldeão inocente durante o dia, mas à noite você se torna uma besta que caça vítimas com sua matilha de lobisomens.",
+    "villager": "Um cidadão simples sem poderes especiais, mas sua voz é sua arma mais poderosa. Observe, pense e vote para expor os lobisomens.",
+    "seer": "Você tem visão sobrenatural que revela a verdadeira identidade de qualquer jogador. Sua informação é preciosa — compartilhe-a sabiamente.",
+    "witch": "Você tem duas poções mágicas de uso único. Pense cuidadosamente antes de usá-las.",
+    "doctor": "O médico leal da vila. Cada noite você escolhe um jogador para proteger dos ataques dos lobisomens.",
+    "hunter": "Um guerreiro corajoso que não teme a morte. Se for morto, você dispara sua última bala em um jogador de sua escolha."
+  },
+  "abilities": {
+    "wolfHunt": "Caça Noturna",
+    "wolfHuntDesc": "Vote com os lobos para escolher uma vítima · Canal de voz secreto aberto apenas para você",
+    "wolfDisguise": "Disfarce Diurno",
+    "wolfDisguiseDesc": "Participe da discussão e voto como se fosse inocente",
+    "seerVision": "Visão Noturna",
+    "seerVisionDesc": "Revele a identidade de um jogador cada noite · Lobisomem ou Aldeão",
+    "seerLog": "Registro de Revelações",
+    "seerLogDesc": "Acumule suas descobertas noite após noite",
+    "witchSave": "Poção de Cura",
+    "witchSaveDesc": "Salve a vítima dos lobisomens da morte · Uma vez por jogo",
+    "witchKill": "Poção da Morte",
+    "witchKillDesc": "Mate um jogador suspeito · Uma vez por jogo",
+    "docProtect": "Proteção Noturna",
+    "docProtectDesc": "Proteja um jogador cada noite · Não o mesmo jogador duas vezes seguidas",
+    "hunterShot": "Tiro Mortal",
+    "hunterShotDesc": "Acionado na sua morte · Escolha seu alvo rapidamente"
+  },
+  "night": {
+    "title": "A escuridão cai...",
+    "voiceOnly": "Apenas voz · Câmeras desligadas",
+    "wolfChannel": "Canal Secreto dos Lobisomens",
+    "chooseVictim": "Escolher vítima",
+    "confirmKill": "Confirmar Morte",
+    "seerTurn": "Vez do Vidente",
+    "whoToReveal": "Quem revelar esta noite?",
+    "revealIdentity": "Revelar Identidade",
+    "witchTurn": "Vez da Bruxa",
+    "victimChosen": "Vítima Escolhida",
+    "willDie": "Morrerá se você não intervir",
+    "savePotion": "Salvar",
+    "killPotion": "Matar",
+    "savePlayer": "Salvar",
+    "useDeathPotion": "Poção da Morte",
+    "skip": "Pular sem usar",
+    "docTurn": "Vez do Médico",
+    "whoToProtect": "Escolha quem proteger esta noite",
+    "confirmProtect": "Confirmar Proteção",
+    "protectedLastNight": "Protegido na noite passada",
+    "youWillProtect": "Você protegerá",
+    "tonight": "esta noite",
+    "waitingForDoctor": "⏳ Esperando a proteção do médico...",
+    "waitingForWolves": "⏳ Esperando os lobisomens escolherem sua vítima..."
+  },
+  "day": {
+    "title": "Dia",
+    "dayNum": "Dia",
+    "discussion": "Discussão livre com voz e câmera",
+    "vote": "Votar",
+    "timeLeft": "Tempo restante"
+  },
+  "vote": {
+    "title": "Votação Pública",
+    "voteToEliminate": "Vote para eliminar o suspeito",
+    "confirmVote": "Confirmar Voto",
+    "votes": "votos",
+    "eliminated": "Eliminado!",
+    "noElimination": "Ninguém eliminado"
+  },
+  "hunter": {
+    "youDied": "Você foi morto, Caçador!",
+    "lastShot": "Você tem uma última bala. Escolha quem sai com você!",
+    "whoToTake": "Quem você leva?",
+    "fireShot": "Dispare a última bala!",
+    "yourTarget": "Seu alvo",
+    "willHit": "Sua bala atingirá"
+  },
+  "result": {
+    "wolfWin": "Lobisomens Ganham!",
+    "villageWin": "Aldeia Ganha!",
+    "rolesRevealed": "Papéis Revelados",
+    "playAgain": "Jogar Novamente",
+    "backToHome": "Voltar ao Início"
+  },
+  "seerResult": {
+    "visionTitle": "Resultado da Visão",
+    "isWolf": "Lobisomem Perigoso!",
+    "isVillager": "Aldeão Inocente",
+    "revealed": "Sua visão revelou que",
+    "log": "Registro"
+  },
+  "seer": {
+    "waiting_result": "Esperando resultado da visão..."
+  },
+  "witchResult": {
+    "title": "Resultado Mágico",
+    "saved": "Sua poção o salvou!",
+    "killed": "A poção da morte o matou",
+    "potionsLeft": "Poções restantes",
+    "depleted": "Esgotada"
+  },
+  "common": {
+    "back": "Voltar",
+    "confirm": "Confirmar",
+    "cancel": "Cancelar",
+    "ok": "OK",
+    "loading": "Carregando...",
+    "error": "Erro",
+    "dead": "Morto",
+    "alive": "Vivo",
+    "speaking": "Falando",
+    "muted": "Mudo",
+    "showMore": "Mostrar mais..."
+  }
+}

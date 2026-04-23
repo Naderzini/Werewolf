@@ -12,7 +12,8 @@
     "join": "Rejoindre",
     "settings": "Paramètres",
     "language": "Langue",
-    "createRoomInfo": "Un code unique sera généré automatiquement. Partagez-le avec vos amis pour les inviter."
+    "createRoomInfo": "Un code unique sera généré automatiquement. Partagez-le avec vos amis pour les inviter.",
+    "chooseAvatar": "Choisissez votre avatar"
   },
   "lobby": {
     "roomCode": "Code de salle",
@@ -24,7 +25,8 @@
     "host": "Hôte",
     "leave": "Quitter",
     "copied": "Code copié !",
-    "share": "Partager le code"
+    "share": "Partager le code",
+    "avatarChanged": "Avatar mis à jour !"
   },
   "roles": {
     "wolf": "Loup-Garou",
@@ -86,7 +88,9 @@
     "confirmProtect": "Confirmer la protection",
     "protectedLastNight": "Protégé la nuit dernière",
     "youWillProtect": "Vous protégerez",
-    "tonight": "ce soir"
+    "tonight": "ce soir",
+    "waitingForDoctor": "⏳ En attente de la protection du médecin...",
+    "waitingForWolves": "⏳ En attente que les loups choisissent leur victime..."
   },
   "day": {
     "title": "Le jour",
@@ -125,6 +129,9 @@
     "revealed": "Votre vision a révélé que",
     "log": "Journal"
   },
+  "seer": {
+    "waiting_result": "En attente du résultat de la vision..."
+  },
   "witchResult": {
     "title": "Résultat magique",
     "saved": "Votre potion l'a sauvé !",
@@ -142,6 +149,7 @@
     "dead": "Mort",
     "alive": "Vivant",
     "speaking": "Parle",
-    "muted": "Muet"
+    "muted": "Muet",
+    "showMore": "Afficher plus..."
   }
 }

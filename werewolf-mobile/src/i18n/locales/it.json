@@ -1,0 +1,155 @@
+{
+  "app": {
+    "title": "Lupo Mannaro",
+    "subtitle": "Gioco di Deduzione Sociale"
+  },
+  "home": {
+    "createRoom": "Crea Stanza",
+    "joinRoom": "Unisciti",
+    "or": "— o —",
+    "enterCode": "Inserisci codice stanza",
+    "enterName": "Inserisci il tuo nome",
+    "join": "Unisciti",
+    "settings": "Impostazioni",
+    "language": "Lingua",
+    "createRoomInfo": "Verrà generato un codice unico di stanza. Condividilo con gli amici per invitarli.",
+    "chooseAvatar": "Scegli il tuo avatar"
+  },
+  "lobby": {
+    "roomCode": "Codice Stanza",
+    "players": "giocatori",
+    "startGame": "Inizia Gioco",
+    "waiting": "In attesa...",
+    "ready": "Pronto",
+    "minPlayers": "Servono almeno 6 giocatori",
+    "host": "Host",
+    "leave": "Lascia",
+    "copied": "Codice copiato!",
+    "share": "Condividi codice",
+    "avatarChanged": "Avatar aggiornato!"
+  },
+  "roles": {
+    "wolf": "Lupo Mannaro",
+    "villager": "Villano",
+    "seer": "Veggente",
+    "witch": "Strega",
+    "doctor": "Medico",
+    "hunter": "Cacciatore",
+    "yourRole": "Il Tuo Ruolo Segreto",
+    "understood": "Capito",
+    "teamEvil": "Squadra del Male",
+    "teamGood": "Squadra del Bene"
+  },
+  "roleDesc": {
+    "wolf": "Fingi di essere un villano innocente durante il giorno, ma di notte diventi una bestia che caccia vittime con il tuo branco di lupi.",
+    "villager": "Un semplice cittadino senza poteri speciali, ma la tua voce è la tua arma più potente. Osserva, pensa e vota per esporre i lupi.",
+    "seer": "Hai visione soprannaturale che rivela la vera identità di qualsiasi giocatore. La tua informazione è preziosa — condividila saggiamente.",
+    "witch": "Hai due pozioni magiche monouso. Pensa attentamente prima di usarle.",
+    "doctor": "Il medico fedele del villaggio. Ogni notte scegli un giocatore da proteggere dagli attacchi dei lupi.",
+    "hunter": "Un guerriero coraggioso che non teme la morte. Se vieni ucciso, spari la tua ultima pallottola a un giocatore a tua scelta."
+  },
+  "abilities": {
+    "wolfHunt": "Caccia Notturna",
+    "wolfHuntDesc": "Vota con i lupi per scegliere una vittima · Canale vocale segreto aperto solo per te",
+    "wolfDisguise": "Travestimento Diurno",
+    "wolfDisguiseDesc": "Partecipa alla discussione e al voto come se fossi innocente",
+    "seerVision": "Visione Notturna",
+    "seerVisionDesc": "Rivela l'identità di un giocatore ogni notte · Lupo o Villano",
+    "seerLog": "Registro delle Rivelazioni",
+    "seerLogDesc": "Accumula le tue scoperte notte dopo notte",
+    "witchSave": "Pozione di Cura",
+    "witchSaveDesc": "Salva la vittima dei lupi dalla morte · Una volta per gioco",
+    "witchKill": "Pozione di Morte",
+    "witchKillDesc": "Uccidi un giocatore sospetto · Una volta per gioco",
+    "docProtect": "Protezione Notturna",
+    "docProtectDesc": "Proteggi un giocatore ogni notte · Non lo stesso giocatore due volte di fila",
+    "hunterShot": "Colpo Mortale",
+    "hunterShotDesc": "Attivato alla tua morte · Scegli il tuo obiettivo rapidamente"
+  },
+  "night": {
+    "title": "Il buio cala...",
+    "voiceOnly": "Solo voce · Telecamere spente",
+    "wolfChannel": "Canale Segreto dei Lupi",
+    "chooseVictim": "Scegli vittima",
+    "confirmKill": "Conferma Uccisione",
+    "seerTurn": "Turno della Veggente",
+    "whoToReveal": "Chi rivelare stasera?",
+    "revealIdentity": "Rivela Identità",
+    "witchTurn": "Turno della Strega",
+    "victimChosen": "Vittima Scelta",
+    "willDie": "Morirà se non interveni",
+    "savePotion": "Salva",
+    "killPotion": "Uccidi",
+    "savePlayer": "Salva",
+    "useDeathPotion": "Pozione di Morte",
+    "skip": "Salta senza usare",
+    "docTurn": "Turno del Medico",
+    "whoToProtect": "Scegli chi proteggere stasera",
+    "confirmProtect": "Conferma Protezione",
+    "protectedLastNight": "Protetto la notte scorsa",
+    "youWillProtect": "Proteggerai",
+    "tonight": "stasera",
+    "waitingForDoctor": "⏳ In attesa della protezione del medico...",
+    "waitingForWolves": "⏳ In attesa che i lupi scelgano la loro vittima..."
+  },
+  "day": {
+    "title": "Giorno",
+    "dayNum": "Giorno",
+    "discussion": "Discussione libera con voce e telecamera",
+    "vote": "Vota",
+    "timeLeft": "Tempo rimanente"
+  },
+  "vote": {
+    "title": "Voto Pubblico",
+    "voteToEliminate": "Vota per eliminare il sospetto",
+    "confirmVote": "Conferma Voto",
+    "votes": "voti",
+    "eliminated": "Eliminato!",
+    "noElimination": "Nessuno eliminato"
+  },
+  "hunter": {
+    "youDied": "Sei stato ucciso, Cacciatore!",
+    "lastShot": "Hai un'ultima pallottola. Scegli chi se ne va con te!",
+    "whoToTake": "Chi porti con te?",
+    "fireShot": "Spara l'ultima pallottola!",
+    "yourTarget": "Il tuo obiettivo",
+    "willHit": "La tua pallottola colpirà"
+  },
+  "result": {
+    "wolfWin": "I Lupi Vincono!",
+    "villageWin": "Il Villaggio Vince!",
+    "rolesRevealed": "Ruoli Rivelati",
+    "playAgain": "Gioca Ancora",
+    "backToHome": "Torna alla Home"
+  },
+  "seerResult": {
+    "visionTitle": "Risultato della Visione",
+    "isWolf": "Lupo Pericoloso!",
+    "isVillager": "Villano Innocente",
+    "revealed": "La tua visione ha rivelato che",
+    "log": "Registro"
+  },
+  "seer": {
+    "waiting_result": "In attesa del risultato della visione..."
+  },
+  "witchResult": {
+    "title": "Risultato Magico",
+    "saved": "La tua pozione l'ha salvato!",
+    "killed": "La pozione di morte l'ha ucciso",
+    "potionsLeft": "Pozioni rimanenti",
+    "depleted": "Esaurita"
+  },
+  "common": {
+    "back": "Indietro",
+    "confirm": "Conferma",
+    "cancel": "Annulla",
+    "ok": "OK",
+    "loading": "Caricamento...",
+    "error": "Errore",
+    "dead": "Morto",
+    "alive": "Vivo",
+    "speaking": "Parlando",
+    "muted": "Muto",
+    "showMore": "Mostra di più..."
+  }
+}

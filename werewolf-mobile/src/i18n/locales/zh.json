@@ -1,0 +1,155 @@
+{
+  "app": {
+    "title": "狼人杀",
+    "subtitle": "社交推理游戏"
+  },
+  "home": {
+    "createRoom": "创建房间",
+    "joinRoom": "加入",
+    "or": "— 或 —",
+    "enterCode": "输入房间代码",
+    "enterName": "输入您的名字",
+    "join": "加入",
+    "settings": "设置",
+    "language": "语言",
+    "createRoomInfo": "将为您生成唯一的房间代码。与朋友分享以邀请他们。",
+    "chooseAvatar": "选择您的头像"
+  },
+  "lobby": {
+    "roomCode": "房间代码",
+    "players": "玩家",
+    "startGame": "开始游戏",
+    "waiting": "等待中...",
+    "ready": "准备就绪",
+    "minPlayers": "至少需要6名玩家",
+    "host": "主持人",
+    "leave": "离开",
+    "copied": "代码已复制！",
+    "share": "分享代码",
+    "avatarChanged": "头像已更新！"
+  },
+  "roles": {
+    "wolf": "狼人",
+    "villager": "村民",
+    "seer": "预言家",
+    "witch": "女巫",
+    "doctor": "医生",
+    "hunter": "猎人",
+    "yourRole": "您的秘密身份",
+    "understood": "明白了",
+    "teamEvil": "邪恶阵营",
+    "teamGood": "善良阵营"
+  },
+  "roleDesc": {
+    "wolf": "白天假装是无辜的村民，但晚上你变成与狼群一起猎杀受害者的野兽。",
+    "villager": "没有特殊能力的普通公民，但你的声音是你最强大的武器。观察、思考并投票揭露狼人。",
+    "seer": "你有超自然的视力，可以揭示任何玩家的真实身份。你的信息非常宝贵 — 明智地分享它。",
+    "witch": "你有两种一次性魔法药水。在使用它们之前要仔细考虑。",
+    "doctor": "村庄的忠实医生。每晚你选择一个玩家来保护免受狼人攻击。",
+    "hunter": "一个不怕死亡的勇敢战士。如果你被杀死，你向你选择的玩家发射最后一颗子弹。"
+  },
+  "abilities": {
+    "wolfHunt": "夜间狩猎",
+    "wolfHuntDesc": "与狼人投票选择受害者 · 仅为你开放的秘密语音频道",
+    "wolfDisguise": "白天伪装",
+    "wolfDisguiseDesc": "像无辜者一样参与讨论和投票",
+    "seerVision": "夜间视野",
+    "seerVisionDesc": "每晚揭示一个玩家的身份 · 狼人或村民",
+    "seerLog": "启示日志",
+    "seerLogDesc": "一夜又一夜积累你的发现",
+    "witchSave": "治疗药水",
+    "witchSaveDesc": "从死亡中拯救狼人的受害者 · 游戏中一次",
+    "witchKill": "死亡药水",
+    "witchKillDesc": "杀死可疑玩家 · 游戏中一次",
+    "docProtect": "夜间保护",
+    "docProtectDesc": "每晚保护一个玩家 · 不能连续两次保护同一玩家",
+    "hunterShot": "致命射击",
+    "hunterShotDesc": "在你死亡时触发 · 快速选择你的目标"
+  },
+  "night": {
+    "title": "黑暗降临...",
+    "voiceOnly": "仅语音 · 摄像头关闭",
+    "wolfChannel": "狼人秘密频道",
+    "chooseVictim": "选择受害者",
+    "confirmKill": "确认击杀",
+    "seerTurn": "预言家回合",
+    "whoToReveal": "今晚要揭示谁？",
+    "revealIdentity": "揭示身份",
+    "witchTurn": "女巫回合",
+    "victimChosen": "受害者已选择",
+    "willDie": "如果你不干预将会死亡",
+    "savePotion": "拯救",
+    "killPotion": "击杀",
+    "savePlayer": "拯救",
+    "useDeathPotion": "死亡药水",
+    "skip": "不使用跳过",
+    "docTurn": "医生回合",
+    "whoToProtect": "选择今晚保护谁",
+    "confirmProtect": "确认保护",
+    "protectedLastNight": "昨晚受保护",
+    "youWillProtect": "你将保护",
+    "tonight": "今晚",
+    "waitingForDoctor": "⏳ 等待医生的保护...",
+    "waitingForWolves": "⏳ 等待狼人选择他们的受害者..."
+  },
+  "day": {
+    "title": "白天",
+    "dayNum": "天",
+    "discussion": "语音和摄像头的自由讨论",
+    "vote": "投票",
+    "timeLeft": "剩余时间"
+  },
+  "vote": {
+    "title": "公开投票",
+    "voteToEliminate": "投票淘汰嫌疑人",
+    "confirmVote": "确认投票",
+    "votes": "票",
+    "eliminated": "被淘汰！",
+    "noElimination": "无人被淘汰"
+  },
+  "hunter": {
+    "youDied": "你被杀死了，猎人！",
+    "lastShot": "你有最后一颗子弹。选择谁和你一起离开！",
+    "whoToTake": "你要带走谁？",
+    "fireShot": "发射最后一颗子弹！",
+    "yourTarget": "你的目标",
+    "willHit": "你的子弹将击中"
+  },
+  "result": {
+    "wolfWin": "狼人获胜！",
+    "villageWin": "村庄获胜！",
+    "rolesRevealed": "身份揭晓",
+    "playAgain": "再玩一次",
+    "backToHome": "返回主页"
+  },
+  "seerResult": {
+    "visionTitle": "视野结果",
+    "isWolf": "危险的狼人！",
+    "isVillager": "无辜的村民",
+    "revealed": "你的视野揭示了",
+    "log": "日志"
+  },
+  "seer": {
+    "waiting_result": "等待视野结果..."
+  },
+  "witchResult": {
+    "title": "魔法结果",
+    "saved": "你的药水救了他！",
+    "killed": "死亡药水杀了他",
+    "potionsLeft": "剩余药水",
+    "depleted": "耗尽"
+  },
+  "common": {
+    "back": "返回",
+    "confirm": "确认",
+    "cancel": "取消",
+    "ok": "好的",
+    "loading": "加载中...",
+    "error": "错误",
+    "dead": "死亡",
+    "alive": "存活",
+    "speaking": "说话中",
+    "muted": "静音",
+    "showMore": "显示更多..."
+  }
+}

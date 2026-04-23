@@ -1,0 +1,155 @@
+{
+  "app": {
+    "title": "Hombre Lobo",
+    "subtitle": "Juego de Deducción Social"
+  },
+  "home": {
+    "createRoom": "Crear Sala",
+    "joinRoom": "Unirse",
+    "or": "— o —",
+    "enterCode": "Ingresa el código de la sala",
+    "enterName": "Ingresa tu nombre",
+    "join": "Unirse",
+    "settings": "Configuración",
+    "language": "Idioma",
+    "createRoomInfo": "Se generará un código único de sala. Compártelo con tus amigos para invitarlos.",
+    "chooseAvatar": "Elige tu avatar"
+  },
+  "lobby": {
+    "roomCode": "Código de Sala",
+    "players": "jugadores",
+    "startGame": "Iniciar Juego",
+    "waiting": "Esperando...",
+    "ready": "Listo",
+    "minPlayers": "Se necesitan al menos 6 jugadores",
+    "host": "Anfitrión",
+    "leave": "Salir",
+    "copied": "¡Código copiado!",
+    "share": "Compartir código",
+    "avatarChanged": "¡Avatar actualizado!"
+  },
+  "roles": {
+    "wolf": "Hombre Lobo",
+    "villager": "Aldeano",
+    "seer": "Vidente",
+    "witch": "Bruja",
+    "doctor": "Médico",
+    "hunter": "Cazador",
+    "yourRole": "Tu Rol Secreto",
+    "understood": "Entendido",
+    "teamEvil": "Equipo del Mal",
+    "teamGood": "Equipo del Bien"
+  },
+  "roleDesc": {
+    "wolf": "Finge ser un aldeano inocente durante el día, pero por la noche te conviertes en una bestia que caza víctimas con tu manada de lobos.",
+    "villager": "Un simple ciudadano sin poderes especiales, pero tu voz es tu arma más poderosa. Observa, piensa y vota para exponer a los lobos.",
+    "seer": "Tienes visión sobrenatural que revela la verdadera identidad de cualquier jugador. Tu información es preciosa — compártela sabiamente.",
+    "witch": "Tienes dos pociones mágicas de un solo uso. Piensa cuidadosamente antes de usarlas.",
+    "doctor": "El médico leal del pueblo. Cada noche eliges a un jugador para proteger de los ataques de los lobos.",
+    "hunter": "Un guerrero valiente que no teme a la muerte. Si te matan, disparas tu última bala a un jugador de tu elección."
+  },
+  "abilities": {
+    "wolfHunt": "Caza Nocturna",
+    "wolfHuntDesc": "Vota con los lobos para elegir una víctima · Canal de voz secreto abierto solo para ti",
+    "wolfDisguise": "Disfraz Diurno",
+    "wolfDisguiseDesc": "Participa en discusión y votación como si fueras inocente",
+    "seerVision": "Visión Nocturna",
+    "seerVisionDesc": "Revela la identidad de un jugador cada noche · Lobo o Aldeano",
+    "seerLog": "Registro de Revelaciones",
+    "seerLogDesc": "Acumula tus hallazgos noche tras noche",
+    "witchSave": "Poción de Curación",
+    "witchSaveDesc": "Salva a la víctima de los lobos de la muerte · Una vez por juego",
+    "witchKill": "Poción de Muerte",
+    "witchKillDesc": "Mata a un jugador sospechoso · Una vez por juego",
+    "docProtect": "Protección Nocturna",
+    "docProtectDesc": "Protege a un jugador cada noche · No al mismo jugador dos veces seguidas",
+    "hunterShot": "Disparo Mortal",
+    "hunterShotDesc": "Activado al morir · Elige tu objetivo rápidamente"
+  },
+  "night": {
+    "title": "La oscuridad cae...",
+    "voiceOnly": "Solo voz · Cámaras apagadas",
+    "wolfChannel": "Canal Secreto de Lobos",
+    "chooseVictim": "Elegir víctima",
+    "confirmKill": "Confirmar Asesinato",
+    "seerTurn": "Turno del Vidente",
+    "whoToReveal": "¿A quién revelar esta noche?",
+    "revealIdentity": "Revelar Identidad",
+    "witchTurn": "Turno de la Bruja",
+    "victimChosen": "Víctima Elegida",
+    "willDie": "Morirá si no intervienes",
+    "savePotion": "Salvar",
+    "killPotion": "Matar",
+    "savePlayer": "Salvar",
+    "useDeathPotion": "Poción de Muerte",
+    "skip": "Omitir sin usar",
+    "docTurn": "Turno del Médico",
+    "whoToProtect": "Elige a quién proteger esta noche",
+    "confirmProtect": "Confirmar Protección",
+    "protectedLastNight": "Protegido la noche pasada",
+    "youWillProtect": "Protegerás",
+    "tonight": "esta noche",
+    "waitingForDoctor": "⏳ Esperando la protección del médico...",
+    "waitingForWolves": "⏳ Esperando que los lobos elijan su víctima..."
+  },
+  "day": {
+    "title": "Día",
+    "dayNum": "Día",
+    "discussion": "Discusión libre con voz y cámara",
+    "vote": "Votar",
+    "timeLeft": "Tiempo restante"
+  },
+  "vote": {
+    "title": "Voto Público",
+    "voteToEliminate": "Vota para eliminar al sospechoso",
+    "confirmVote": "Confirmar Voto",
+    "votes": "votos",
+    "eliminated": "¡Eliminado!",
+    "noElimination": "Nadie eliminado"
+  },
+  "hunter": {
+    "youDied": "¡Has sido asesinado, Cazador!",
+    "lastShot": "Tienes una última bala. ¡Elige quién se va contigo!",
+    "whoToTake": "¿A quién te llevas?",
+    "fireShot": "¡Dispara la última bala!",
+    "yourTarget": "Tu objetivo",
+    "willHit": "Tu bala alcanzará"
+  },
+  "result": {
+    "wolfWin": "¡Los Lobos Ganan!",
+    "villageWin": "¡El Pueblo Gana!",
+    "rolesRevealed": "Roles Revelados",
+    "playAgain": "Jugar de Nuevo",
+    "backToHome": "Volver al Inicio"
+  },
+  "seerResult": {
+    "visionTitle": "Resultado de la Visión",
+    "isWolf": "¡Lobo Peligroso!",
+    "isVillager": "Aldeano Inocente",
+    "revealed": "Tu visión reveló que",
+    "log": "Registro"
+  },
+  "seer": {
+    "waiting_result": "Esperando resultado de la visión..."
+  },
+  "witchResult": {
+    "title": "Resultado Mágico",
+    "saved": "¡Tu poción lo salvó!",
+    "killed": "La poción de muerte lo mató",
+    "potionsLeft": "Pociones restantes",
+    "depleted": "Agotada"
+  },
+  "common": {
+    "back": "Atrás",
+    "confirm": "Confirmar",
+    "cancel": "Cancelar",
+    "ok": "OK",
+    "loading": "Cargando...",
+    "error": "Error",
+    "dead": "Muerto",
+    "alive": "Vivo",
+    "speaking": "Hablando",
+    "muted": "Silenciado",
+    "showMore": "Mostrar más..."
+  }
+}

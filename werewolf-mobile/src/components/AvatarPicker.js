@@ -1,18 +1,20 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { COLORS } from '../constants/theme';
 
 const AVATAR_OPTIONS = [
   '🧑', '👩', '🧔', '👱‍♀️', '👨‍🦱', '👩‍🦰', '🧑‍🦱', '👱', '👨‍🦳', '👩‍🦳',
-  '🧑', '👶', '👴', '👵', '🧓', '👲', '👳‍♀️', '👳', '🧕', '👮‍♀️',
+  '👶', '👴', '👵', '🧓', '👲', '👳‍♀️', '👳', '🧕', '👮‍♀️',
   '👮', '👷‍♀️', '👷', '💂‍♀️', '💂', '🕵️‍♀️', '🕵️', '👩‍⚕️', '👨‍⚕️', '👩‍🌾',
   '👨‍🌾', '👩‍🍳', '👨‍🍳', '👩‍🎓', '👨‍🎓', '👩‍🎨', '👨‍🎨', '👩‍🏫', '👨‍🏫',
   '👩‍⚖️', '👨‍⚖️', '👩‍🌰', '👨‍🌰', '👩‍🔬', '👨‍🔬', '👩‍💻', '👨‍💻', '👩‍🎤',
   '👨‍🎤', '👩‍🏭', '👨‍🏭', '👩‍✈️', '👨‍✈️', '👩‍🚀', '👨‍🚀', '👩‍⚕️', '👨‍⚕️',
-  '🧑‍⚕️', '👩‍🌾', '🧑‍🌾', '👩‍🍳', '🧑‍🍳', '👩‍🎓', '🧑‍🎓', '👩‍🏫', '🧑‍🏫'
+  '🧑‍⚕️', '👩‍🌾', '🧑‍🌾', '👩‍🍳', '🧑‍🍳', '👩‍🎓', '🧑‍🎓','🧑‍🏫'
 ];
 
 export default function AvatarPicker({ selectedAvatar, onAvatarSelect, title = "Choose your avatar" }) {
+  const { t } = useTranslation();
   const [showAll, setShowAll] = useState(false);
   const displayAvatars = showAll ? AVATAR_OPTIONS : AVATAR_OPTIONS.slice(0, 24);
 
@@ -46,7 +48,7 @@ export default function AvatarPicker({ selectedAvatar, onAvatarSelect, title = "
             style={styles.showMoreButton} 
             onPress={() => setShowAll(true)}
           >
-            <Text style={styles.showMoreText}>Show more...</Text>
+            <Text style={styles.showMoreText}>{t('common.showMore')}</Text>
           </TouchableOpacity>
         )}
       </ScrollView>

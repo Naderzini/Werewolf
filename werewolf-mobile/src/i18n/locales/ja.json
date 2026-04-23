@@ -1,0 +1,155 @@
+{
+  "app": {
+    "title": "人狼",
+    "subtitle": "社会的推論ゲーム"
+  },
+  "home": {
+    "createRoom": "ルーム作成",
+    "joinRoom": "参加",
+    "or": "— または —",
+    "enterCode": "ルームコードを入力",
+    "enterName": "名前を入力",
+    "join": "参加",
+    "settings": "設定",
+    "language": "言語",
+    "createRoomInfo": "固有のルームコードが生成されます。友達と共有して招待してください。",
+    "chooseAvatar": "アバターを選択"
+  },
+  "lobby": {
+    "roomCode": "ルームコード",
+    "players": "プレイヤー",
+    "startGame": "ゲーム開始",
+    "waiting": "待機中...",
+    "ready": "準備完了",
+    "minPlayers": "最低6人必要です",
+    "host": "ホスト",
+    "leave": "退出",
+    "copied": "コードをコピーしました！",
+    "share": "コードを共有",
+    "avatarChanged": "アバターを更新しました！"
+  },
+  "roles": {
+    "wolf": "人狼",
+    "villager": "村人",
+    "seer": "占い師",
+    "witch": "魔女",
+    "doctor": "医師",
+    "hunter": "狩人",
+    "yourRole": "あなたの秘密の役割",
+    "understood": "理解した",
+    "teamEvil": "悪チーム",
+    "teamGood": "善チーム"
+  },
+  "roleDesc": {
+    "wolf": "昼は無実の村人を装い、夜は人狼の群れと共に獲物を狩る獣になります。",
+    "villager": "特別な能力のない普通の市民ですが、あなたの声が最も強力な武器です。観察し、考え、人狼を暴くために投票してください。",
+    "seer": "プレイヤーの真の姿を明らかにする超自然的な視力を持っています。あなたの情報は貴重です — 賢く共有してください。",
+    "witch": "使い捨ての魔法の薬を2つ持っています。使用する前に慎重に考えてください。",
+    "doctor": "村の忠実な医師。毎晩人狼の攻撃から守るプレイヤーを選びます。",
+    "hunter": "死を恐れない勇敢な戦士。殺された場合、選択したプレイヤーに最後の弾丸を発射します。"
+  },
+  "abilities": {
+    "wolfHunt": "夜の狩猟",
+    "wolfHuntDesc": "人狼と一緒に獲物を選ぶために投票 · あなただけのための秘密音声チャンネル",
+    "wolfDisguise": "昼の変装",
+    "wolfDisguiseDesc": "無実のように議論と投票に参加",
+    "seerVision": "夜の視界",
+    "seerVisionDesc": "毎晩プレイヤーの正体を明らかに · 人狼または村人",
+    "seerLog": "啓示ログ",
+    "seerLogDesc": "夜々あなたの発見を蓄積",
+    "witchSave": "治療薬",
+    "witchSaveDesc": "人狼の獲物を死から救う · ゲーム中1回",
+    "witchKill": "死の薬",
+    "witchKillDesc": "疑わしいプレイヤーを殺す · ゲーム中1回",
+    "docProtect": "夜の保護",
+    "docProtectDesc": "毎晩プレイヤーを保護 · 2回連続で同じプレイヤー不可",
+    "hunterShot": "死の射撃",
+    "hunterShotDesc": "あなたの死で発動 · 素早く標的を選択"
+  },
+  "night": {
+    "title": "闇が落ちる...",
+    "voiceOnly": "音声のみ · カメラオフ",
+    "wolfChannel": "人狼秘密チャンネル",
+    "chooseVictim": "獲物を選択",
+    "confirmKill": "殺害を確認",
+    "seerTurn": "占い師の番",
+    "whoToReveal": "今夜誰を明らかにしますか？",
+    "revealIdentity": "正体を明らかに",
+    "witchTurn": "魔女の番",
+    "victimChosen": "獲物選択済み",
+    "willDie": "介入しないと死にます",
+    "savePotion": "救う",
+    "killPotion": "殺す",
+    "savePlayer": "救う",
+    "useDeathPotion": "死の薬",
+    "skip": "使用せずにスキップ",
+    "docTurn": "医師の番",
+    "whoToProtect": "今夜誰を守るか選択",
+    "confirmProtect": "保護を確認",
+    "protectedLastNight": "昨夜保護済み",
+    "youWillProtect": "あなたは守ります",
+    "tonight": "今夜",
+    "waitingForDoctor": "⏳ 医師の保護を待機中...",
+    "waitingForWolves": "⏳ 人狼が獲物を選択するのを待機中..."
+  },
+  "day": {
+    "title": "昼",
+    "dayNum": "日",
+    "discussion": "音声とカメラで自由な議論",
+    "vote": "投票",
+    "timeLeft": "残り時間"
+  },
+  "vote": {
+    "title": "公開投票",
+    "voteToEliminate": "容疑者を排除するために投票",
+    "confirmVote": "投票を確認",
+    "votes": "票",
+    "eliminated": "排除されました！",
+    "noElimination": "誰も排除されませんでした"
+  },
+  "hunter": {
+    "youDied": "あなたは殺されました、狩人！",
+    "lastShot": "最後の弾丸が1発あります。誰を連れて行きますか！",
+    "whoToTake": "誰を連れて行きますか？",
+    "fireShot": "最後の弾丸を発射！",
+    "yourTarget": "あなたの標的",
+    "willHit": "あなたの弾丸が当たります"
+  },
+  "result": {
+    "wolfWin": "人狼の勝利！",
+    "villageWin": "村の勝利！",
+    "rolesRevealed": "役割が明らかに",
+    "playAgain": "もう一度プレイ",
+    "backToHome": "ホームに戻る"
+  },
+  "seerResult": {
+    "visionTitle": "視界の結果",
+    "isWolf": "危険な人狼！",
+    "isVillager": "無実の村人",
+    "revealed": "あなたの視界が明らかにした",
+    "log": "ログ"
+  },
+  "seer": {
+    "waiting_result": "視界の結果を待機中..."
+  },
+  "witchResult": {
+    "title": "魔法の結果",
+    "saved": "あなたの薬が救いました！",
+    "killed": "死の薬が殺しました",
+    "potionsLeft": "残りの薬",
+    "depleted": "使い果たした"
+  },
+  "common": {
+    "back": "戻る",
+    "confirm": "確認",
+    "cancel": "キャンセル",
+    "ok": "OK",
+    "loading": "読み込み中...",
+    "error": "エラー",
+    "dead": "死亡",
+    "alive": "生存",
+    "speaking": "話している",
+    "muted": "ミュート",
+    "showMore": "もっと見る..."
+  }
+}

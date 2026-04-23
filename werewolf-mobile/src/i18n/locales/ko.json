@@ -1,0 +1,155 @@
+{
+  "app": {
+    "title": "웨어울프",
+    "subtitle": "사회 추리 게임"
+  },
+  "home": {
+    "createRoom": "방 만들기",
+    "joinRoom": "참가",
+    "or": "— 또는 —",
+    "enterCode": "방 코드 입력",
+    "enterName": "이름 입력",
+    "join": "참가",
+    "settings": "설정",
+    "language": "언어",
+    "createRoomInfo": "고유한 방 코드가 생성됩니다. 친구와 공유하여 초대하세요.",
+    "chooseAvatar": "아바타 선택"
+  },
+  "lobby": {
+    "roomCode": "방 코드",
+    "players": "플레이어",
+    "startGame": "게임 시작",
+    "waiting": "대기 중...",
+    "ready": "준비 완료",
+    "minPlayers": "최소 6명 필요",
+    "host": "호스트",
+    "leave": "나가기",
+    "copied": "코드 복사됨!",
+    "share": "코드 공유",
+    "avatarChanged": "아바타 업데이트됨!"
+  },
+  "roles": {
+    "wolf": "웨어울프",
+    "villager": "마을 사람",
+    "seer": "예언자",
+    "witch": "마녀",
+    "doctor": "의사",
+    "hunter": "사냥꾼",
+    "yourRole": "당신의 비밀 역할",
+    "understood": "이해됨",
+    "teamEvil": "악 팀",
+    "teamGood": "선 팀"
+  },
+  "roleDesc": {
+    "wolf": "낮에는 무죄한 마을 사람인 척하지만, 밤에는 늑대 무리와 함께 희생자를 사냥하는 야수가 됩니다.",
+    "villager": "특별한 능력 없는 평범한 시민이지만, 당신의 목소리가 가장 강력한 무기입니다. 관찰하고, 생각하고, 웨어울프를 폭로하기 위해 투표하세요.",
+    "seer": "모든 플레이어의 진짜 정체를 밝히는 초자연적 시력을 가지고 있습니다. 당신의 정보는 매우 귀중합니다 — 현명하게 공유하세요.",
+    "witch": "일회용 마법 물약 두 개를 가지고 있습니다. 사용하기 전 신중하게 생각하세요.",
+    "doctor": "마을의 충실한 의사. 매밤 늑대 공격으로부터 보호할 플레이어를 선택합니다.",
+    "hunter": "죽음을 두려워하지 않는 용감한 전사. 죽으면 선택한 플레이어에게 마지막 총알을 발사합니다."
+  },
+  "abilities": {
+    "wolfHunt": "밤 사냥",
+    "wolfHuntDesc": "늑대와 함께 희생자 선택 투표 · 당신만을 위한 비밀 음성 채널",
+    "wolfDisguise": "낮 위장",
+    "wolfDisguiseDesc": "무죄한 것처럼 토론과 투표에 참여",
+    "seerVision": "밤 시야",
+    "seerVisionDesc": "매밤 플레이어의 정체를 밝힘 · 웨어울프 또는 마을 사람",
+    "seerLog": "계시 기록",
+    "seerLogDesc": "밤마다 당신의 발견을 축적",
+    "witchSave": "치료 물약",
+    "witchSaveDesc": "늑대 희생자를 죽음에서 구함 · 게임당 한 번",
+    "witchKill": "죽음 물약",
+    "witchKillDesc": "의심스러운 플레이어를 죽임 · 게임당 한 번",
+    "docProtect": "밤 보호",
+    "docProtectDesc": "매밤 플레이어 보호 · 같은 플레이어 연속 두 번 불가",
+    "hunterShot": "치명적 사격",
+    "hunterShotDesc": "당신의 죽음으로 발동 · 목표를 빠르게 선택"
+  },
+  "night": {
+    "title": "어둠이 내립니다...",
+    "voiceOnly": "음성만 · 카메라 꺼짐",
+    "wolfChannel": "늑대 비밀 채널",
+    "chooseVictim": "희생자 선택",
+    "confirmKill": "살해 확인",
+    "seerTurn": "예언자 차례",
+    "whoToReveal": "오늘 밤 누구를 밝힐까요?",
+    "revealIdentity": "정체 밝히기",
+    "witchTurn": "마녀 차례",
+    "victimChosen": "희생자 선택됨",
+    "willDie": "개입하지 않으면 죽을 것임",
+    "savePotion": "구하기",
+    "killPotion": "죽이기",
+    "savePlayer": "구하기",
+    "useDeathPotion": "죽음 물약",
+    "skip": "사용하지 않고 건너뛰기",
+    "docTurn": "의사 차례",
+    "whoToProtect": "오늘 밤 누구를 보호할지 선택",
+    "confirmProtect": "보호 확인",
+    "protectedLastNight": "어젯밤 보호됨",
+    "youWillProtect": "당신은 보호할 것임",
+    "tonight": "오늘 밤",
+    "waitingForDoctor": "⏳ 의사의 보호를 기다리는 중...",
+    "waitingForWolves": "⏳ 늑대가 희생자를 선택하기를 기다리는 중..."
+  },
+  "day": {
+    "title": "낮",
+    "dayNum": "날",
+    "discussion": "음성과 카메라로 자유 토론",
+    "vote": "투표",
+    "timeLeft": "남은 시간"
+  },
+  "vote": {
+    "title": "공개 투표",
+    "voteToEliminate": "용의자를 퇴출하기 위해 투표",
+    "confirmVote": "투표 확인",
+    "votes": "표",
+    "eliminated": "퇴출됨!",
+    "noElimination": "아무도 퇴출되지 않음"
+  },
+  "hunter": {
+    "youDied": "당신은 죽었습니다, 사냥꾼!",
+    "lastShot": "마지막 총알이 하나 있습니다. 누구를 데려갈까요!",
+    "whoToTake": "누구를 데려가시겠습니까?",
+    "fireShot": "마지막 총알 발사!",
+    "yourTarget": "당신의 목표",
+    "willHit": "당신의 총알이 명중할 것임"
+  },
+  "result": {
+    "wolfWin": "늑대 승리!",
+    "villageWin": "마을 승리!",
+    "rolesRevealed": "역할 공개",
+    "playAgain": "다시 플레이",
+    "backToHome": "홈으로 돌아가기"
+  },
+  "seerResult": {
+    "visionTitle": "시야 결과",
+    "isWolf": "위험한 웨어울프!",
+    "isVillager": "무죄한 마을 사람",
+    "revealed": "당신의 시야가 밝힌 것",
+    "log": "기록"
+  },
+  "seer": {
+    "waiting_result": "시야 결과를 기다리는 중..."
+  },
+  "witchResult": {
+    "title": "마법 결과",
+    "saved": "당신의 물약이 구했습니다!",
+    "killed": "죽음 물약이 죽였습니다",
+    "potionsLeft": "남은 물약",
+    "depleted": "소진됨"
+  },
+  "common": {
+    "back": "뒤로",
+    "confirm": "확인",
+    "cancel": "취소",
+    "ok": "확인",
+    "loading": "로딩 중...",
+    "error": "오류",
+    "dead": "죽음",
+    "alive": "살아있음",
+    "speaking": "말하는 중",
+    "muted": "음소거",
+    "showMore": "더 보기..."
+  }
+}

@@ -12,7 +12,8 @@
     "join": "Join",
     "settings": "Settings",
     "language": "Language",
-    "createRoomInfo": "A unique room code will be generated for you. Share it with friends to invite them."
+    "createRoomInfo": "A unique room code will be generated for you. Share it with friends to invite them.",
+    "chooseAvatar": "Choose your avatar"
   },
   "lobby": {
     "roomCode": "Room Code",
@@ -24,7 +25,8 @@
     "host": "Host",
     "leave": "Leave",
     "copied": "Code copied!",
-    "share": "Share code"
+    "share": "Share code",
+    "avatarChanged": "Avatar updated!"
   },
   "roles": {
     "wolf": "Werewolf",
@@ -147,6 +149,7 @@
     "dead": "Dead",
     "alive": "Alive",
     "speaking": "Speaking",
-    "muted": "Muted"
+    "muted": "Muted",
+    "showMore": "Show more..."
   }
 }

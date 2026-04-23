@@ -137,7 +137,7 @@ export default function JoinRoomScreen({ navigation, route }) {
 
           {/* Avatar Selection */}
           <View style={styles.avatarContainer}>
-            <Text style={styles.inputLabel}>Choose your avatar</Text>
+            <Text style={styles.inputLabel}>{t('home.chooseAvatar')}</Text>
             <AvatarPicker
               selectedAvatar={selectedAvatar}
               onAvatarSelect={setSelectedAvatar}

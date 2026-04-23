@@ -1,0 +1,155 @@
+{
+  "app": {
+    "title": "Werwolf",
+    "subtitle": "Soziales Deduktionsspiel"
+  },
+  "home": {
+    "createRoom": "Raum Erstellen",
+    "joinRoom": "Beitreten",
+    "or": "— oder —",
+    "enterCode": "Raumcode eingeben",
+    "enterName": "Dein Name eingeben",
+    "join": "Beitreten",
+    "settings": "Einstellungen",
+    "language": "Sprache",
+    "createRoomInfo": "Ein einzigartiger Raumcode wird generiert. Teile ihn mit Freunden, um sie einzuladen.",
+    "chooseAvatar": "Wähle deinen Avatar"
+  },
+  "lobby": {
+    "roomCode": "Raumcode",
+    "players": "Spieler",
+    "startGame": "Spiel Starten",
+    "waiting": "Warten...",
+    "ready": "Bereit",
+    "minPlayers": "Mindestens 6 Spieler erforderlich",
+    "host": "Host",
+    "leave": "Verlassen",
+    "copied": "Code kopiert!",
+    "share": "Code teilen",
+    "avatarChanged": "Avatar aktualisiert!"
+  },
+  "roles": {
+    "wolf": "Werwolf",
+    "villager": "Dorfbewohner",
+    "seer": "Seherin",
+    "witch": "Hexe",
+    "doctor": "Arzt",
+    "hunter": "Jäger",
+    "yourRole": "Deine Geheime Rolle",
+    "understood": "Verstanden",
+    "teamEvil": "Böse Team",
+    "teamGood": "Gute Team"
+  },
+  "roleDesc": {
+    "wolf": "Täusche vor, ein unschuldiger Dorfbewohner zu sein, aber nachts wirst du zu einem Biest, das mit deinem Wolfsrudel Opfer jagt.",
+    "villager": "Ein einfacher Bürger ohne besondere Fähigkeiten, aber deine Stimme ist deine stärkste Waffe. Beobachte, denke und stimme ab, um die Werwölfe zu entlarven.",
+    "seer": "Du hast übernatürliche Vision, die die wahre Identität jedes Spielers offenbart. Deine Information ist kostbar — teile sie weise.",
+    "witch": "Du hast zwei einmalige magische Tränke. Denke sorgfältig nach, bevor du sie verwendest.",
+    "doctor": "Der treue Arzt des Dorfes. Jede Nacht wählst du einen Spieler, den du vor Werwolfangriffen schützt.",
+    "hunter": "Ein tapferer Krieger, der den Tod nicht fürchtet. Wenn du getötet wirst, feuerst du deine letzte Kugel auf einen Spieler deiner Wahl."
+  },
+  "abilities": {
+    "wolfHunt": "Nachtjagd",
+    "wolfHuntDesc": "Stimme mit Wölfen ab, um ein Opfer zu wählen · Geheimer Sprachkanal nur für dich offen",
+    "wolfDisguise": "Tarnung am Tag",
+    "wolfDisguiseDesc": "Nimm an Diskussion und Abstimmung teil, als wärst du unschuldig",
+    "seerVision": "Nachtvision",
+    "seerVisionDesc": "Enthülle die Identität eines Spielers jede Nacht · Werwolf oder Dorfbewohner",
+    "seerLog": "Offenbarungsprotokoll",
+    "seerLogDesc": "Sammle deine Erkenntnisse Nacht für Nacht",
+    "witchSave": "Heiltrank",
+    "witchSaveDesc": "Rette das Werwolfopfer vor dem Tod · Einmal pro Spiel",
+    "witchKill": "Todestrank",
+    "witchKillDesc": "Töte einen verdächtigen Spieler · Einmal pro Spiel",
+    "docProtect": "Nachtschutz",
+    "docProtectDesc": "Schütze einen Spieler jede Nacht · Nicht zweimal hintereinander derselbe Spieler",
+    "hunterShot": "Todschießen",
+    "hunterShotDesc": "Bei deinem Tod ausgelöst · Wähle schnell dein Ziel"
+  },
+  "night": {
+    "title": "Die Dunkelheit fällt...",
+    "voiceOnly": "Nur Stimme · Kameras aus",
+    "wolfChannel": "Geheimer Werwolfkanal",
+    "chooseVictim": "Opfer wählen",
+    "confirmKill": "Tötung bestätigen",
+    "seerTurn": "Seherin am Zug",
+    "whoToReveal": "Wen soll heute Nacht enthüllt werden?",
+    "revealIdentity": "Identität enthüllen",
+    "witchTurn": "Hexe am Zug",
+    "victimChosen": "Opfer gewählt",
+    "willDie": "Wird sterben, wenn du nicht eingreifst",
+    "savePotion": "Retten",
+    "killPotion": "Töten",
+    "savePlayer": "Retten",
+    "useDeathPotion": "Todesrank",
+    "skip": "Überspringen ohne Verwendung",
+    "docTurn": "Arzt am Zug",
+    "whoToProtect": "Wähle, wer heute Nacht geschützt wird",
+    "confirmProtect": "Schutz bestätigen",
+    "protectedLastNight": "Letzte Nacht geschützt",
+    "youWillProtect": "Du wirst schützen",
+    "tonight": "heute Nacht",
+    "waitingForDoctor": "⏳ Warte auf den Schutz des Arztes...",
+    "waitingForWolves": "⏳ Warte, dass die Werwölfe ihr Opfer wählen..."
+  },
+  "day": {
+    "title": "Tag",
+    "dayNum": "Tag",
+    "discussion": "Freie Diskussion mit Stimme und Kamera",
+    "vote": "Abstimmen",
+    "timeLeft": "Verbleibende Zeit"
+  },
+  "vote": {
+    "title": "Öffentliche Abstimmung",
+    "voteToEliminate": "Stimme ab, um den Verdächtigen zu eliminieren",
+    "confirmVote": "Stimme bestätigen",
+    "votes": "Stimmen",
+    "eliminated": "Eliminiert!",
+    "noElimination": "Niemand eliminiert"
+  },
+  "hunter": {
+    "youDied": "Du wurdest getötet, Jäger!",
+    "lastShot": "Du hast eine letzte Kugel. Wähle, wer mit dir geht!",
+    "whoToTake": "Wen nimmst du mit?",
+    "fireShot": "Feuere die letzte Kugel ab!",
+    "yourTarget": "Dein Ziel",
+    "willHit": "Deine Kugel wird treffen"
+  },
+  "result": {
+    "wolfWin": "Werwölfe Gewinnen!",
+    "villageWin": "Dorf Gewinnt!",
+    "rolesRevealed": "Rollen Enthüllt",
+    "playAgain": "Erneut Spielen",
+    "backToHome": "Zurück zur Startseite"
+  },
+  "seerResult": {
+    "visionTitle": "Visionsergebnis",
+    "isWolf": "Gefährlicher Werwolf!",
+    "isVillager": "Unschuldiger Dorfbewohner",
+    "revealed": "Deine Vision hat enthüllt, dass",
+    "log": "Protokoll"
+  },
+  "seer": {
+    "waiting_result": "Warte auf Visionsergebnis..."
+  },
+  "witchResult": {
+    "title": "Magisches Ergebnis",
+    "saved": "Dein Trank hat ihn gerettet!",
+    "killed": "Der Todesrank hat ihn getötet",
+    "potionsLeft": "Verbleibende Tränke",
+    "depleted": "Erschöpft"
+  },
+  "common": {
+    "back": "Zurück",
+    "confirm": "Bestätigen",
+    "cancel": "Abbrechen",
+    "ok": "OK",
+    "loading": "Laden...",
+    "error": "Fehler",
+    "dead": "Tot",
+    "alive": "Lebendig",
+    "speaking": "Sprechend",
+    "muted": "Stumm",
+    "showMore": "Mehr anzeigen..."
+  }
+}
