@@ -63,7 +63,13 @@ export default function LobbyScreen({ navigation }) {
 
   const renderPlayer = ({ item, index }) => (
     <View style={styles.playerRow}>
-      <PlayerAvatar name={item.name} index={index} size={36} isHost={item.isHost} />
+      <PlayerAvatar 
+        name={item.name} 
+        index={index} 
+        size={36} 
+        isHost={item.isHost} 
+        avatarUrl={item.avatarUrl}
+      />
       <View style={styles.playerInfo}>
         <Text style={styles.playerName}>{item.name}</Text>
         {item.isHost && <Text style={styles.hostBadge}>👑 {t('lobby.host')}</Text>}

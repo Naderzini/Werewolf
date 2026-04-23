@@ -55,32 +55,23 @@ export default function SettingsPanel({
       <Text style={styles.title}>⚙️ Game Settings</Text>
 
       <Stepper
-        label="🌙 Night duration"
-        value={settings.nightDuration}
-        min={15}
+        label="⏱️ Optional timer (seconds)"
+        value={settings.extraTime || 0}
+        min={0}
         max={300}
         step={15}
+        unit={settings.extraTime === 0 ? 's (disabled)' : 's'}
         disabled={!isHost}
-        onChange={(v) => patch({ nightDuration: v })}
+        onChange={(v) => patch({ extraTime: v })}
       />
-      <Stepper
-        label="☀️ Day duration"
-        value={settings.dayDuration}
-        min={30}
-        max={600}
-        step={30}
-        disabled={!isHost}
-        onChange={(v) => patch({ dayDuration: v })}
-      />
-      <Stepper
-        label="🗳️ Vote duration"
-        value={settings.voteDuration}
-        min={15}
-        max={180}
-        step={15}
-        disabled={!isHost}
-        onChange={(v) => patch({ voteDuration: v })}
-      />
+
+      <View style={styles.helperRow}>
+        <Text style={styles.helperText}>
+          {settings.extraTime === 0 
+            ? '⚡ No timers — phases advance only when all players have acted'
+            : '⏱️ Optional countdown hint shown in UI (not enforced)'}
+        </Text>
+      </View>
 
       <View style={styles.toggleRow}>
         <View style={{ flex: 1 }}>
@@ -153,6 +144,8 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   helper: { color: COLORS.muted, fontSize: 10, marginTop: 2 },
+  helperRow: { marginTop: 8 },
+  helperText: { color: COLORS.muted, fontSize: 11, lineHeight: 14 },
   hostNote: {
     color: COLORS.muted,
     fontSize: 11,

@@ -9,8 +9,23 @@ import { useGame } from '../context/GameContext';
 export default function SeerResultScreen({ navigation, route }) {
   const { t } = useTranslation();
   const { state } = useGame();
-  const { targetName, isWolf } = route.params || { targetName: 'أحمد', isWolf: true };
   const scaleAnim = useRef(new Animated.Value(0.3)).current;
+
+  // Use dynamic data from seer_result socket event
+  const seerResult = state.seerResult || route.params; // fallback for navigation testing
+  
+  // Show loading if no result received yet
+  if (!seerResult) {
+    return (
+      <LinearGradient colors={['#1a1400', '#060500', COLORS.bg]} style={styles.container}>
+        <View style={styles.loadingContainer}>
+          <Text style={styles.loadingText}>🔮 {t('seer.waiting_result')}</Text>
+        </View>
+      </LinearGradient>
+    );
+  }
+
+  const { targetName, isWolf } = seerResult;
 
   useEffect(() => {
     Animated.spring(scaleAnim, { toValue: 1, friction: 4, useNativeDriver: true }).start();
@@ -78,6 +93,16 @@ export default function SeerResultScreen({ navigation, route }) {
 
 const styles = StyleSheet.create({
   container: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loadingText: {
+    fontSize: 18,
+    color: COLORS.text,
+    textAlign: 'center',
+  },
   content: { alignItems: 'center', paddingHorizontal: 20, gap: 16, width: '100%' },
   eyebrow: { fontSize: 12, color: '#d97706', letterSpacing: 2, fontFamily: 'monospace' },
   visionCard: {

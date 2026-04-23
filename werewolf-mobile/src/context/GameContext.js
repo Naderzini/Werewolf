@@ -3,19 +3,20 @@ import { ROLES, PHASES, getRoleDistribution } from '../constants/roles';
 
 const GameContext = createContext();
 
-// Default timers/options (overridden by server `room.settings` broadcasts)
+// Default options (overridden by server `room.settings` broadcasts)
+// No automatic timers — phases advance only when all players have acted.
 export const DEFAULT_SETTINGS = {
-  nightDuration: 60,
-  dayDuration: 120,
-  voteDuration: 45,
-  roleRevealDuration: 10,
   extraWolf: false,
+  extraTime: 0,
 };
 
 const initialState = {
   // Player info
   playerId: null,
   playerName: '',
+  playerAvatar: '🧑', // Default avatar
+
+  // Room info
   
   // Room info
   roomId: null,
@@ -64,19 +65,37 @@ const initialState = {
   isSpeaking: false,
   speakingPlayers: [],
   
-  // Timer
-  timer: 0,
+  // Sequential night step tracking (from server night_action_status)
+  nightStep: null,     // 'doctor' | 'wolves' | 'witch' | 'seer' | null
+  doctorDone: false,
+  wolvesDone: false,
+  witchDone: false,
+  seerDone: false,
 
   // Skip-phase voting (ready-up)
   skipCount: 0,
   skipTotal: 0,
   iSkipped: false,
+
+  // Dynamic data (replaces hardcoded values)
+  wolfMessages: [],     // [{ id, senderId, senderName, text, timestamp }]
+  speakingPlayer: null, // { id, name } | null
+  seerResult: null,     // { targetId, targetName, isWolf } | null
+  gameRevealedPlayers: [], // Populated by game_over event
 };
 
 const gameReducer = (state, action) => {
   switch (action.type) {
     case 'SET_PLAYER':
-      return { ...state, playerId: action.payload.id, playerName: action.payload.name };
+      return { 
+        ...state, 
+        playerId: action.payload.id, 
+        playerName: action.payload.name,
+        playerAvatar: action.payload.avatar || '🧑'
+      };
+    
+    case 'SET_AVATAR':
+      return { ...state, playerAvatar: action.payload };
     
     case 'SET_ROOM':
       return { 
@@ -123,12 +142,35 @@ const gameReducer = (state, action) => {
         ...state, 
         phase: action.payload.phase,
         dayNumber: action.payload.dayNumber ?? state.dayNumber,
-        phaseDuration: action.payload.duration ?? 0,
-        timer: action.payload.duration ?? 0,
         // Reset skip votes on every phase transition
         skipCount: 0,
         skipTotal: 0,
         iSkipped: false,
+        // Reset night step tracking when entering night (will be set by night_action_status)
+        ...(action.payload.phase === 'night' ? {
+          nightStep: null,
+          doctorDone: false,
+          wolvesDone: false,
+          witchDone: false,
+          seerDone: false,
+          wolfVictim: null,
+          seerTarget: null,
+          witchAction: null,
+          doctorTarget: null,
+          nightResults: [],
+          eliminatedToday: null,
+          votes: {},
+        } : {}),
+      };
+
+    case 'SET_NIGHT_STATUS':
+      return {
+        ...state,
+        nightStep: action.payload.nightStep ?? state.nightStep,
+        doctorDone: action.payload.doctorDone ?? state.doctorDone,
+        wolvesDone: action.payload.wolvesDone ?? state.wolvesDone,
+        witchDone: action.payload.witchDone ?? state.witchDone,
+        seerDone: action.payload.seerDone ?? state.seerDone,
       };
 
     case 'SET_SKIP':
@@ -225,6 +267,21 @@ const gameReducer = (state, action) => {
     case 'UPDATE_SPEAKING':
       return { ...state, speakingPlayers: action.payload };
     
+    case 'SET_WOLF_MESSAGES':
+      return { ...state, wolfMessages: action.payload };
+    
+    case 'ADD_WOLF_MESSAGE':
+      return { ...state, wolfMessages: [...state.wolfMessages, action.payload] };
+    
+    case 'SET_SPEAKING_PLAYER':
+      return { ...state, speakingPlayer: action.payload };
+    
+    case 'SET_SEER_RESULT':
+      return { ...state, seerResult: action.payload };
+    
+    case 'SET_GAME_REVEALED_PLAYERS':
+      return { ...state, gameRevealedPlayers: action.payload };
+
     case 'RESET_NIGHT':
       return {
         ...state,
@@ -235,6 +292,14 @@ const gameReducer = (state, action) => {
         nightResults: [],
         eliminatedToday: null,
         votes: {},
+        nightStep: null,
+        doctorDone: false,
+        wolvesDone: false,
+        witchDone: false,
+        seerDone: false,
+        // Reset dynamic data that's night-specific
+        wolfMessages: [],
+        seerResult: null,
       };
     
     case 'RESET_GAME':
@@ -249,7 +314,8 @@ export const GameProvider = ({ children }) => {
   const [state, dispatch] = useReducer(gameReducer, initialState);
 
   const actions = {
-    setPlayer: (id, name) => dispatch({ type: 'SET_PLAYER', payload: { id, name } }),
+    setPlayer: (id, name, avatar) => dispatch({ type: 'SET_PLAYER', payload: { id, name, avatar } }),
+    setAvatar: (avatar) => dispatch({ type: 'SET_AVATAR', payload: avatar }),
     setRoom: (roomId, roomCode, isHost) => dispatch({ type: 'SET_ROOM', payload: { roomId, roomCode, isHost } }),
     updatePlayers: (players) => dispatch({ type: 'UPDATE_PLAYERS', payload: players }),
     updateRoom: (room) => dispatch({ type: 'UPDATE_ROOM', payload: room }),
@@ -268,13 +334,18 @@ export const GameProvider = ({ children }) => {
     hunterTarget: (targetId) => dispatch({ type: 'HUNTER_TARGET', payload: targetId }),
     nightResults: (results, newDead) => dispatch({ type: 'NIGHT_RESULTS', payload: { results, newDead } }),
     gameOver: (winner) => dispatch({ type: 'GAME_OVER', payload: winner }),
-    setTimer: (time) => dispatch({ type: 'SET_TIMER', payload: time }),
+    setNightStatus: (status) => dispatch({ type: 'SET_NIGHT_STATUS', payload: status }),
     toggleMute: () => dispatch({ type: 'TOGGLE_MUTE' }),
     updateSpeaking: (players) => dispatch({ type: 'UPDATE_SPEAKING', payload: players }),
     resetNight: () => dispatch({ type: 'RESET_NIGHT' }),
     setSkip: ({ skipCount, totalAlive }) => dispatch({ type: 'SET_SKIP', payload: { skipCount, totalAlive } }),
     markSkipped: () => dispatch({ type: 'MARK_SKIPPED' }),
     setWolfVictim: (victimId) => dispatch({ type: 'SET_WOLF_VICTIM', payload: victimId }),
+    setWolfMessages: (messages) => dispatch({ type: 'SET_WOLF_MESSAGES', payload: messages }),
+    addWolfMessage: (message) => dispatch({ type: 'ADD_WOLF_MESSAGE', payload: message }),
+    setSpeakingPlayer: (player) => dispatch({ type: 'SET_SPEAKING_PLAYER', payload: player }),
+    setSeerResult: (result) => dispatch({ type: 'SET_SEER_RESULT', payload: result }),
+    setGameRevealedPlayers: (players) => dispatch({ type: 'SET_GAME_REVEALED_PLAYERS', payload: players }),
     resetGame: () => dispatch({ type: 'RESET_GAME' }),
   };
 

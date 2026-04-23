@@ -86,7 +86,9 @@
     "confirmProtect": "Confirm Protection",
     "protectedLastNight": "Protected last night",
     "youWillProtect": "You will protect",
-    "tonight": "tonight"
+    "tonight": "tonight",
+    "waitingForDoctor": "⏳ Waiting for the doctor's protection...",
+    "waitingForWolves": "⏳ Waiting for wolves to choose their victim..."
   },
   "day": {
     "title": "Daytime",
@@ -124,6 +126,9 @@
     "isVillager": "Innocent Villager",
     "revealed": "Your vision revealed that",
     "log": "Log"
+  },
+  "seer": {
+    "waiting_result": "Waiting for vision result..."
   },
   "witchResult": {
     "title": "Magic Result",

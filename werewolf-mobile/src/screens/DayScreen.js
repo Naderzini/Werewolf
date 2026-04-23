@@ -6,17 +6,12 @@ import { COLORS } from '../constants/theme';
 import PhaseBanner from '../components/PhaseBanner';
 import SkipPhaseButton from '../components/SkipPhaseButton';
 import { useGame } from '../context/GameContext';
-import usePhaseTimer from '../hooks/usePhaseTimer';
 
 const EMOJIS = ['🧑', '�', '🧔', '🧑‍🦱', '�', '👱‍♀️', '🧑‍🎓', '�‍🦰', '🧑‍�', '👨‍🦲', '🧔‍♂️', '👩‍�'];
 
 export default function DayScreen({ navigation }) {
   const { t } = useTranslation();
   const { state } = useGame();
-
-  const duration = state.phaseDuration || state.settings?.dayDuration || 120;
-  // Visual countdown only — server emits phase_changed to Vote
-  const { formatted } = usePhaseTimer(duration);
 
   const videoPlayers = (state.players || []).map((p, i) => ({
     ...p,
@@ -84,9 +79,6 @@ export default function DayScreen({ navigation }) {
           </View>
         ))}
       </View>
-
-      {/* Timer */}
-      <Text style={styles.timer}>{formatted}</Text>
 
       {/* Bottom controls */}
       <View style={styles.bottomBar}>

@@ -8,30 +8,12 @@ import PhaseBanner from '../components/PhaseBanner';
 import PlayerAvatar from '../components/PlayerAvatar';
 import SkipPhaseButton from '../components/SkipPhaseButton';
 import { useGame } from '../context/GameContext';
-import usePhaseTimer from '../hooks/usePhaseTimer';
 
 export default function NightScreen({ navigation }) {
   const { t } = useTranslation();
   const { state } = useGame();
 
-  const duration = state.phaseDuration || state.settings?.nightDuration || 60;
-
-  // Jump to this role's action screen. Role players are routed here automatically
-  // by useGameSocket; this button is a manual fallback.
-  const navigateToRoleAction = () => {
-    const role = state.myRole;
-    switch (role) {
-      case ROLES.WOLF:   navigation.replace('WolfAction');   break;
-      case ROLES.SEER:   navigation.replace('SeerAction');   break;
-      case ROLES.WITCH:  navigation.replace('WitchAction');  break;
-      case ROLES.DOCTOR: navigation.replace('DoctorAction'); break;
-      // Villagers and Hunter just wait here — server will emit phase_changed → day
-      default: break;
-    }
-  };
-
-  // Visual countdown only — phase transitions are server-driven
-  const { formatted } = usePhaseTimer(duration);
+  // No timer — phases advance only when all players have acted
 
   // Use real players from state (exclude dead to mirror server truth)
   const voicePlayers = (state.players || []).map((p) => ({
@@ -47,8 +29,6 @@ export default function NightScreen({ navigation }) {
     >
       <PhaseBanner phase="night" label={t('night.title')} icon="🌙" />
 
-      {/* Timer */}
-      <Text style={styles.timer}>{formatted}</Text>
       <Text style={styles.voiceLabel}>{t('night.voiceOnly')}</Text>
 
       {/* Voice grid */}

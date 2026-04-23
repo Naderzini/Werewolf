@@ -103,6 +103,7 @@ export const endNight = () => socket?.emit('end_night');
 
 // ── Day actions ──
 export const castVote = (targetId) => socket?.emit('cast_vote', { targetId });
+export const updateAvatar = (avatar) => socket?.emit('update_avatar', { avatar });
 export const endVote = () => socket?.emit('end_vote');
 
 // ── Hunter ──
@@ -139,7 +140,11 @@ export const onHunterTurn = subscribe('hunter_turn');
 export const onHunterResult = subscribe('hunter_result');
 export const onWolfVoteUpdate = subscribe('wolf_vote_update');
 export const onWolfVictimUpdate = subscribe('wolf_victim_update');
+export const onWolfMessage = subscribe('wolf_message');
+export const onSeerResult = subscribe('seer_result');
+export const onNightActionStatus = subscribe('night_action_status');
 export const onSkipUpdate = subscribe('skip_update');
+export const onPlayerAvatarUpdate = subscribe('player_avatar_update');
 export const onVoiceOffer = subscribe('voice_offer');
 export const onVoiceAnswer = subscribe('voice_answer');
 export const onIceCandidate = subscribe('ice_candidate');

@@ -7,18 +7,20 @@ import { ROLE_CONFIG } from '../constants/roles';
 import GradientButton from '../components/GradientButton';
 import { useGame } from '../context/GameContext';
 
-const REVEALED_ROLES = [
-  { id: 'p1', name: 'أحمد', role: 'wolf', isDead: true },
-  { id: 'p2', name: 'سارة', role: 'seer', isDead: false },
-  { id: 'p3', name: 'كريم', role: 'wolf', isDead: true },
-  { id: 'p4', name: 'لينا', role: 'villager', isDead: true },
-  { id: 'p5', name: 'يوسف', role: 'doctor', isDead: false },
-  { id: 'me', name: 'أنت', role: 'witch', isDead: false },
-];
-
 export default function GameResultScreen({ navigation }) {
   const { t } = useTranslation();
   const { state, resetGame } = useGame();
+
+  // Use dynamic data from game_over event, fallback to current players if not populated yet
+  const revealedPlayers = state.gameRevealedPlayers.length > 0 
+    ? state.gameRevealedPlayers 
+    : state.players.map((p) => ({
+        id: p.id,
+        name: p.name,
+        role: p.role,
+        isDead: p.isDead,
+        avatarUrl: p.avatarUrl,
+      }));
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const scaleAnim = useRef(new Animated.Value(0.5)).current;
 
@@ -56,7 +58,7 @@ export default function GameResultScreen({ navigation }) {
         <Text style={styles.revealTitle}>🃏 {t('result.rolesRevealed')}</Text>
 
         <View style={styles.rolesList}>
-          {REVEALED_ROLES.map((player) => {
+          {revealedPlayers.map((player) => {
             const config = ROLE_CONFIG[player.role];
             const colors = ROLE_COLORS[player.role] || ROLE_COLORS.villager;
             return (

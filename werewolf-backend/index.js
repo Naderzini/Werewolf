@@ -18,15 +18,8 @@ const {
   getPublicRoom,
 } = require('./src/rooms');
 
-// Server-side phase timers (roomCode -> NodeJS timer)
-const phaseTimers = new Map();
 // Skip votes per room (roomCode -> Set<socketId>) — reset on each phase change
 const skipVotes = new Map();
-
-function clearPhaseTimer(roomCode) {
-  const t = phaseTimers.get(roomCode);
-  if (t) { clearTimeout(t); phaseTimers.delete(roomCode); }
-}
 
 function clearSkipVotes(roomCode) {
   skipVotes.delete(roomCode);
@@ -46,29 +39,120 @@ function computeLeadingVictim(wolfVotes) {
   return leader;
 }
 
-// Roles that act at night (hunter acts only on death; villager never)
-const NIGHT_ACTING_ROLES = new Set(['wolf', 'seer', 'witch', 'doctor']);
+// ── Sequential night steps ──
+// Order: doctor → wolves → witch → seer → resolve
+const NIGHT_STEPS = ['doctor', 'wolves', 'witch', 'seer', 'resolve'];
+
+// Check if a given night step has any alive player that needs to act
+function stepHasActor(room, step) {
+  switch (step) {
+    case 'doctor': return room.players.some((p) => p.role === 'doctor' && !p.isDead && p.isOnline);
+    case 'wolves': return room.players.some((p) => p.role === 'wolf' && !p.isDead && p.isOnline);
+    case 'witch':  return room.players.some((p) => p.role === 'witch' && !p.isDead && p.isOnline);
+    case 'seer':   return room.players.some((p) => p.role === 'seer' && !p.isDead && p.isOnline);
+    case 'resolve': return true; // always runs
+    default: return false;
+  }
+}
+
+// Advance to the next night step that has an actor, or resolve
+function advanceNightStep(roomCode) {
+  const room = rooms.get(roomCode);
+  if (!room || room.phase !== 'night') return;
+
+  const currentIdx = NIGHT_STEPS.indexOf(room.nightStep);
+  for (let i = currentIdx + 1; i < NIGHT_STEPS.length; i++) {
+    const step = NIGHT_STEPS[i];
+    if (step === 'resolve') {
+      // All actions collected — resolve the night
+      const results = resolveNight(roomCode);
+      broadcastRoom(roomCode);
+      io.to(roomCode).emit('night_results', { results, deadPlayers: room.deadPlayers });
+
+      // Check if hunter was killed by wolves
+      const hunterKilled = (results || []).find(
+        (r) => r.event === 'killed_by_wolves' && r.role === 'hunter'
+      ) || (results || []).find(
+        (r) => r.event === 'killed_by_witch' && r.role === 'hunter'
+      );
+      if (hunterKilled) {
+        room.phase = 'hunter_turn';
+        io.to(hunterKilled.playerId).emit('hunter_turn');
+        broadcastNightStatus(roomCode);
+        return;
+      }
+
+      const winner = checkWinCondition(roomCode);
+      if (winner) {
+        room.phase = 'game_over';
+        io.to(roomCode).emit('game_over', { winner, players: room.players });
+        return;
+      }
+      emitPhase(roomCode, 'day');
+      return;
+    }
+    if (stepHasActor(room, step)) {
+      room.nightStep = step;
+      broadcastNightStatus(roomCode);
+      return;
+    }
+  }
+}
+
+// Check if all players for the current step have acted
+function isCurrentStepComplete(room) {
+  const acted = room.nightActions.acted || new Set();
+  switch (room.nightStep) {
+    case 'doctor': {
+      const docs = room.players.filter((p) => p.role === 'doctor' && !p.isDead && p.isOnline);
+      return docs.length === 0 || docs.every((p) => acted.has(p.id));
+    }
+    case 'wolves': {
+      const wolves = room.players.filter((p) => p.role === 'wolf' && !p.isDead && p.isOnline);
+      return wolves.length === 0 || wolves.every((p) => acted.has(p.id));
+    }
+    case 'witch': {
+      const witches = room.players.filter((p) => p.role === 'witch' && !p.isDead && p.isOnline);
+      return witches.length === 0 || witches.every((p) => acted.has(p.id));
+    }
+    case 'seer': {
+      const seers = room.players.filter((p) => p.role === 'seer' && !p.isDead && p.isOnline);
+      return seers.length === 0 || seers.every((p) => acted.has(p.id));
+    }
+    default: return true;
+  }
+}
+
+// After every night action: if current step is done, advance to next step
+function maybeAdvanceNightStep(roomCode) {
+  const room = rooms.get(roomCode);
+  if (!room || room.phase !== 'night') return;
+  if (isCurrentStepComplete(room)) {
+    advanceNightStep(roomCode);
+  }
+}
 
 function markNightActed(room, playerId) {
   if (!room.nightActions.acted) room.nightActions.acted = new Set();
   room.nightActions.acted.add(playerId);
 }
 
-function isNightComplete(room) {
-  if (room.phase !== 'night') return false;
-  const acted = room.nightActions.acted || new Set();
-  const aliveActors = room.players.filter(
-    (p) => !p.isDead && p.isOnline && NIGHT_ACTING_ROLES.has(p.role)
-  );
-  if (aliveActors.length === 0) return true;
-  return aliveActors.every((p) => acted.has(p.id));
-}
-
-// Call after every night action: if everyone who needs to act has acted, advance
-function maybeAutoAdvanceNight(roomCode) {
+// Broadcast night action status to all clients so they can show/hide/grey out UIs
+function broadcastNightStatus(roomCode) {
   const room = rooms.get(roomCode);
   if (!room) return;
-  if (isNightComplete(room)) autoAdvancePhase(roomCode, 'night');
+  const acted = room.nightActions.acted || new Set();
+  io.to(roomCode).emit('night_action_status', {
+    nightStep: room.nightStep,
+    doctorDone: room.players.filter((p) => p.role === 'doctor' && !p.isDead && p.isOnline)
+      .every((p) => acted.has(p.id)),
+    wolvesDone: room.players.filter((p) => p.role === 'wolf' && !p.isDead && p.isOnline)
+      .every((p) => acted.has(p.id)),
+    witchDone: room.players.filter((p) => p.role === 'witch' && !p.isDead && p.isOnline)
+      .every((p) => acted.has(p.id)),
+    seerDone: room.players.filter((p) => p.role === 'seer' && !p.isDead && p.isOnline)
+      .every((p) => acted.has(p.id)),
+  });
 }
 
 const app = express();
@@ -96,54 +180,55 @@ function emitRoles(roomCode) {
   });
 }
 
-// Helper: phase transition with timer info + server-side auto-advance
+// Helper: phase transition — no automatic timers.
+// Phase advances only when all relevant players have submitted their actions.
 function emitPhase(roomCode, phase, extra = {}) {
   const room = rooms.get(roomCode);
   if (!room) return;
   room.phase = phase;
-  const durationMap = {
-    role_reveal: room.settings.roleRevealDuration,
-    night: room.settings.nightDuration,
-    day: room.settings.dayDuration,
-    vote: room.settings.voteDuration,
-  };
-  const duration = durationMap[phase] ?? null;
   io.to(roomCode).emit('phase_changed', {
     phase,
     dayNumber: room.dayNumber,
-    duration,
+    duration: null, // no timers — action-driven advancement
     ...extra,
   });
 
-  // Auto-advance when duration expires. Reset skip votes for the new phase.
-  clearPhaseTimer(roomCode);
   clearSkipVotes(roomCode);
-  if (duration) {
-    phaseTimers.set(roomCode, setTimeout(() => autoAdvancePhase(roomCode, phase), duration * 1000));
+
+  // When entering night, reset nightActions and start the sequential night flow
+  if (phase === 'night') {
+    room.nightActions = {
+      wolfVotes: {},
+      seerTarget: null,
+      witchAction: null,
+      doctorTarget: null,
+      acted: new Set(),
+    };
+    // Find first step that has an alive actor
+    room.nightStep = null;
+    for (const step of NIGHT_STEPS) {
+      if (step === 'resolve') { /* handled by advanceNightStep */ break; }
+      if (stepHasActor(room, step)) {
+        room.nightStep = step;
+        break;
+      }
+    }
+    if (room.nightStep) {
+      broadcastNightStatus(roomCode);
+    } else {
+      // No night actors alive — go straight to resolve
+      advanceNightStep(roomCode);
+    }
   }
 }
 
-function autoAdvancePhase(roomCode, expectedPhase) {
+// Manual phase advance — used by skip_phase unanimous vote and host triggers
+function advancePhase(roomCode, expectedPhase) {
   const room = rooms.get(roomCode);
-  if (!room || room.phase !== expectedPhase) return; // already changed
+  if (!room || room.phase !== expectedPhase) return;
 
   if (expectedPhase === 'role_reveal') {
     emitPhase(roomCode, 'night');
-    return;
-  }
-
-  if (expectedPhase === 'night') {
-    const results = resolveNight(roomCode);
-    // Broadcast updated player list first so clients know who died / their role
-    broadcastRoom(roomCode);
-    io.to(roomCode).emit('night_results', { results, deadPlayers: room.deadPlayers });
-    const winner = checkWinCondition(roomCode);
-    if (winner) {
-      room.phase = 'game_over';
-      io.to(roomCode).emit('game_over', { winner, players: room.players });
-      return;
-    }
-    emitPhase(roomCode, 'day');
     return;
   }
 
@@ -154,9 +239,10 @@ function autoAdvancePhase(roomCode, expectedPhase) {
 
   if (expectedPhase === 'vote') {
     const result = resolveVote(roomCode);
-    broadcastRoom(roomCode); // reveal eliminated player's role
+    broadcastRoom(roomCode);
     io.to(roomCode).emit('vote_result', result);
     if (result && result.isHunter) {
+      room.phase = 'hunter_turn';
       io.to(result.eliminated.id).emit('hunter_turn');
       return;
     }
@@ -240,12 +326,24 @@ io.on('connection', (socket) => {
     callback({ success: true });
   });
 
-  // ── Night actions ──
+  // ── Night actions (sequential: doctor → wolves → witch → seer) ──
+
+  socket.on('doctor_protect', ({ targetId }) => {
+    const info = playerSockets.get(socket.id);
+    if (!info) return;
+    const room = rooms.get(info.roomCode);
+    if (!room || room.phase !== 'night' || room.nightStep !== 'doctor') return;
+    room.nightActions.doctorTarget = targetId;
+    markNightActed(room, socket.id);
+    broadcastNightStatus(info.roomCode);
+    maybeAdvanceNightStep(info.roomCode);
+  });
+
   socket.on('wolf_vote', ({ targetId }) => {
     const info = playerSockets.get(socket.id);
     if (!info) return;
     const room = rooms.get(info.roomCode);
-    if (!room) return;
+    if (!room || room.phase !== 'night' || room.nightStep !== 'wolves') return;
     room.nightActions.wolfVotes[socket.id] = targetId;
 
     // Share votes among wolves only
@@ -254,23 +352,37 @@ io.on('connection', (socket) => {
       io.to(w.id).emit('wolf_vote_update', { voterId: socket.id, targetId });
     });
 
-    // Also notify the witch of the current leading victim so she can decide
-    const leadingVictimId = computeLeadingVictim(room.nightActions.wolfVotes);
-    const witch = room.players.find((p) => p.role === 'witch' && !p.isDead);
-    if (witch) {
-      io.to(witch.id).emit('wolf_victim_update', { victimId: leadingVictimId });
+    markNightActed(room, socket.id);
+    broadcastNightStatus(info.roomCode);
+
+    // If all wolves voted, notify witch of the victim before advancing
+    if (isCurrentStepComplete(room)) {
+      const leadingVictimId = computeLeadingVictim(room.nightActions.wolfVotes);
+      const witch = room.players.find((p) => p.role === 'witch' && !p.isDead);
+      if (witch) {
+        io.to(witch.id).emit('wolf_victim_update', { victimId: leadingVictimId });
+      }
     }
 
-    // Mark this wolf as done and maybe advance the night
+    maybeAdvanceNightStep(info.roomCode);
+  });
+
+  socket.on('witch_action', ({ action }) => {
+    const info = playerSockets.get(socket.id);
+    if (!info) return;
+    const room = rooms.get(info.roomCode);
+    if (!room || room.phase !== 'night' || room.nightStep !== 'witch') return;
+    room.nightActions.witchAction = action;
     markNightActed(room, socket.id);
-    maybeAutoAdvanceNight(info.roomCode);
+    broadcastNightStatus(info.roomCode);
+    maybeAdvanceNightStep(info.roomCode);
   });
 
   socket.on('seer_reveal', ({ targetId }, callback = () => {}) => {
     const info = playerSockets.get(socket.id);
     if (!info) return callback({ success: false });
     const room = rooms.get(info.roomCode);
-    if (!room) return callback({ success: false });
+    if (!room || room.phase !== 'night' || room.nightStep !== 'seer') return callback({ success: false });
     const target = room.players.find((p) => p.id === targetId);
     if (!target) return callback({ success: false });
     callback({
@@ -280,48 +392,22 @@ io.on('connection', (socket) => {
       isWolf: target.role === 'wolf',
     });
     markNightActed(room, socket.id);
-    maybeAutoAdvanceNight(info.roomCode);
+    broadcastNightStatus(info.roomCode);
+    maybeAdvanceNightStep(info.roomCode);
   });
 
-  socket.on('witch_action', ({ action }) => {
-    const info = playerSockets.get(socket.id);
-    if (!info) return;
-    const room = rooms.get(info.roomCode);
-    if (!room) return;
-    room.nightActions.witchAction = action;
-    markNightActed(room, socket.id);
-    maybeAutoAdvanceNight(info.roomCode);
-  });
-
-  socket.on('doctor_protect', ({ targetId }) => {
-    const info = playerSockets.get(socket.id);
-    if (!info) return;
-    const room = rooms.get(info.roomCode);
-    if (!room) return;
-    room.nightActions.doctorTarget = targetId;
-    markNightActed(room, socket.id);
-    maybeAutoAdvanceNight(info.roomCode);
-  });
-
-  // ── End night (manual host trigger) ──
+  // ── End night (manual host trigger — forces resolution) ──
   socket.on('end_night', () => {
     const info = playerSockets.get(socket.id);
     if (!info) return;
     const room = rooms.get(info.roomCode);
     if (!room) return;
     if (room.hostId !== info.playerId) return;
-    clearPhaseTimer(info.roomCode); // cancel server-side timer
+    if (room.phase !== 'night') return;
 
-    const results = resolveNight(info.roomCode);
-    io.to(info.roomCode).emit('night_results', { results, deadPlayers: room.deadPlayers });
-
-    const winner = checkWinCondition(info.roomCode);
-    if (winner) {
-      room.phase = 'game_over';
-      io.to(info.roomCode).emit('game_over', { winner, players: room.players });
-      return;
-    }
-    emitPhase(info.roomCode, 'day');
+    // Force jump to resolve
+    room.nightStep = 'seer'; // set to last step so advanceNightStep goes to resolve
+    advanceNightStep(info.roomCode);
   });
 
   // ── Skip phase voting (any player can vote to skip; advance when all alive agree) ──
@@ -350,7 +436,7 @@ io.on('connection', (socket) => {
 
     // Unanimous among alive players → advance immediately
     if (votes.size >= alive.length && alive.length > 0) {
-      autoAdvancePhase(info.roomCode, room.phase);
+      advancePhase(info.roomCode, room.phase);
     }
   });
 
@@ -371,12 +457,13 @@ io.on('connection', (socket) => {
     const room = rooms.get(info.roomCode);
     if (!room) return;
     if (room.hostId !== info.playerId) return;
-    clearPhaseTimer(info.roomCode);
 
     const result = resolveVote(info.roomCode);
+    broadcastRoom(info.roomCode);
     io.to(info.roomCode).emit('vote_result', result);
 
     if (result && result.isHunter) {
+      room.phase = 'hunter_turn';
       io.to(result.eliminated.id).emit('hunter_turn');
       return; // Wait for hunter action
     }
@@ -433,7 +520,6 @@ io.on('connection', (socket) => {
       const result = leaveRoom(info.roomCode, info.playerId);
       playerSockets.delete(socket.id);
       if (result?.deleted) {
-        clearPhaseTimer(info.roomCode); // clean up timer for empty room
         clearSkipVotes(info.roomCode);
       } else {
         broadcastRoom(info.roomCode);

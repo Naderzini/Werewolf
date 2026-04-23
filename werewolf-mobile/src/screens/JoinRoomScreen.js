@@ -14,6 +14,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useTranslation } from 'react-i18next';
 import { COLORS } from '../constants/theme';
 import GradientButton from '../components/GradientButton';
+import AvatarPicker from '../components/AvatarPicker';
 import { useGame } from '../context/GameContext';
 import {
   connectSocket,
@@ -25,11 +26,12 @@ export default function JoinRoomScreen({ navigation, route }) {
   const { t } = useTranslation();
   const { mode } = route.params || {};
   const isCreate = mode === 'create';
-  const { setPlayer, setRoom, updateRoom } = useGame();
+  const { setPlayer, setRoom, updateRoom, setAvatar, playerAvatar } = useGame();
 
   const [name, setName] = useState('');
   const [code, setCode] = useState('');
   const [loading, setLoading] = useState(false);
+  const [selectedAvatar, setSelectedAvatar] = useState('🧑'); // Default avatar
 
   // Accept "WLF-123", "wlf123", "123 ", etc. and normalize to backend format.
   const normalizeCode = (raw) => {
@@ -54,9 +56,16 @@ export default function JoinRoomScreen({ navigation, route }) {
         : await socketJoinRoom(normalized, name.trim());
 
       const { room, playerId } = response;
-      setPlayer(playerId, name.trim());
+      setPlayer(playerId, name.trim(), selectedAvatar);
       setRoom(room.code, room.code, room.hostId === playerId);
       updateRoom(room);
+      // Update avatar on server
+      try {
+        // This will be handled by the backend socket event
+        setAvatar(selectedAvatar);
+      } catch (err) {
+        console.log('Avatar update failed:', err);
+      }
       navigation.replace('Lobby');
     } catch (err) {
       const msg = err?.message || 'Unknown error';
@@ -126,6 +135,16 @@ export default function JoinRoomScreen({ navigation, route }) {
             />
           </View>
 
+          {/* Avatar Selection */}
+          <View style={styles.avatarContainer}>
+            <Text style={styles.inputLabel}>Choose your avatar</Text>
+            <AvatarPicker
+              selectedAvatar={selectedAvatar}
+              onAvatarSelect={setSelectedAvatar}
+              title=""
+            />
+          </View>
+
           <GradientButton
             title={isCreate ? t('home.createRoom') : t('home.join')}
             icon={isCreate ? '🚀' : '🔑'}
@@ -183,6 +202,10 @@ const styles = StyleSheet.create({
     color: COLORS.text,
     fontSize: 18,
     fontWeight: '700',
+  },
+  avatarContainer: { 
+    width: '100%',
+    marginTop: 10,
   },
   continueBtn: { width: 220, marginTop: 10 },
 });

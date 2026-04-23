@@ -15,12 +15,15 @@ export default function WitchActionScreen({ navigation }) {
   const [killTarget, setKillTarget] = useState(null);
   const [showKillList, setShowKillList] = useState(false);
 
+  // Block witch until wolves have submitted their victim
+  const waitingForWolves = !state.wolvesDone;
+
   const alivePlayers = getActionPlayers(state.players, state.playerId, {
     includeSelf: false,
   });
 
-  // Server emits `wolf_victim_update` to the witch as wolves vote; look up
-  // the victim in the FULL players list so the witch can save herself too.
+  // Server emits `wolf_victim_update` to the witch once all wolves have voted;
+  // look up the victim in the FULL players list so the witch can save herself too.
   const wolfVictim = state.wolfVictim
     ? (state.players || []).find((p) => p.id === state.wolfVictim) || null
     : null;
@@ -48,6 +51,14 @@ export default function WitchActionScreen({ navigation }) {
       <ScrollView contentContainerStyle={styles.scroll}>
         <PhaseBanner phase="night" label={t('night.witchTurn')} icon="🧙‍♂️" />
 
+        {/* Waiting for wolves overlay */}
+        {waitingForWolves && (
+          <View style={styles.waitingOverlay}>
+            <Text style={styles.waitingIcon}>⏳</Text>
+            <Text style={styles.waitingText}>{t('night.waitingForWolves')}</Text>
+          </View>
+        )}
+
         {/* Victim info */}
         {wolfVictim ? (
           <View style={styles.victimCard}>
@@ -65,7 +76,7 @@ export default function WitchActionScreen({ navigation }) {
         )}
 
         {/* Potions */}
-        <View style={styles.potionRow}>
+        <View style={[styles.potionRow, waitingForWolves && { opacity: 0.3 }]}>
           <View style={[styles.potion, styles.lifePotion]}>
             <Text style={styles.potionEmoji}>💚</Text>
             <Text style={[styles.potionName, { color: '#34d399' }]}>{t('night.savePotion')}</Text>
@@ -79,7 +90,7 @@ export default function WitchActionScreen({ navigation }) {
         </View>
 
         {/* Save button */}
-        {!state.witchSaveUsed && wolfVictim && (
+        {!waitingForWolves && !state.witchSaveUsed && wolfVictim && (
           <GradientButton
             title={`💚 ${t('night.savePlayer')} ${wolfVictim.name}`}
             onPress={handleSave}
@@ -89,7 +100,7 @@ export default function WitchActionScreen({ navigation }) {
         )}
 
         {/* Kill button */}
-        {!state.witchKillUsed && (
+        {!waitingForWolves && !state.witchKillUsed && (
           <>
             {showKillList ? (
               <View style={styles.killList}>
@@ -126,9 +137,11 @@ export default function WitchActionScreen({ navigation }) {
         )}
 
         {/* Skip */}
-        <TouchableOpacity style={styles.skipBtn} onPress={handleSkip}>
-          <Text style={styles.skipText}>{t('night.skip')}</Text>
-        </TouchableOpacity>
+        {!waitingForWolves && (
+          <TouchableOpacity style={styles.skipBtn} onPress={handleSkip}>
+            <Text style={styles.skipText}>{t('night.skip')}</Text>
+          </TouchableOpacity>
+        )}
       </ScrollView>
     </LinearGradient>
   );
@@ -190,4 +203,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   skipText: { fontSize: 12, color: COLORS.muted },
+  waitingOverlay: {
+    backgroundColor: '#0d0508',
+    borderWidth: 1,
+    borderColor: '#3a2a00',
+    borderRadius: 12,
+    padding: 16,
+    alignItems: 'center',
+    gap: 8,
+  },
+  waitingIcon: { fontSize: 28 },
+  waitingText: { color: '#fbbf24', fontSize: 14, fontWeight: '600', textAlign: 'center' },
 });

@@ -6,13 +6,12 @@ const {
   shuffleArray,
 } = require('./roles');
 
-// Default game settings (timers in seconds). Host can override these before start.
+// Default game settings. Host can override these before start.
+// No automatic timers — phases advance only when all players have acted.
+// extraTime: optional timer per phase (in seconds) that the host can enable.
 const DEFAULT_SETTINGS = {
-  nightDuration: 60,      // duration of the night voice phase
-  dayDuration: 120,       // duration of the day discussion
-  voteDuration: 45,       // duration of the vote
-  roleRevealDuration: 10, // how long each player sees their role
   extraWolf: false,       // +1 wolf when players >= 10
+  extraTime: 0,           // 0 = no timer; >0 = optional countdown hint (seconds) shown on UI (not enforced server-side)
 };
 
 // Active rooms storage
@@ -117,20 +116,11 @@ function updateSettings(roomCode, playerId, partial) {
   if (room.gameStarted) return { error: 'GAME_ALREADY_STARTED' };
 
   const next = { ...room.settings };
-  if (typeof partial.nightDuration === 'number') {
-    next.nightDuration = Math.max(15, Math.min(600, partial.nightDuration));
-  }
-  if (typeof partial.dayDuration === 'number') {
-    next.dayDuration = Math.max(30, Math.min(600, partial.dayDuration));
-  }
-  if (typeof partial.voteDuration === 'number') {
-    next.voteDuration = Math.max(15, Math.min(300, partial.voteDuration));
-  }
-  if (typeof partial.roleRevealDuration === 'number') {
-    next.roleRevealDuration = Math.max(5, Math.min(60, partial.roleRevealDuration));
-  }
   if (typeof partial.extraWolf === 'boolean') {
     next.extraWolf = partial.extraWolf;
+  }
+  if (typeof partial.extraTime === 'number') {
+    next.extraTime = Math.max(0, Math.min(600, partial.extraTime));
   }
   room.settings = next;
   return { room };

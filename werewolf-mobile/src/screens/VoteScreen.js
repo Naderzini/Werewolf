@@ -6,7 +6,6 @@ import { COLORS } from '../constants/theme';
 import GradientButton from '../components/GradientButton';
 import SkipPhaseButton from '../components/SkipPhaseButton';
 import { useGame } from '../context/GameContext';
-import usePhaseTimer from '../hooks/usePhaseTimer';
 import { castVote as sendCastVote, onVoteUpdate } from '../services/socketService';
 
 const EMOJIS = ['🧑', '👩', '🧔', '🧑‍🦱', '👨', '👱‍♀️'];
@@ -17,10 +16,6 @@ export default function VoteScreen({ navigation }) {
   const [selected, setSelected] = useState(null);
   const [hasVoted, setHasVoted] = useState(false);
   const [votes, setVotes] = useState({});
-
-  const duration = state.phaseDuration || state.settings?.voteDuration || 45;
-  // Visual countdown only — server auto-resolves vote when its timer expires
-  const { formatted } = usePhaseTimer(duration);
 
   useEffect(() => {
     const off = onVoteUpdate(({ votes: v }) => setVotes(v || {}));
@@ -55,7 +50,6 @@ export default function VoteScreen({ navigation }) {
           <Text style={styles.headerIcon}>🗳️</Text>
           <Text style={styles.headerTitle}>{t('vote.title')}</Text>
           <Text style={styles.headerSub}>{t('vote.voteToEliminate')}</Text>
-          <Text style={styles.timer}>{formatted}</Text>
         </View>
 
         {/* Player vote cards */}

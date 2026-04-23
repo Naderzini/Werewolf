@@ -16,6 +16,10 @@ export default function WolfActionScreen({ navigation }) {
   const [selectedVictim, setSelectedVictim] = useState(null);
   const [confirmed, setConfirmed] = useState(false);
 
+  // Block wolves until doctor has submitted protection
+  const waitingForDoctor = state.nightStep === 'wolves' && !state.doctorDone
+    && state.players.some((p) => p.role === 'doctor' && !p.isDead && p.isOnline);
+
   // Exclude self; wolves can target any non-wolf alive player
   const players = getActionPlayers(state.players, state.playerId, {
     includeSelf: false,
@@ -34,16 +38,34 @@ export default function WolfActionScreen({ navigation }) {
       <ScrollView contentContainerStyle={styles.scroll}>
         <PhaseBanner phase="night" label={t('night.wolfChannel')} icon="🐺" />
 
+        {/* Waiting for doctor overlay */}
+        {waitingForDoctor && (
+          <View style={styles.waitingOverlay}>
+            <Text style={styles.waitingIcon}>⏳</Text>
+            <Text style={styles.waitingText}>{t('night.waitingForDoctor')}</Text>
+          </View>
+        )}
+
         {/* Wolf chat indicator */}
-        <View style={styles.chatBox}>
-          <Text style={styles.chatSpeaker}>{t('common.speaking')}...</Text>
-          <Text style={styles.chatMessage}>"نقتل أحمد الليلة — يشك فينا!"</Text>
+        <View style={[styles.chatBox, waitingForDoctor && styles.blocked]}>
+          <Text style={styles.chatSpeaker}>
+            {state.speakingPlayer?.name ?? t('common.speaking')}...
+          </Text>
+          {state.wolfMessages.length > 0 ? (
+            state.wolfMessages.map((msg) => (
+              <Text key={msg.id} style={styles.chatMessage}>
+                "{msg.text}"
+              </Text>
+            ))
+          ) : (
+            <Text style={styles.chatMessage}>🐺 Planning tonight's hunt...</Text>
+          )}
         </View>
 
         {/* Choose victim */}
-        <Text style={styles.sectionLabel}>{t('night.chooseVictim')}</Text>
+        <Text style={[styles.sectionLabel, waitingForDoctor && { opacity: 0.3 }]}>{t('night.chooseVictim')}</Text>
 
-        <View style={styles.playerGrid}>
+        <View style={[styles.playerGrid, waitingForDoctor && { opacity: 0.3 }]}>
           {players.map((player) => (
             <TouchableOpacity
               key={player.id}
@@ -52,8 +74,8 @@ export default function WolfActionScreen({ navigation }) {
                 player.isDead && styles.deadCard,
                 selectedVictim === player.id && styles.selectedCard,
               ]}
-              onPress={() => !player.isDead && setSelectedVictim(player.id)}
-              disabled={player.isDead}
+              onPress={() => !player.isDead && !waitingForDoctor && setSelectedVictim(player.id)}
+              disabled={player.isDead || waitingForDoctor}
             >
               <Text style={styles.playerEmoji}>{player.emoji}</Text>
               <Text
@@ -160,4 +182,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   confirmedText: { color: '#4ade80', fontSize: 13, fontWeight: '600' },
+  waitingOverlay: {
+    backgroundColor: '#0d0508',
+    borderWidth: 1,
+    borderColor: '#3a2a00',
+    borderRadius: 12,
+    padding: 16,
+    alignItems: 'center',
+    gap: 8,
+  },
+  waitingIcon: { fontSize: 28 },
+  waitingText: { color: '#fbbf24', fontSize: 14, fontWeight: '600', textAlign: 'center' },
+  blocked: { opacity: 0.3 },
 });
