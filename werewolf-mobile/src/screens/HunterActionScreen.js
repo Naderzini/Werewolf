@@ -5,25 +5,25 @@ import { useTranslation } from 'react-i18next';
 import { COLORS } from '../constants/theme';
 import GradientButton from '../components/GradientButton';
 import { useGame } from '../context/GameContext';
-
-const ALIVE_PLAYERS = [
-  { id: 'p3', name: 'كريم', emoji: '🧔' },
-  { id: 'p2', name: 'سارة', emoji: '👩' },
-  { id: 'p1', name: 'أحمد', emoji: '🧑' },
-  { id: 'p6', name: 'نور', emoji: '👩‍🦰' },
-];
+import { getActionPlayers } from '../utils/players';
+import { hunterShot } from '../services/socketService';
 
 export default function HunterActionScreen({ navigation }) {
   const { t } = useTranslation();
-  const { hunterTarget } = useGame();
+  const { state, hunterTarget } = useGame();
   const [selected, setSelected] = useState(null);
 
-  const selectedPlayer = ALIVE_PLAYERS.find((p) => p.id === selected);
+  const players = getActionPlayers(state.players, state.playerId, {
+    includeSelf: false,
+  });
+
+  const selectedPlayer = players.find((p) => p.id === selected);
 
   const handleShoot = () => {
     if (!selected) return;
+    hunterShot(selected);
     hunterTarget(selected);
-    navigation.replace('GameResult');
+    // Server will trigger phase change / game_over
   };
 
   return (
@@ -39,7 +39,7 @@ export default function HunterActionScreen({ navigation }) {
 
         {/* Player list */}
         <View style={styles.list}>
-          {ALIVE_PLAYERS.map((player) => {
+          {players.map((player) => {
             const isSelected = selected === player.id;
             return (
               <TouchableOpacity

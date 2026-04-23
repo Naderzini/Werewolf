@@ -13,7 +13,7 @@ const API_CONFIG = {
   SOCKET_URL_LOCAL: 'http://localhost:3000',
   SOCKET_URL_LAN: 'http://192.168.1.19:3000', // Update with your computer's IP
   
-  // Production
+  // Productions
   SOCKET_URL_PROD: 'https://your-production-server.com',
 };
 

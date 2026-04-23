@@ -11,7 +11,8 @@
     "enterName": "Enter your name",
     "join": "Join",
     "settings": "Settings",
-    "language": "Language"
+    "language": "Language",
+    "createRoomInfo": "A unique room code will be generated for you. Share it with friends to invite them."
   },
   "lobby": {
     "roomCode": "Room Code",

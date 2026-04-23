@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { COLORS, ROLE_COLORS } from '../constants/theme';
 import { ROLE_CONFIG, ROLES, TEAMS } from '../constants/roles';
 import GradientButton from '../components/GradientButton';
+import SkipPhaseButton from '../components/SkipPhaseButton';
 import { useGame } from '../context/GameContext';
 
 export default function RoleRevealScreen({ navigation }) {
@@ -102,13 +103,10 @@ export default function RoleRevealScreen({ navigation }) {
           ))}
         </View>
 
-        {/* Understood button */}
-        <GradientButton
-          title={`${t('roles.understood')} 🤫`}
-          onPress={handleUnderstood}
-          colors={[colors.primary, colors.primary + 'cc']}
-          style={styles.understoodBtn}
-        />
+        {/* Ready / skip — phase advances when all alive players click it */}
+        <View style={styles.understoodBtn}>
+          <SkipPhaseButton label={`${t('roles.understood')} 🤫`} />
+        </View>
       </Animated.View>
     </LinearGradient>
   );

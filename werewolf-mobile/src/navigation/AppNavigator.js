@@ -1,6 +1,8 @@
 import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, createNavigationContainerRef } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+export const navigationRef = createNavigationContainerRef();
 import { COLORS } from '../constants/theme';
 
 import HomeScreen from '../screens/HomeScreen';
@@ -19,6 +21,12 @@ import HunterActionScreen from '../screens/HunterActionScreen';
 import GameResultScreen from '../screens/GameResultScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import TestMenuScreen from '../screens/TestMenuScreen';
+import useGameSocket from '../hooks/useGameSocket';
+
+function GameSocketWatcher() {
+  useGameSocket();
+  return null;
+}
 
 const Stack = createNativeStackNavigator();
 
@@ -30,7 +38,8 @@ const screenOptions = {
 
 export default function AppNavigator() {
   return (
-    <NavigationContainer>
+    <NavigationContainer ref={navigationRef}>
+      <GameSocketWatcher />
       <Stack.Navigator screenOptions={screenOptions} initialRouteName="Home">
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="TestMenu" component={TestMenuScreen} />

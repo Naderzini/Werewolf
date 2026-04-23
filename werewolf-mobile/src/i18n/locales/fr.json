@@ -11,7 +11,8 @@
     "enterName": "Entrez votre nom",
     "join": "Rejoindre",
     "settings": "Paramètres",
-    "language": "Langue"
+    "language": "Langue",
+    "createRoomInfo": "Un code unique sera généré automatiquement. Partagez-le avec vos amis pour les inviter."
   },
   "lobby": {
     "roomCode": "Code de salle",

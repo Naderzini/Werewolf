@@ -1,30 +1,42 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useTranslation } from 'react-i18next';
 import { COLORS } from '../constants/theme';
 import PhaseBanner from '../components/PhaseBanner';
 import GradientButton from '../components/GradientButton';
 import { useGame } from '../context/GameContext';
-
-const PLAYERS = [
-  { id: 'p1', name: 'أحمد', emoji: '🧑', checked: false },
-  { id: 'p2', name: 'سارة', emoji: '👩', checked: false },
-  { id: 'p5', name: 'يوسف', emoji: '🧑‍🦱', checked: true, isVillager: true },
-];
+import { getActionPlayers } from '../utils/players';
+import { sendSeerReveal } from '../services/socketService';
 
 export default function SeerActionScreen({ navigation }) {
   const { t } = useTranslation();
   const { state, seerReveal } = useGame();
   const [selected, setSelected] = useState(null);
 
-  const handleReveal = () => {
+  // Track who we've already checked using seerResults from context
+  const checkedIds = new Set((state.seerResults || []).map((r) => r.playerId));
+
+  const players = getActionPlayers(state.players, state.playerId, {
+    includeSelf: false,
+  }).map((p) => {
+    const res = (state.seerResults || []).find((r) => r.playerId === p.id);
+    return {
+      ...p,
+      checked: checkedIds.has(p.id),
+      isVillager: res ? !res.isWolf : undefined,
+    };
+  });
+
+  const handleReveal = async () => {
     if (!selected) return;
-    const player = PLAYERS.find((p) => p.id === selected);
-    // In production, server reveals the truth. For demo, randomize.
-    const isWolf = Math.random() > 0.5;
-    seerReveal(selected, player.name, isWolf);
-    navigation.replace('SeerResult', { targetName: player.name, isWolf });
+    try {
+      const res = await sendSeerReveal(selected);
+      seerReveal(res.targetId, res.playerName, res.isWolf);
+      navigation.replace('SeerResult', { targetName: res.playerName, isWolf: res.isWolf });
+    } catch (err) {
+      Alert.alert('Error', err.message || 'Could not reveal');
+    }
   };
 
   return (
@@ -39,7 +51,7 @@ export default function SeerActionScreen({ navigation }) {
         <Text style={styles.label}>{t('night.whoToReveal')}</Text>
 
         <View style={styles.list}>
-          {PLAYERS.map((player) => (
+          {players.map((player) => (
             <TouchableOpacity
               key={player.id}
               style={[

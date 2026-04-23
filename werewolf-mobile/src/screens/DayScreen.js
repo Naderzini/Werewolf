@@ -1,45 +1,33 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useTranslation } from 'react-i18next';
 import { COLORS } from '../constants/theme';
 import PhaseBanner from '../components/PhaseBanner';
-import GradientButton from '../components/GradientButton';
-import PlayerAvatar from '../components/PlayerAvatar';
+import SkipPhaseButton from '../components/SkipPhaseButton';
 import { useGame } from '../context/GameContext';
+import usePhaseTimer from '../hooks/usePhaseTimer';
 
-const VIDEO_PLAYERS = [
-  { id: 'p1', name: 'أحمد', emoji: '🧑', isSpeaking: true },
-  { id: 'me', name: 'أنت', emoji: '😐', isMe: true },
-  { id: 'p2', name: 'سارة', emoji: '👩' },
-  { id: 'p4', name: 'لينا', emoji: '💀', isDead: true },
-  { id: 'p5', name: 'يوسف', emoji: '🧑‍🦱' },
-  { id: 'p3', name: 'كريم', emoji: '🧔' },
-];
+const EMOJIS = ['🧑', '�', '🧔', '🧑‍🦱', '�', '👱‍♀️', '🧑‍🎓', '�‍🦰', '🧑‍�', '👨‍🦲', '🧔‍♂️', '👩‍�'];
 
 export default function DayScreen({ navigation }) {
   const { t } = useTranslation();
   const { state } = useGame();
-  const [timeLeft, setTimeLeft] = useState(120);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setTimeLeft((prev) => {
-        if (prev <= 0) {
-          clearInterval(interval);
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-    return () => clearInterval(interval);
-  }, []);
+  const duration = state.phaseDuration || state.settings?.dayDuration || 120;
+  // Visual countdown only — server emits phase_changed to Vote
+  const { formatted } = usePhaseTimer(duration);
 
-  const formatTime = (s) => {
-    const min = Math.floor(s / 60);
-    const sec = s % 60;
-    return `${min}:${sec.toString().padStart(2, '0')}`;
-  };
+  const videoPlayers = (state.players || []).map((p, i) => ({
+    ...p,
+    emoji: p.isDead ? '💀' : EMOJIS[i % EMOJIS.length],
+    isMe: p.id === state.playerId,
+    isSpeaking: false,
+  }));
+
+  // Build recap from last night_results (events: killed_by_wolves | killed_by_witch | saved)
+  const recap = (state.nightResults || []).filter((r) => r.event !== 'saved');
+  const roleLabel = (r) => (r ? r.charAt(0).toUpperCase() + r.slice(1) : 'unknown');
 
   return (
     <LinearGradient colors={['#050510', '#030308', COLORS.bg]} style={styles.container}>
@@ -50,9 +38,25 @@ export default function DayScreen({ navigation }) {
         icon="☀️"
       />
 
+      {/* Night recap — who died last night */}
+      <View style={styles.recapBox}>
+        <Text style={styles.recapTitle}>🌙 Last night…</Text>
+        {recap.length === 0 ? (
+          <Text style={styles.recapPeace}>☀️ A peaceful night — nobody died.</Text>
+        ) : (
+          recap.map((r) => (
+            <Text key={r.playerId} style={styles.recapLine}>
+              💀 <Text style={styles.recapName}>{r.name}</Text> was{' '}
+              {r.event === 'killed_by_witch' ? 'killed by the witch' : 'killed by the wolves'}.
+              {r.role ? ` They were a ${roleLabel(r.role)}.` : ''}
+            </Text>
+          ))
+        )}
+      </View>
+
       {/* Video grid */}
       <View style={styles.videoGrid}>
-        {VIDEO_PLAYERS.map((player, index) => (
+        {videoPlayers.map((player, index) => (
           <View
             key={player.id}
             style={[
@@ -82,7 +86,7 @@ export default function DayScreen({ navigation }) {
       </View>
 
       {/* Timer */}
-      <Text style={styles.timer}>{formatTime(timeLeft)}</Text>
+      <Text style={styles.timer}>{formatted}</Text>
 
       {/* Bottom controls */}
       <View style={styles.bottomBar}>
@@ -92,12 +96,9 @@ export default function DayScreen({ navigation }) {
         <TouchableOpacity style={styles.controlBtn}>
           <Text style={styles.controlIcon}>📹</Text>
         </TouchableOpacity>
-        <GradientButton
-          title={`🗳️ ${t('day.vote')}`}
-          onPress={() => navigation.replace('Vote')}
-          colors={['#d97706', '#b45309']}
-          style={styles.voteBtn}
-        />
+        <View style={styles.voteBtn}>
+          <SkipPhaseButton label={`${t('day.vote')} 🗳️`} />
+        </View>
       </View>
     </LinearGradient>
   );
@@ -105,6 +106,25 @@ export default function DayScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   container: { flex: 1, paddingTop: 50 },
+  recapBox: {
+    marginHorizontal: 12,
+    marginTop: 8,
+    padding: 14,
+    borderRadius: 14,
+    backgroundColor: 'rgba(124,58,237,0.08)',
+    borderWidth: 1,
+    borderColor: 'rgba(124,58,237,0.35)',
+    gap: 6,
+  },
+  recapTitle: {
+    color: '#c4b5fd',
+    fontSize: 12,
+    fontWeight: '800',
+    letterSpacing: 0.5,
+  },
+  recapPeace: { color: '#fde68a', fontSize: 13, fontWeight: '600' },
+  recapLine: { color: COLORS.text, fontSize: 13, lineHeight: 19 },
+  recapName: { color: '#f87171', fontWeight: '800' },
   videoGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',

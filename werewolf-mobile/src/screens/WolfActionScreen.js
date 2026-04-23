@@ -3,26 +3,30 @@ import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-nati
 import { LinearGradient } from 'expo-linear-gradient';
 import { useTranslation } from 'react-i18next';
 import { COLORS } from '../constants/theme';
+import { ROLES } from '../constants/roles';
 import PhaseBanner from '../components/PhaseBanner';
 import GradientButton from '../components/GradientButton';
 import { useGame } from '../context/GameContext';
-
-const ALIVE_PLAYERS = [
-  { id: 'p1', name: 'أحمد', emoji: '🧑' },
-  { id: 'p3', name: 'كريم', emoji: '🧔', isWolf: true },
-  { id: 'p4', name: 'لينا', emoji: '👩', isDead: true },
-  { id: 'p5', name: 'سارة', emoji: '👩‍🦰' },
-];
+import { getActionPlayers } from '../utils/players';
+import { sendWolfVote } from '../services/socketService';
 
 export default function WolfActionScreen({ navigation }) {
   const { t } = useTranslation();
-  const { wolfVote } = useGame();
+  const { state, wolfVote } = useGame();
   const [selectedVictim, setSelectedVictim] = useState(null);
+  const [confirmed, setConfirmed] = useState(false);
+
+  // Exclude self; wolves can target any non-wolf alive player
+  const players = getActionPlayers(state.players, state.playerId, {
+    includeSelf: false,
+    extraFilter: (p) => p.role !== 'wolf',
+  });
 
   const handleConfirmKill = () => {
-    if (!selectedVictim) return;
+    if (!selectedVictim || confirmed) return;
+    sendWolfVote(selectedVictim);
     wolfVote(selectedVictim);
-    navigation.replace('Day');
+    setConfirmed(true);
   };
 
   return (
@@ -40,39 +44,45 @@ export default function WolfActionScreen({ navigation }) {
         <Text style={styles.sectionLabel}>{t('night.chooseVictim')}</Text>
 
         <View style={styles.playerGrid}>
-          {ALIVE_PLAYERS.map((player) => (
+          {players.map((player) => (
             <TouchableOpacity
               key={player.id}
               style={[
                 styles.playerCard,
                 player.isDead && styles.deadCard,
                 selectedVictim === player.id && styles.selectedCard,
-                player.isWolf && styles.wolfCard,
               ]}
-              onPress={() => !player.isDead && !player.isWolf && setSelectedVictim(player.id)}
-              disabled={player.isDead || player.isWolf}
+              onPress={() => !player.isDead && setSelectedVictim(player.id)}
+              disabled={player.isDead}
             >
-              <Text style={styles.playerEmoji}>{player.isDead ? '💀' : player.emoji}</Text>
-              <Text style={[
-                styles.playerName,
-                selectedVictim === player.id && { color: '#ef4444' },
-                player.isWolf && { color: '#ef4444' },
-                player.isDead && { color: '#555' },
-              ]}>
+              <Text style={styles.playerEmoji}>{player.emoji}</Text>
+              <Text
+                style={[
+                  styles.playerName,
+                  selectedVictim === player.id && { color: '#ef4444' },
+                  player.isDead && { color: '#555' },
+                ]}
+              >
                 {player.name}
               </Text>
             </TouchableOpacity>
           ))}
         </View>
 
-        {/* Confirm kill button */}
-        <GradientButton
-          title={`🩸 ${t('night.confirmKill')}`}
-          onPress={handleConfirmKill}
-          colors={['#ef4444', '#b91c1c']}
-          style={styles.killBtn}
-          disabled={!selectedVictim}
-        />
+        {/* Confirm kill button / confirmed state */}
+        {confirmed ? (
+          <View style={styles.confirmedBox}>
+            <Text style={styles.confirmedText}>✅ Vote submitted — waiting for night to end…</Text>
+          </View>
+        ) : (
+          <GradientButton
+            title={`🩸 ${t('night.confirmKill')}`}
+            onPress={handleConfirmKill}
+            colors={['#ef4444', '#b91c1c']}
+            style={styles.killBtn}
+            disabled={!selectedVictim}
+          />
+        )}
       </ScrollView>
     </LinearGradient>
   );
@@ -140,4 +150,14 @@ const styles = StyleSheet.create({
   playerEmoji: { fontSize: 28 },
   playerName: { fontSize: 10, color: COLORS.text },
   killBtn: { width: '100%', marginTop: 8 },
+  confirmedBox: {
+    marginTop: 8,
+    padding: 14,
+    borderRadius: 12,
+    backgroundColor: '#0d1a0d',
+    borderWidth: 1,
+    borderColor: '#1a4d1a',
+    alignItems: 'center',
+  },
+  confirmedText: { color: '#4ade80', fontSize: 13, fontWeight: '600' },
 });

@@ -1,42 +1,51 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useTranslation } from 'react-i18next';
 import { COLORS } from '../constants/theme';
 import GradientButton from '../components/GradientButton';
+import SkipPhaseButton from '../components/SkipPhaseButton';
 import { useGame } from '../context/GameContext';
+import usePhaseTimer from '../hooks/usePhaseTimer';
+import { castVote as sendCastVote, onVoteUpdate } from '../services/socketService';
 
-const VOTE_PLAYERS = [
-  { id: 'p1', name: 'أحمد', emoji: '🧑', votes: 2 },
-  { id: 'p2', name: 'سارة', emoji: '👩', votes: 1 },
-  { id: 'p3', name: 'كريم', emoji: '🧔', votes: 0 },
-  { id: 'p5', name: 'يوسف', emoji: '🧑‍🦱', votes: 0 },
-];
+const EMOJIS = ['🧑', '👩', '🧔', '🧑‍🦱', '👨', '👱‍♀️'];
 
 export default function VoteScreen({ navigation }) {
   const { t } = useTranslation();
-  const { state, castVote, eliminatePlayer } = useGame();
+  const { state } = useGame();
   const [selected, setSelected] = useState(null);
   const [hasVoted, setHasVoted] = useState(false);
+  const [votes, setVotes] = useState({});
 
-  const maxVotes = Math.max(...VOTE_PLAYERS.map((p) => p.votes));
+  const duration = state.phaseDuration || state.settings?.voteDuration || 45;
+  // Visual countdown only — server auto-resolves vote when its timer expires
+  const { formatted } = usePhaseTimer(duration);
+
+  useEffect(() => {
+    const off = onVoteUpdate(({ votes: v }) => setVotes(v || {}));
+    return () => off?.();
+  }, []);
+
+  const alivePlayers = (state.players || []).filter((p) => !p.isDead && p.id !== state.playerId);
+
+  const voteCounts = {};
+  Object.values(votes).forEach((tid) => {
+    if (tid) voteCounts[tid] = (voteCounts[tid] || 0) + 1;
+  });
+  const maxVotes = Math.max(0, ...Object.values(voteCounts));
+
+  const candidates = alivePlayers.map((p, i) => ({
+    id: p.id,
+    name: p.name,
+    emoji: EMOJIS[i % EMOJIS.length],
+    votes: voteCounts[p.id] || 0,
+  }));
 
   const handleVote = () => {
     if (!selected) return;
-    castVote(state.playerId, selected);
+    sendCastVote(selected);
     setHasVoted(true);
-
-    // Simulate vote result after short delay
-    setTimeout(() => {
-      const eliminated = VOTE_PLAYERS.reduce((max, p) =>
-        p.votes > max.votes ? p : max
-      , VOTE_PLAYERS[0]);
-      eliminatePlayer(eliminated.id);
-
-      // Check if eliminated player is hunter
-      // For demo, go to game result or next night
-      navigation.replace('Night');
-    }, 2000);
   };
 
   return (
@@ -46,11 +55,12 @@ export default function VoteScreen({ navigation }) {
           <Text style={styles.headerIcon}>🗳️</Text>
           <Text style={styles.headerTitle}>{t('vote.title')}</Text>
           <Text style={styles.headerSub}>{t('vote.voteToEliminate')}</Text>
+          <Text style={styles.timer}>{formatted}</Text>
         </View>
 
         {/* Player vote cards */}
         <View style={styles.list}>
-          {VOTE_PLAYERS.map((player) => {
+          {candidates.map((player) => {
             const isSelected = selected === player.id;
             const votePercent = maxVotes > 0 ? (player.votes / (maxVotes + 1)) * 100 : 0;
 
@@ -93,6 +103,13 @@ export default function VoteScreen({ navigation }) {
             <Text style={styles.votedText}>✅ {t('vote.confirmVote')}</Text>
           </View>
         )}
+
+        {/* Once voted, players can ready-up to resolve the vote immediately */}
+        {hasVoted && (
+          <View style={{ marginTop: 8 }}>
+            <SkipPhaseButton label="End vote" />
+          </View>
+        )}
       </ScrollView>
     </LinearGradient>
   );
@@ -105,6 +122,7 @@ const styles = StyleSheet.create({
   headerIcon: { fontSize: 40 },
   headerTitle: { fontSize: 24, fontWeight: '900', color: '#fbbf24' },
   headerSub: { fontSize: 12, color: COLORS.muted },
+  timer: { fontSize: 20, fontWeight: '900', color: '#fbbf24', marginTop: 6 },
   list: { gap: 8 },
   voteRow: {
     borderRadius: 12,

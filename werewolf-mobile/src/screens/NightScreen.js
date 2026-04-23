@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useTranslation } from 'react-i18next';
@@ -6,63 +6,39 @@ import { COLORS } from '../constants/theme';
 import { ROLES } from '../constants/roles';
 import PhaseBanner from '../components/PhaseBanner';
 import PlayerAvatar from '../components/PlayerAvatar';
+import SkipPhaseButton from '../components/SkipPhaseButton';
 import { useGame } from '../context/GameContext';
-
-const VOICE_PLAYERS = [
-  { id: 'p1', name: 'أحمد', isSpeaking: true },
-  { id: 'p2', name: 'سارة', isSpeaking: false },
-  { id: 'p3', name: 'كريم', isSpeaking: false },
-  { id: 'p4', name: 'لينا', isDead: true },
-  { id: 'p5', name: 'يوسف', isSpeaking: false },
-  { id: 'me', name: 'أنت', isMe: true },
-];
+import usePhaseTimer from '../hooks/usePhaseTimer';
 
 export default function NightScreen({ navigation }) {
   const { t } = useTranslation();
-  const { state, setTimer } = useGame();
-  const [timeLeft, setTimeLeft] = useState(60);
+  const { state } = useGame();
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setTimeLeft((prev) => {
-        if (prev <= 0) {
-          clearInterval(interval);
-          navigateToRoleAction();
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-    return () => clearInterval(interval);
-  }, []);
+  const duration = state.phaseDuration || state.settings?.nightDuration || 60;
 
+  // Jump to this role's action screen. Role players are routed here automatically
+  // by useGameSocket; this button is a manual fallback.
   const navigateToRoleAction = () => {
     const role = state.myRole;
     switch (role) {
-      case ROLES.WOLF:
-        navigation.replace('WolfAction');
-        break;
-      case ROLES.SEER:
-        navigation.replace('SeerAction');
-        break;
-      case ROLES.WITCH:
-        navigation.replace('WitchAction');
-        break;
-      case ROLES.DOCTOR:
-        navigation.replace('DoctorAction');
-        break;
-      default:
-        // Villager and Hunter just wait
-        setTimeout(() => navigation.replace('Day'), 3000);
-        break;
+      case ROLES.WOLF:   navigation.replace('WolfAction');   break;
+      case ROLES.SEER:   navigation.replace('SeerAction');   break;
+      case ROLES.WITCH:  navigation.replace('WitchAction');  break;
+      case ROLES.DOCTOR: navigation.replace('DoctorAction'); break;
+      // Villagers and Hunter just wait here — server will emit phase_changed → day
+      default: break;
     }
   };
 
-  const formatTime = (s) => {
-    const min = Math.floor(s / 60);
-    const sec = s % 60;
-    return `${min}:${sec.toString().padStart(2, '0')}`;
-  };
+  // Visual countdown only — phase transitions are server-driven
+  const { formatted } = usePhaseTimer(duration);
+
+  // Use real players from state (exclude dead to mirror server truth)
+  const voicePlayers = (state.players || []).map((p) => ({
+    ...p,
+    isMe: p.id === state.playerId,
+    isSpeaking: false,
+  }));
 
   return (
     <LinearGradient
@@ -72,12 +48,12 @@ export default function NightScreen({ navigation }) {
       <PhaseBanner phase="night" label={t('night.title')} icon="🌙" />
 
       {/* Timer */}
-      <Text style={styles.timer}>{formatTime(timeLeft)}</Text>
+      <Text style={styles.timer}>{formatted}</Text>
       <Text style={styles.voiceLabel}>{t('night.voiceOnly')}</Text>
 
       {/* Voice grid */}
       <View style={styles.voiceGrid}>
-        {VOICE_PLAYERS.map((player, index) => (
+        {voicePlayers.map((player, index) => (
           <View key={player.id} style={styles.voiceCell}>
             <View style={[
               styles.voiceAvatar,
@@ -107,10 +83,10 @@ export default function NightScreen({ navigation }) {
         ))}
       </View>
 
-      {/* Action button - skip to role action */}
-      <TouchableOpacity style={styles.skipBtn} onPress={navigateToRoleAction}>
-        <Text style={styles.skipText}>⏭️ {state.myRole ? t('common.confirm') : t('night.title')}</Text>
-      </TouchableOpacity>
+      {/* Ready button — all alive players can vote to end night early */}
+      <View style={styles.skipWrap}>
+        <SkipPhaseButton label={t('night.skip') || 'End night'} />
+      </View>
 
       {/* Mute toggle */}
       <View style={styles.controls}>
@@ -172,6 +148,10 @@ const styles = StyleSheet.create({
   speakingDot: {
     fontSize: 8,
     color: COLORS.village,
+  },
+  skipWrap: {
+    marginTop: 24,
+    alignSelf: 'center',
   },
   skipBtn: {
     marginTop: 30,

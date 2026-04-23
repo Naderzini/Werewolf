@@ -6,12 +6,8 @@ import { COLORS } from '../constants/theme';
 import PhaseBanner from '../components/PhaseBanner';
 import GradientButton from '../components/GradientButton';
 import { useGame } from '../context/GameContext';
-
-const ALIVE_PLAYERS = [
-  { id: 'p1', name: 'أحمد', emoji: '🧑' },
-  { id: 'p2', name: 'سارة', emoji: '👩' },
-  { id: 'p3', name: 'كريم', emoji: '🧔' },
-];
+import { getActionPlayers } from '../utils/players';
+import { sendWitchAction } from '../services/socketService';
 
 export default function WitchActionScreen({ navigation }) {
   const { t } = useTranslation();
@@ -19,24 +15,33 @@ export default function WitchActionScreen({ navigation }) {
   const [killTarget, setKillTarget] = useState(null);
   const [showKillList, setShowKillList] = useState(false);
 
-  // Simulated wolf victim
-  const wolfVictim = { id: 'p1', name: 'أحمد', emoji: '🧑' };
+  const alivePlayers = getActionPlayers(state.players, state.playerId, {
+    includeSelf: false,
+  });
+
+  // Server emits `wolf_victim_update` to the witch as wolves vote; look up
+  // the victim in the FULL players list so the witch can save herself too.
+  const wolfVictim = state.wolfVictim
+    ? (state.players || []).find((p) => p.id === state.wolfVictim) || null
+    : null;
+
+  const emit = (action) => {
+    sendWitchAction(action);
+    witchAction(action);
+    navigation.replace('Night');
+  };
 
   const handleSave = () => {
-    witchAction({ type: 'save', targetId: wolfVictim.id });
-    navigation.replace('Day');
+    if (wolfVictim) emit({ type: 'save', targetId: wolfVictim.id });
+    else emit(null);
   };
 
   const handleKill = () => {
     if (!killTarget) return;
-    witchAction({ type: 'kill', targetId: killTarget });
-    navigation.replace('Day');
+    emit({ type: 'kill', targetId: killTarget });
   };
 
-  const handleSkip = () => {
-    witchAction(null);
-    navigation.replace('Day');
-  };
+  const handleSkip = () => emit(null);
 
   return (
     <LinearGradient colors={['#120835', '#050310', COLORS.bg]} style={styles.container}>
@@ -44,14 +49,20 @@ export default function WitchActionScreen({ navigation }) {
         <PhaseBanner phase="night" label={t('night.witchTurn')} icon="🧙‍♂️" />
 
         {/* Victim info */}
-        <View style={styles.victimCard}>
-          <Text style={styles.victimEmoji}>{wolfVictim.emoji}</Text>
-          <View style={styles.victimInfo}>
-            <Text style={styles.victimWarning}>⚠️ {t('night.victimChosen')}</Text>
-            <Text style={styles.victimName}>{wolfVictim.name}</Text>
-            <Text style={styles.victimDesc}>{t('night.willDie')}</Text>
+        {wolfVictim ? (
+          <View style={styles.victimCard}>
+            <Text style={styles.victimEmoji}>{wolfVictim.emoji}</Text>
+            <View style={styles.victimInfo}>
+              <Text style={styles.victimWarning}>⚠️ {t('night.victimChosen')}</Text>
+              <Text style={styles.victimName}>{wolfVictim.name}</Text>
+              <Text style={styles.victimDesc}>{t('night.willDie')}</Text>
+            </View>
           </View>
-        </View>
+        ) : (
+          <View style={styles.victimCard}>
+            <Text style={styles.victimDesc}>🌙 Waiting for wolves...</Text>
+          </View>
+        )}
 
         {/* Potions */}
         <View style={styles.potionRow}>
@@ -68,7 +79,7 @@ export default function WitchActionScreen({ navigation }) {
         </View>
 
         {/* Save button */}
-        {!state.witchSaveUsed && (
+        {!state.witchSaveUsed && wolfVictim && (
           <GradientButton
             title={`💚 ${t('night.savePlayer')} ${wolfVictim.name}`}
             onPress={handleSave}
@@ -83,7 +94,7 @@ export default function WitchActionScreen({ navigation }) {
             {showKillList ? (
               <View style={styles.killList}>
                 <Text style={styles.killLabel}>{t('night.chooseVictim')}</Text>
-                {ALIVE_PLAYERS.filter((p) => p.id !== wolfVictim.id).map((player) => (
+                {alivePlayers.filter((p) => !wolfVictim || p.id !== wolfVictim.id).map((player) => (
                   <TouchableOpacity
                     key={player.id}
                     style={[styles.killRow, killTarget === player.id && styles.killRowSelected]}

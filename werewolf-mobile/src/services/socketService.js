@@ -2,30 +2,59 @@ import { io } from 'socket.io-client';
 import { SOCKET_URL } from '../config/api';
 
 let socket = null;
+// Persistent listeners that survive socket reconnects / early subscriptions
+const persistentListeners = new Map(); // event -> Set<callback>
 
+function attachAllListeners(sock) {
+  persistentListeners.forEach((cbs, event) => {
+    cbs.forEach((cb) => {
+      sock.off(event, cb);
+      sock.on(event, cb);
+    });
+  });
+}
+
+// ── Connection lifecycle ──
 export const connectSocket = () => {
-  if (socket?.connected) return socket;
-  
-  socket = io(SOCKET_URL, {
-    transports: ['websocket'],
-    reconnection: true,
-    reconnectionAttempts: 5,
-    reconnectionDelay: 1000,
-  });
+  return new Promise((resolve, reject) => {
+    // Already connected — resolve immediately
+    if (socket?.connected) return resolve(socket);
 
-  socket.on('connect', () => {
-    console.log('Connected to server:', socket.id);
-  });
+    // Already connecting — wait for it
+    if (socket && !socket.connected) {
+      const onConnect = () => { cleanup(); resolve(socket); };
+      const onError = (err) => { cleanup(); reject(err); };
+      const cleanup = () => { socket.off('connect', onConnect); socket.off('connect_error', onError); };
+      socket.once('connect', onConnect);
+      socket.once('connect_error', onError);
+      return;
+    }
 
-  socket.on('disconnect', (reason) => {
-    console.log('Disconnected:', reason);
-  });
+    socket = io(SOCKET_URL, {
+      transports: ['websocket'],
+      reconnection: true,
+      reconnectionAttempts: 5,
+      reconnectionDelay: 1000,
+      timeout: 8000,
+    });
 
-  socket.on('connect_error', (err) => {
-    console.log('Connection error:', err.message);
-  });
+    // Attach any listeners that were registered before the socket existed
+    attachAllListeners(socket);
 
-  return socket;
+    socket.on('connect', () => {
+      console.log('[socket] connected', socket.id);
+      // Re-attach on every (re)connect to survive network drops
+      attachAllListeners(socket);
+      resolve(socket);
+    });
+
+    socket.once('connect_error', (err) => {
+      console.log('[socket] error', err.message);
+      reject(new Error('NOT_CONNECTED'));
+    });
+
+    socket.on('disconnect', (reason) => console.log('[socket] disconnected', reason));
+  });
 };
 
 export const getSocket = () => socket;
@@ -37,154 +66,80 @@ export const disconnectSocket = () => {
   }
 };
 
-// ── Room Actions ──
-export const createRoom = (playerName) => {
+// ── Helpers ──
+const ACK_TIMEOUT_MS = 8000;
+const emitWithAck = (event, payload) => {
   return new Promise((resolve, reject) => {
-    if (!socket) return reject('Not connected');
-    socket.emit('create_room', { playerName }, (response) => {
-      if (response.success) resolve(response);
-      else reject(response.error);
+    if (!socket?.connected) return reject(new Error('NOT_CONNECTED'));
+    let settled = false;
+    const timer = setTimeout(() => {
+      if (settled) return;
+      settled = true;
+      reject(new Error('TIMEOUT'));
+    }, ACK_TIMEOUT_MS);
+    socket.emit(event, payload, (response) => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timer);
+      if (response?.success) resolve(response);
+      else reject(new Error(response?.error || 'UNKNOWN_ERROR'));
     });
   });
 };
 
-export const joinRoom = (roomCode, playerName) => {
-  return new Promise((resolve, reject) => {
-    if (!socket) return reject('Not connected');
-    socket.emit('join_room', { roomCode, playerName }, (response) => {
-      if (response.success) resolve(response);
-      else reject(response.error);
-    });
-  });
-};
+// ── Room actions ──
+export const createRoom = (playerName) => emitWithAck('create_room', { playerName });
+export const joinRoom = (roomCode, playerName) => emitWithAck('join_room', { roomCode, playerName });
+export const leaveRoom = () => emitWithAck('leave_room', {});
+export const updateSettings = (settings) => emitWithAck('update_settings', { settings });
+export const startGame = () => emitWithAck('start_game', {});
 
-export const startGame = (roomCode) => {
-  return new Promise((resolve, reject) => {
-    if (!socket) return reject('Not connected');
-    socket.emit('start_game', { roomCode }, (response) => {
-      if (response.success) resolve(response);
-      else reject(response.error);
-    });
-  });
-};
+// ── Night actions ──
+export const sendWolfVote = (targetId) => socket?.emit('wolf_vote', { targetId });
+export const sendSeerReveal = (targetId) => emitWithAck('seer_reveal', { targetId });
+export const sendWitchAction = (action) => socket?.emit('witch_action', { action });
+export const sendDoctorProtect = (targetId) => socket?.emit('doctor_protect', { targetId });
+export const endNight = () => socket?.emit('end_night');
 
-// ── Night Actions ──
-export const sendWolfVote = (roomCode, targetId) => {
-  socket?.emit('wolf_vote', { roomCode, targetId });
-};
-
-export const sendSeerReveal = (roomCode, targetId) => {
-  return new Promise((resolve, reject) => {
-    if (!socket) return reject('Not connected');
-    socket.emit('seer_reveal', { roomCode, targetId }, (response) => {
-      if (response.success) resolve(response);
-      else reject('Reveal failed');
-    });
-  });
-};
-
-export const sendWitchAction = (roomCode, action) => {
-  socket?.emit('witch_action', { roomCode, action });
-};
-
-export const sendDoctorProtect = (roomCode, targetId) => {
-  socket?.emit('doctor_protect', { roomCode, targetId });
-};
-
-export const endNight = (roomCode) => {
-  socket?.emit('end_night', { roomCode });
-};
-
-// ── Day Actions ──
-export const castVote = (roomCode, targetId) => {
-  socket?.emit('cast_vote', { roomCode, targetId });
-};
-
-export const endVote = (roomCode) => {
-  socket?.emit('end_vote', { roomCode });
-};
+// ── Day actions ──
+export const castVote = (targetId) => socket?.emit('cast_vote', { targetId });
+export const endVote = () => socket?.emit('end_vote');
 
 // ── Hunter ──
-export const hunterShot = (roomCode, targetId) => {
-  socket?.emit('hunter_shot', { roomCode, targetId });
+export const hunterShot = (targetId) => socket?.emit('hunter_shot', { targetId });
+
+// ── Skip phase ──
+export const sendSkipPhase = () => socket?.emit('skip_phase');
+
+// ── Voice signaling ──
+export const sendVoiceOffer = (targetId, offer) => socket?.emit('voice_offer', { targetId, offer });
+export const sendVoiceAnswer = (targetId, answer) => socket?.emit('voice_answer', { targetId, answer });
+export const sendIceCandidate = (targetId, candidate) => socket?.emit('ice_candidate', { targetId, candidate });
+
+// ── Event listeners (persistent: work even if called before socket exists) ──
+const subscribe = (event) => (callback) => {
+  if (!persistentListeners.has(event)) persistentListeners.set(event, new Set());
+  persistentListeners.get(event).add(callback);
+  // If socket already exists, attach immediately
+  if (socket) socket.on(event, callback);
+  return () => {
+    persistentListeners.get(event)?.delete(callback);
+    socket?.off(event, callback);
+  };
 };
 
-// ── Voice Signaling ──
-export const sendVoiceOffer = (roomCode, targetId, offer) => {
-  socket?.emit('voice_offer', { roomCode, targetId, offer });
-};
-
-export const sendVoiceAnswer = (targetId, answer) => {
-  socket?.emit('voice_answer', { targetId, answer });
-};
-
-export const sendIceCandidate = (targetId, candidate) => {
-  socket?.emit('ice_candidate', { targetId, candidate });
-};
-
-// ── Event Listeners ──
-export const onPlayersUpdated = (callback) => {
-  socket?.on('players_updated', callback);
-  return () => socket?.off('players_updated', callback);
-};
-
-export const onGameStarted = (callback) => {
-  socket?.on('game_started', callback);
-  return () => socket?.off('game_started', callback);
-};
-
-export const onRoleAssigned = (callback) => {
-  socket?.on('role_assigned', callback);
-  return () => socket?.off('role_assigned', callback);
-};
-
-export const onPhaseChanged = (callback) => {
-  socket?.on('phase_changed', callback);
-  return () => socket?.off('phase_changed', callback);
-};
-
-export const onNightResults = (callback) => {
-  socket?.on('night_results', callback);
-  return () => socket?.off('night_results', callback);
-};
-
-export const onVoteUpdate = (callback) => {
-  socket?.on('vote_update', callback);
-  return () => socket?.off('vote_update', callback);
-};
-
-export const onVoteResult = (callback) => {
-  socket?.on('vote_result', callback);
-  return () => socket?.off('vote_result', callback);
-};
-
-export const onGameOver = (callback) => {
-  socket?.on('game_over', callback);
-  return () => socket?.off('game_over', callback);
-};
-
-export const onHunterTurn = (callback) => {
-  socket?.on('hunter_turn', callback);
-  return () => socket?.off('hunter_turn', callback);
-};
-
-export const onWolfVoteUpdate = (callback) => {
-  socket?.on('wolf_vote_update', callback);
-  return () => socket?.off('wolf_vote_update', callback);
-};
-
-// Voice signaling listeners
-export const onVoiceOffer = (callback) => {
-  socket?.on('voice_offer', callback);
-  return () => socket?.off('voice_offer', callback);
-};
-
-export const onVoiceAnswer = (callback) => {
-  socket?.on('voice_answer', callback);
-  return () => socket?.off('voice_answer', callback);
-};
-
-export const onIceCandidate = (callback) => {
-  socket?.on('ice_candidate', callback);
-  return () => socket?.off('ice_candidate', callback);
-};
+export const onRoomUpdated = subscribe('room_updated');
+export const onRoleAssigned = subscribe('role_assigned');
+export const onPhaseChanged = subscribe('phase_changed');
+export const onNightResults = subscribe('night_results');
+export const onVoteUpdate = subscribe('vote_update');
+export const onVoteResult = subscribe('vote_result');
+export const onGameOver = subscribe('game_over');
+export const onHunterTurn = subscribe('hunter_turn');
+export const onHunterResult = subscribe('hunter_result');
+export const onWolfVoteUpdate = subscribe('wolf_vote_update');
+export const onWolfVictimUpdate = subscribe('wolf_victim_update');
+export const onSkipUpdate = subscribe('skip_update');
+export const onVoiceOffer = subscribe('voice_offer');
+export const onVoiceAnswer = subscribe('voice_answer');
+export const onIceCandidate = subscribe('ice_candidate');

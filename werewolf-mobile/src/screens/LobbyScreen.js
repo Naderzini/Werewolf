@@ -1,71 +1,64 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, Alert } from 'react-native';
+import React, { useState } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  TouchableOpacity,
+  Alert,
+  ScrollView,
+} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useTranslation } from 'react-i18next';
 import { COLORS } from '../constants/theme';
-import { ROLE_CONFIG, getRoleDistribution } from '../constants/roles';
+import { MIN_PLAYERS, MAX_PLAYERS } from '../constants/roles';
 import GradientButton from '../components/GradientButton';
 import PlayerAvatar from '../components/PlayerAvatar';
+import SettingsPanel from '../components/SettingsPanel';
 import { useGame } from '../context/GameContext';
-
-// Mock players for demo - in production these come from Firebase/Socket.IO
-const MOCK_PLAYERS = [
-  { id: 'p1', name: 'أحمد', isOnline: true, isHost: true },
-  { id: 'p2', name: 'سارة', isOnline: true, isHost: false },
-  { id: 'p3', name: 'كريم', isOnline: true, isHost: false },
-  { id: 'p4', name: 'لينا', isOnline: false, isHost: false },
-  { id: 'p5', name: 'يوسف', isOnline: false, isHost: false },
-];
+import {
+  updateSettings as sendSettings,
+  startGame as sendStartGame,
+  leaveRoom as sendLeaveRoom,
+} from '../services/socketService';
 
 export default function LobbyScreen({ navigation }) {
   const { t } = useTranslation();
-  const { state, updatePlayers, startGame } = useGame();
-  const [players, setPlayers] = useState([]);
+  const { state, setSettings } = useGame();
+  const [starting, setStarting] = useState(false);
 
-  useEffect(() => {
-    // In production: listen to Firebase/Socket for player updates
-    // For now, use mock data + current player
-    const currentPlayer = {
-      id: state.playerId,
-      name: state.playerName || 'You',
-      isOnline: true,
-      isHost: state.isHost,
-    };
-    
-    const allPlayers = state.isHost
-      ? [currentPlayer, ...MOCK_PLAYERS.slice(1)]
-      : [...MOCK_PLAYERS.slice(0, 1), currentPlayer, ...MOCK_PLAYERS.slice(2)];
-    
-    setPlayers(allPlayers);
-    updatePlayers(allPlayers);
-  }, []);
+  const players = state.players || [];
+  const canStart = state.isHost && players.length >= MIN_PLAYERS && !starting;
 
-  const canStart = players.length >= 6;
-
-  const handleStartGame = () => {
-    if (!canStart) {
-      Alert.alert('', t('lobby.minPlayers'));
+  const handleStartGame = async () => {
+    if (players.length < MIN_PLAYERS) {
+      Alert.alert('', `Need at least ${MIN_PLAYERS} players.`);
       return;
     }
-    // Assign roles
-    const roles = Object.keys(getRoleDistribution(players.length) || {});
-    const shuffledRoles = [];
-    const dist = getRoleDistribution(players.length);
-    if (dist) {
-      for (const [role, count] of Object.entries(dist)) {
-        for (let i = 0; i < count; i++) shuffledRoles.push(role);
-      }
+    setStarting(true);
+    try {
+      await sendStartGame();
+    } catch (err) {
+      Alert.alert('Error', err.message || 'Could not start game');
+      setStarting(false);
     }
-    // Shuffle
-    for (let i = shuffledRoles.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [shuffledRoles[i], shuffledRoles[j]] = [shuffledRoles[j], shuffledRoles[i]];
+  };
+
+  const handleSettingsChange = async (partial) => {
+    // Optimistic update then sync
+    setSettings(partial);
+    try {
+      await sendSettings(partial);
+    } catch (err) {
+      Alert.alert('Error', err.message || 'Could not update settings');
     }
-    
-    // For demo: assign first role to current player
-    const myRole = shuffledRoles[0] || 'wolf';
-    startGame(myRole);
-    navigation.replace('RoleReveal');
+  };
+
+  const handleLeave = async () => {
+    try {
+      await sendLeaveRoom();
+    } catch (_) {}
+    navigation.popToTop();
   };
 
   const renderPlayer = ({ item, index }) => (
@@ -75,38 +68,55 @@ export default function LobbyScreen({ navigation }) {
         <Text style={styles.playerName}>{item.name}</Text>
         {item.isHost && <Text style={styles.hostBadge}>👑 {t('lobby.host')}</Text>}
       </View>
-      <View style={[styles.statusDot, { backgroundColor: item.isOnline ? COLORS.village : '#444' }]} />
+      <View
+        style={[
+          styles.statusDot,
+          { backgroundColor: item.isOnline ? COLORS.village : '#444' },
+        ]}
+      />
     </View>
   );
 
   return (
     <LinearGradient colors={['#1a0a2e', '#0a0a16']} style={styles.container}>
-      {/* Header with room code */}
       <View style={styles.header}>
         <View style={styles.codeBox}>
           <Text style={styles.codeLabel}>{t('lobby.roomCode')}</Text>
-          <Text style={styles.codeValue}>{state.roomCode || 'WLF-47'}</Text>
+          <Text style={styles.codeValue}>{state.roomCode || '—'}</Text>
         </View>
-        <Text style={styles.roomName}>🌲</Text>
         <Text style={styles.playerCount}>
-          {players.length}/8 {t('lobby.players')}
+          {players.length}/{MAX_PLAYERS} {t('lobby.players')}
         </Text>
       </View>
 
-      {/* Players list */}
-      <FlatList
-        data={players}
-        renderItem={renderPlayer}
-        keyExtractor={(item) => item.id}
-        contentContainerStyle={styles.list}
-        style={styles.listContainer}
-      />
+      <ScrollView style={styles.scroll} contentContainerStyle={{ paddingBottom: 20 }}>
+        {/* Players */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Players</Text>
+          <FlatList
+            scrollEnabled={false}
+            data={players}
+            renderItem={renderPlayer}
+            keyExtractor={(item) => item.id}
+            contentContainerStyle={{ gap: 6 }}
+          />
+        </View>
 
-      {/* Bottom actions */}
+        {/* Settings */}
+        <View style={styles.section}>
+          <SettingsPanel
+            settings={state.settings}
+            playerCount={players.length}
+            isHost={state.isHost}
+            onChange={handleSettingsChange}
+          />
+        </View>
+      </ScrollView>
+
       <View style={styles.bottom}>
         {state.isHost ? (
           <GradientButton
-            title={t('lobby.startGame')}
+            title={starting ? '...' : t('lobby.startGame')}
             icon="🚀"
             onPress={handleStartGame}
             colors={['#7c3aed', '#4f46e5']}
@@ -118,8 +128,8 @@ export default function LobbyScreen({ navigation }) {
             <Text style={styles.waitingText}>⏳ {t('lobby.waiting')}</Text>
           </View>
         )}
-        
-        <TouchableOpacity style={styles.leaveBtn} onPress={() => navigation.popToTop()}>
+
+        <TouchableOpacity style={styles.leaveBtn} onPress={handleLeave}>
           <Text style={styles.leaveText}>🚪 {t('lobby.leave')}</Text>
         </TouchableOpacity>
       </View>
@@ -144,31 +154,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 10,
   },
-  codeLabel: {
-    fontSize: 10,
-    color: COLORS.muted,
-    marginBottom: 4,
-  },
-  codeValue: {
-    fontSize: 24,
-    fontWeight: '900',
-    letterSpacing: 5,
-    color: COLORS.moon,
-  },
-  roomName: {
-    fontSize: 20,
-    textAlign: 'center',
-  },
-  playerCount: {
+  codeLabel: { fontSize: 10, color: COLORS.muted, marginBottom: 4 },
+  codeValue: { fontSize: 24, fontWeight: '900', letterSpacing: 5, color: COLORS.moon },
+  playerCount: { fontSize: 12, color: COLORS.muted, textAlign: 'center', marginTop: 4 },
+  scroll: { flex: 1 },
+  section: { paddingHorizontal: 16, paddingTop: 14 },
+  sectionTitle: {
     fontSize: 12,
     color: COLORS.muted,
-    textAlign: 'center',
-    marginTop: 4,
-  },
-  listContainer: { flex: 1 },
-  list: {
-    padding: 16,
-    gap: 6,
+    marginBottom: 8,
+    textTransform: 'uppercase',
+    letterSpacing: 1,
   },
   playerRow: {
     flexDirection: 'row',
@@ -179,28 +175,11 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   playerInfo: { flex: 1 },
-  playerName: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: COLORS.text,
-  },
-  hostBadge: {
-    fontSize: 10,
-    color: COLORS.moon,
-    marginTop: 2,
-  },
-  statusDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-  },
-  bottom: {
-    padding: 16,
-    gap: 10,
-  },
-  startBtn: {
-    width: '100%',
-  },
+  playerName: { fontSize: 14, fontWeight: '600', color: COLORS.text },
+  hostBadge: { fontSize: 10, color: COLORS.moon, marginTop: 2 },
+  statusDot: { width: 8, height: 8, borderRadius: 4 },
+  bottom: { padding: 16, gap: 10 },
+  startBtn: { width: '100%' },
   waitingBox: {
     height: 48,
     borderRadius: 24,
@@ -210,16 +189,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  waitingText: {
-    color: COLORS.muted,
-    fontSize: 14,
-  },
-  leaveBtn: {
-    alignItems: 'center',
-    padding: 10,
-  },
-  leaveText: {
-    color: '#ef4444',
-    fontSize: 13,
-  },
+  waitingText: { color: COLORS.muted, fontSize: 14 },
+  leaveBtn: { alignItems: 'center', padding: 10 },
+  leaveText: { color: '#ef4444', fontSize: 13 },
 });

@@ -6,25 +6,30 @@ import { COLORS } from '../constants/theme';
 import PhaseBanner from '../components/PhaseBanner';
 import GradientButton from '../components/GradientButton';
 import { useGame } from '../context/GameContext';
-
-const PLAYERS = [
-  { id: 'p1', name: 'أحمد', emoji: '🧑' },
-  { id: 'p2', name: 'سارة', emoji: '👩' },
-  { id: 'p5', name: 'يوسف', emoji: '🧑‍🦱', protectedLastNight: true },
-];
+import { getActionPlayers } from '../utils/players';
+import { sendDoctorProtect } from '../services/socketService';
 
 export default function DoctorActionScreen({ navigation }) {
   const { t } = useTranslation();
   const { state, doctorProtect } = useGame();
   const [selected, setSelected] = useState(null);
 
+  // Doctor can protect themselves but cannot target the same person two nights in a row
+  const players = getActionPlayers(state.players, state.playerId, {
+    includeSelf: true,
+  }).map((p) => ({
+    ...p,
+    protectedLastNight: state.doctorLastTarget === p.id,
+  }));
+
   const handleProtect = () => {
     if (!selected) return;
+    sendDoctorProtect(selected);
     doctorProtect(selected);
-    navigation.replace('Day');
+    navigation.replace('Night');
   };
 
-  const selectedPlayer = PLAYERS.find((p) => p.id === selected);
+  const selectedPlayer = players.find((p) => p.id === selected);
 
   return (
     <LinearGradient colors={['#031a10', '#010805', COLORS.bg]} style={styles.container}>
@@ -34,7 +39,7 @@ export default function DoctorActionScreen({ navigation }) {
         <Text style={styles.label}>{t('night.whoToProtect')} 🛡️</Text>
 
         <View style={styles.list}>
-          {PLAYERS.map((player) => {
+          {players.map((player) => {
             const isDisabled = player.protectedLastNight;
             const isSelected = selected === player.id;
 

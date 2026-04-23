@@ -61,16 +61,10 @@ export default function HomeScreen({ navigation }) {
   }, []);
 
   const handleCreateRoom = () => {
-    const playerId = 'player_' + Date.now();
-    const roomCode = 'WLF-' + Math.floor(10 + Math.random() * 90);
-    setPlayer(playerId, '');
-    setRoom(roomCode, roomCode, true);
-    navigation.navigate('JoinRoom', { mode: 'create', roomCode });
+    navigation.navigate('JoinRoom', { mode: 'create' });
   };
 
   const handleJoinRoom = () => {
-    const playerId = 'player_' + Date.now();
-    setPlayer(playerId, '');
     navigation.navigate('JoinRoom', { mode: 'join' });
   };
 
